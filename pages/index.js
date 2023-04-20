@@ -16,6 +16,15 @@ import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted }
 import {initializeApp} from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendSignInLinkToEmail, signOut, sendEmailVerification} from 'firebase/auth';
 
+import es from '../utils/es.json';
+import fr from '../utils/fr.json';
+import de from '../utils/de.json';
+import cn from '../utils/cn.json';
+import it from '../utils/it.json';
+import ro from '../utils/ro.json';
+import en from '../utils/en.json';
+
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyACfUR1tmMLp0YRkVDBiRmMGJ5rdMuK_VY",
@@ -92,6 +101,57 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [user, setUser] = useState();
+  const [lang, setLang] = useState("EN")
+  
+
+
+  useEffect(() => {
+    const lngPref = localStorage.getItem("lang-pref")
+    setLang(lngPref || 'EN')
+  }, [])
+  
+  
+
+  
+
+  
+
+  const setPreference = () => {
+    localStorage.setItem("lang-pref", lang)
+  }
+
+  useEffect(() => {
+    setPreference()
+    console.log(`Preference changed to ${lang}!`)
+  }, [lang])
+
+  
+
+
+
+
+    const translate = (text) => {
+      if(lang === 'ES'){
+        return es[text]
+      } else if (lang === 'RO'){
+        return ro[text]
+      } else if (lang === 'CN'){
+        return cn[text]
+      } else if (lang === 'IT'){
+        return it[text]
+      } else if (lang === 'DE'){
+        return de[text]
+      }else if (lang === 'FR'){
+        return fr[text]
+      }
+      else {
+        return en[text]
+      }
+    }
+    
+    
+
+  
 
 
  
@@ -115,6 +175,7 @@ export default function Home() {
     // ..
   });
   }
+
 
   
 
@@ -277,6 +338,11 @@ const logOut = () => {
       <Header 
       setIsNavOpen={setIsNavOpen}
       isNavOpen={isNavOpen}
+      lang={lang}
+      setLang={setLang}
+      translate={translate}
+      
+  
       />
 
 
@@ -286,22 +352,22 @@ const logOut = () => {
         <div className='w-full h-full'>
           <div className='flex flex-col md:flex-row w-3/4 md:w-full m-auto mx-4 justify-between'>
           <div className='flex flex-col uppercase mx-4 m-auto w-full md:w-2/3 '>
-          <h1 className="uppercase tracking-tighter text-5xl md:text-8xl justify-start text-start"><span className="text-6xl md:text-8xl">InfinityBee</span><br></br><span className="whitespace-nowrap">Token Presale</span></h1>
+          <h1 className="uppercase tracking-tighter text-5xl md:text-8xl justify-start text-start"><span className="text-6xl md:text-8xl">InfinityBee</span><br></br><span className="whitespace-nowrap">Token {translate("presale")}</span></h1>
           <div className='md:flex flex-col mt-12 w-full hidden'>
-            <h3 className="text-bluee text-2xl">The Currency of Be&Bee Ecosystem</h3>
-              <h3 className='text-2xl'>Used Mainly On the First</h3>
-              <h3 className='text-pinkk text-2xl'>Decentralized Crowdfunding Platform</h3>
-              <h3 className='text-2xl'>In The World</h3>
-              <h3 className='text-purplee text-2xl'>Based on a matrix system with referrals</h3>
+            <h3 className="text-bluee text-2xl">{translate("currency")}</h3>
+              <h3 className='text-2xl'>{translate("used")}</h3>
+              <h3 className='text-pinkk text-2xl'>{translate("decentralized")}</h3>
+              <h3 className='text-2xl'>{translate("world")}</h3>
+              <h3 className='text-purplee text-2xl'>{translate("matrix")}</h3>
           </div>
           
               </div>
               <div className='flex flex-row md:flex-col uppercase w-3/4 md:w-1/3 m-auto mx-8 max-h-[500px] items-start justify-center'>
               <img src='/images/beelogo.png' className='p-4 w-3/4 md:w-2/3 mx-auto justify-center'/>
               <div className='flex flex-col my-auto mx-4 md:mx-0 w-full text-center'>
-              <p>Sold</p>
+              <p>{translate("sold")}</p>
               <h3 className='text-2xl'>23.000.000</h3>
-              <p>Remaining</p>
+              <p>{translate("remaining")}</p>
               <h3 className='text-2xl'>67.000.000</h3>
               </div>
               </div>
@@ -318,7 +384,7 @@ const logOut = () => {
           </div>
         </div>
         <div id='adventurer' className='w-full my-10'>
-          <h2 className='text-center uppercase text-6xl my-5'>Adventurer Levels</h2>
+          <h2 className='text-center uppercase text-6xl my-5'>Adventurer {translate("levels")}</h2>
           <div className="w-full flex flex-col">
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
             <div className='flex flex-col w-full md:w-1/3'>
@@ -343,7 +409,7 @@ const logOut = () => {
           </div>
         </div>
         <div id='master' className='w-full my-10'>
-          <h2 className='text-center uppercase text-6xl my-5'>Master Levels</h2>
+          <h2 className='text-center uppercase text-6xl my-5'>Master {translate("levels")}</h2>
           <div className="w-full flex flex-col">
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
           <div className='flex flex-col w-full md:w-1/3'>
@@ -365,7 +431,7 @@ const logOut = () => {
          
         </div>
         <div id='legend' className='w-full my-10'>
-          <h2 className='text-center uppercase text-6xl my-5'>Legend Levels</h2>
+          <h2 className='text-center uppercase text-6xl my-5'>Legend {translate("levels")}</h2>
           <div className="w-full flex flex-col">
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
           <div className='flex flex-col w-full md:w-1/2'>
