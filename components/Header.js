@@ -76,16 +76,16 @@ export default function Header(props){
                   <ul className="flex flex-col items-center justify-between min-h-[250px]">
 
                     <li className="border-b text-white border-gray-400 my-2 uppercase">
-                      <a href="https://opensea.io/collection/metaapemilitia">Packages</a>
+                      <a href="">Packages</a>
                     </li>
                     <li className="border-b text-white border-gray-400 my-2 uppercase">
                       <a href="/store">About</a>
                     </li>
                     <li className="border-b text-white border-gray-400 my-2 uppercase">
-                      <a href="https://www.metaapemilitia.com/">EN</a>
+                      <a href="">EN</a>
                     </li>
                     <li className="border-b text-white border-gray-400 my-2 uppercase">
-                      <a href="/raffles">Login</a>
+                      <a href="">Login</a>
                     </li>
                     
 
