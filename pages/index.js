@@ -323,7 +323,7 @@ const logOut = () => {
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
             <div className='flex flex-col w-full md:w-1/3'>
               <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(200)}}className='flex w-1/2 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>200 USDT</button>
+              <button onClick={() => {buyTokens(200)}}className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
               {errorMessage &&(
               <div onClick={()=>{setErrorMessage("")}} className='flex justify-center m-auto p-4 my-2 bg-red-600 border-4 rounded-md border-white text-center items-center tracking-wider'>
               <p className='text-white'>{errorMessage}</p>
@@ -332,11 +332,11 @@ const logOut = () => {
             </div>
             <div className='flex flex-col w-full md:w-1/3'>
               <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(500)}} className='flex w-1/2 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>500 USDT</button>
+              <button onClick={() => {buyTokens(500)}} className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
             </div>
             <div className='flex flex-col w-full md:w-1/3'>
               <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(1100)}} className='flex w-1/2 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+              <button onClick={() => {buyTokens(1100)}} className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
             </div>
           </div>
           
@@ -348,15 +348,15 @@ const logOut = () => {
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
           <div className='flex flex-col w-full md:w-1/3'>
               <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(2300)}} className='flex w-1/2 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+              <button onClick={() => {buyTokens(2300)}} className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
             </div>
             <div className='flex flex-col w-full md:w-1/3'>
               <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(5000)}} className='flex w-1/2 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+              <button onClick={() => {buyTokens(5000)}} className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
             </div>
             <div className='flex flex-col w-full md:w-1/3'>
               <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(11000)}} className='flex w-1/2 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+              <button onClick={() => {buyTokens(11000)}} className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
             </div>
            
           </div>
@@ -370,11 +370,11 @@ const logOut = () => {
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
           <div className='flex flex-col w-full md:w-1/2'>
               <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(23000)}} className='flex w-1/2 md:w-1/3 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+              <button onClick={() => {buyTokens(23000)}} className='flex w-1/2 md:w-1/3 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
             </div>
             <div className='flex flex-col w-full md:w-1/2'>
               <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
-              <button onClick={() => {buyTokens(48000)}} className='flex w-1/2 md:w-1/3 mx-auto bg-peach text-center justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+              <button onClick={() => {buyTokens(48000)}} className='flex w-1/2 md:w-1/3 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
             </div>
             
            
