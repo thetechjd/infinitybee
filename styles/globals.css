@@ -105,6 +105,11 @@ html {
   border-color: transparent #06070a;
 }
 
+.button-gradient{
+background: rgb(49,41,74);
+background: linear-gradient(90deg, rgba(49,41,74,1) 0%, rgba(255,128,171,1) 100%);
+}
+
 @keyframes gradient-animation {
   0% {
     background-position: 0% 50%;
