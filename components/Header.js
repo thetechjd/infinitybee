@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useCallback, useState, useRef} from 'react'
 import Link from 'next/link'
 
 
@@ -6,10 +6,16 @@ import Link from 'next/link'
 
 
 
+
+
+
 export default function Header(props){
+
+
     const [packages, setPackages] = useState(false);
     const [about, setAbout] = useState(false);
     const [languages, setLanguages] = useState(false);
+   
     
 
 
@@ -80,17 +86,25 @@ export default function Header(props){
                 <div className=''>
                   <ul className="flex flex-col items-center justify-between min-h-[250px]">
 
-                    <li className="border-b text-white border-gray-400 my-2 uppercase">
-                      <a href="">{props.translate("packages")}</a>
+                    <li  onClick={() => props.setIsNavOpen(false)} className="border-b text-white border-gray-400 my-2 uppercase">
+                      <a href="#adventurer">{props.translate("packages")}</a>
                     </li>
                     <li className="border-b text-white border-gray-400 my-2 uppercase">
                       <a href="">{props.translate("about")}</a>
                     </li>
                     <li className="border-b text-white border-gray-400 my-2 uppercase">
-                      <a href="">EN</a>
+                      <details href="">
+                        <summary>{props.lang}</summary>
+                    <p onClick={()=> {props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO')}} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>EN</p>: <p>RO</p>}</p>
+                    <p onClick={()=> {props.lang === 'ES' ? props.setLang('EN'): props.setLang('ES')}} className='flex w-full justify-between bg-opacity-60  text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>EN</p>: <p>ES</p>}</p>
+                    <p onClick={()=> {props.lang === 'FR' ? props.setLang('EN'): props.setLang('FR')}} className='flex w-full justify-between bg-opacity-60  text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'FR' ? <p>EN</p>: <p>FR</p>}</p>
+                    <p onClick={()=> {props.lang === 'DE' ? props.setLang('EN'): props.setLang('DE')}} className='flex w-full justify-between bg-opacity-60  text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'DE' ? <p>EN</p>: <p>DE</p>}</p>
+                    <p onClick={()=> {props.lang === 'IT' ? props.setLang('EN'): props.setLang('IT')}} className='flex w-full justify-between bg-opacity-60  text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'IT' ? <p>EN</p>: <p>IT</p>}</p>
+                    <p onClick={()=> {props.lang === 'CN' ? props.setLang('EN'): props.setLang('CN')}} className='flex w-full justify-between bg-opacity-60  text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>EN</p>: <p>CN</p>}</p>
+                      </details>
                     </li>
-                    <li className="border-b text-white border-gray-400 my-2 uppercase">
-                      <a href="">Login</a>
+                    <li onClick={()=> { props.setIsNavOpen(false); props.showLoginModal(true)}} className="border-b text-white border-gray-400 my-2 uppercase">
+                      <p>Login</p>
                     </li>
                     
 
@@ -100,12 +114,12 @@ export default function Header(props){
               </div>
             </section>
 
-            <ul className="DESKTOP-MENU hidden space-x-8 lg:flex mr-10">
+            <ul className="DESKTOP-MENU hidden lg:h-full space-x-2 lg:flex mr-10">
 
 
               
               <li className='relative'>
-                <a href="/member"  onMouseEnter={showPackages} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                <a href="/"  onMouseEnter={showPackages} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
                   <p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("packages")}</p>
                 </a>
@@ -126,7 +140,7 @@ export default function Header(props){
 
               </li>
               <li className='relative'>
-                <a href="/member" onMouseEnter={showAbout} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                <a href="/" onMouseEnter={showAbout} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
                   <p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("about")}</p>
                 </a>
@@ -143,9 +157,9 @@ export default function Header(props){
                 )}
               </li>
               <li className='relative'>
-                <a href="/member" onMouseEnter={showLanguages} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                  <p className='rounded uppercase text-xs font-black
-          text-white md:flex'>{props.lang}</p>
+                <a href="/" onMouseEnter={showLanguages} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                  <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+          text-white md:flex'>{props.lang}</p> <img src={`/images/${props.lang}_icon.png`} className='w-[20px]' /></span>
                 </a>
                 {languages &&(
                     <div onMouseLeave={showLanguages} className='absolute my-2'>
@@ -160,10 +174,13 @@ export default function Header(props){
               </li>
               
               <li>
-                <button className='hidden sm:flex bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 hover:bg-opacity-90 flex justify-center flex-row cursor-pointer '>
+                <button onClick={props.success ? props.logOut: props.showLoginModal}className='hidden sm:flex bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 hover:bg-opacity-90 flex justify-center flex-row cursor-pointer '>
                   <p className='rounded uppercase text-xs font-black
-          text-white md:flex'>{props.translate("login")}</p>
+          text-white md:flex'>{props.success ? "Logout" : props.translate("login")}</p>
                 </button>
+              </li>
+              <li className='flex h-full items-center my-auto'>
+                <img src='/images/basket.png' className='flex w-[20px] hover:w-[30px] items-center justify-center'/>
               </li>
               
               {/* CONNECT WALLET */}

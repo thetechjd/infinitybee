@@ -45,7 +45,7 @@ const Input = ({
         -translate-y-3
         scale-75
         top-4
-        z-10
+        z-8
         origin-[0]
         left-6
         cursor-pointer

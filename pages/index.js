@@ -1,5 +1,5 @@
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -9,8 +9,13 @@ import Head from 'next/head';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Input from '../components/Input'
+import LoginModal from '../components/LoginModal'
 import { useStatus } from "../context/statusContext";
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
+
+
+
+
 
 
 import {initializeApp} from 'firebase/app'
@@ -92,16 +97,27 @@ const providerOptions = {
 
 export default function Home() {
 
+  
+
   //State variables
   const [provider, setProvider] = useState();
   const [walletAddress, setAddress] = useState();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [variant, setVariant] = useState('login');
   const [errorMessage, setErrorMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [user, setUser] = useState();
-  const [lang, setLang] = useState("EN")
+  const [lang, setLang] = useState("EN");
+  const [errorModal, setErrorModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
+
+
+
+  const toggleVariant = useCallback(() => {
+    setVariant((currentVariant) => currentVariant === 'login' ? 'register': 'login')
+},[])
   
 
 
@@ -109,7 +125,7 @@ export default function Home() {
     const lngPref = localStorage.getItem("lang-pref")
     setLang(lngPref || 'EN')
   }, [])
-  
+
   
 
   
@@ -148,14 +164,18 @@ export default function Home() {
         return en[text]
       }
     }
-    
-    
 
-  
 
+
+    const showModal = () => {
+      setErrorModal(!errorModal)
+    }
+
+    const showLoginModal = () => {
+      setLoginModal(!loginModal);
+    }
 
  
-
 
   const signUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -167,7 +187,7 @@ export default function Home() {
     setUser(user);
     setUser({emailVerified: false})
     })
-    
+    showLoginModal(false)
   
   .catch((error) => {
     const errorCode = error.code;
@@ -188,6 +208,7 @@ export default function Home() {
     setUser(user);
      console.log(user);
     setSuccess(true);
+    showLoginModal(false)
     
   })
   .catch((error) => {
@@ -202,6 +223,7 @@ const logOut = () => {
     setSuccess(false)
     setEmail("")
     setPassword("")
+    disconnect();
     
   }).catch((error) => {
     // An error happened.
@@ -297,7 +319,7 @@ const logOut = () => {
   }
 
   const buyTokens = async (usdt) => {
-    setErrorMessage("");
+    
 
     const total = usdt * 10**6;
 
@@ -307,6 +329,7 @@ const logOut = () => {
       console.log("You bought tokens!")
     } else {
      setErrorMessage('You must login first to redeem tokens');
+     showModal();
      
 
      
@@ -341,15 +364,35 @@ const logOut = () => {
       lang={lang}
       setLang={setLang}
       translate={translate}
+      success={success}
+      logOut={logOut}
+      showLoginModal={showLoginModal}
       
   
       />
 
+      {loginModal &&(
+         <LoginModal 
+         signUp={signUp}
+         signIn={signIn}
+         walletAddress={walletAddress}
+         connectWallet={connectWallet}
+         toggleVariant={toggleVariant}
+         variant={variant}
+         setEmail={setEmail}
+         email={email}
+         setPassword={setPassword}
+         password={password}
+         showLoginModal={showLoginModal}
+         />
+   
+      )}
+     
 
-      <section className="relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 relative z-10" id="">
+      <section className="relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 -z-10" id="">
 
 
-        <div className='w-full h-full'>
+        <div style={{opacity: errorModal || loginModal  ? "10%": "100%"}} className='w-full h-full'>
           <div className='flex flex-col md:flex-row w-3/4 md:w-full m-auto mx-4 justify-between'>
           <div className='flex flex-col uppercase mx-4 m-auto w-full md:w-2/3 '>
           <h1 className="uppercase tracking-tighter text-5xl md:text-8xl justify-start text-start"><span className="text-6xl md:text-8xl">InfinityBee</span><br></br><span className="whitespace-nowrap">Token {translate("presale")}</span></h1>
@@ -362,7 +405,7 @@ const logOut = () => {
           </div>
           
               </div>
-              <div className='flex flex-row md:flex-col uppercase w-3/4 md:w-1/3 m-auto mx-8 max-h-[500px] items-start justify-center'>
+              <div style={{opacity: errorModal || loginModal ? "10%": "100%"}} className='flex flex-row md:flex-col uppercase w-3/4 md:w-1/3 m-auto mx-8 max-h-[500px] items-start justify-center'>
               <img src='/images/beelogo.png' className='p-4 w-3/4 md:w-2/3 mx-auto justify-center'/>
               <div className='flex flex-col my-auto mx-4 md:mx-0 w-full text-center'>
               <p>{translate("sold")}</p>
@@ -383,20 +426,33 @@ const logOut = () => {
             </div>
           </div>
         </div>
-        <div id='adventurer' className='w-full my-10'>
+        {errorMessage &&(
+        <div className='absolute flex w-full h-full m-auto items-center'>
+       
+       
+          <div style={{opacity: errorModal || loginModal ? "100%": "0%"}}className='relative flex flex-row bg-white p-4 rounded border-4 justify-center mx-auto z-40 w-3/4'>
+      <button onClick={()=> {setErrorMessage(""); showModal()}}className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-white bg-red-500'>X</button>
+      <div onClick={()=>{setErrorMessage(""); showModal()}} className='flex justify-center m-auto p-4 my-2 bg-white border-4 rounded-md border-white text-center items-center tracking-wider'>
+              <p className='text-black'>{errorMessage}</p>
+            </div>
+      </div>
+      
+        
+        </div>
+        )}
+      
+        <div style={{opacity: errorModal || loginModal ? "10%": "100%"}} id='adventurer' className='w-full my-10'>
           <h2 className='text-center uppercase text-6xl my-5'>Adventurer {translate("levels")}</h2>
           <div className="w-full flex flex-col">
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
             <div className='flex flex-col w-full md:w-1/3'>
               <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
               <button onClick={() => {buyTokens(200)}}className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
-              {errorMessage &&(
-              <div onClick={()=>{setErrorMessage("")}} className='flex justify-center m-auto p-4 my-2 bg-red-600 border-4 rounded-md border-white text-center items-center tracking-wider'>
-              <p className='text-white'>{errorMessage}</p>
+              
+             
+            
             </div>
-            )}
-            </div>
-            <div className='flex flex-col w-full md:w-1/3'>
+            <div style={{opacity: errorModal || loginModal  ? "10%": "100%"}} className='flex flex-col w-full md:w-1/3'>
               <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center'/>
               <button onClick={() => {buyTokens(500)}} className='flex w-1/2 mx-auto bg-peach text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
             </div>
@@ -408,7 +464,7 @@ const logOut = () => {
           
           </div>
         </div>
-        <div id='master' className='w-full my-10'>
+        <div style={{opacity: errorModal || loginModal  ? "10%": "100%"}} id='master' className='w-full my-10'>
           <h2 className='text-center uppercase text-6xl my-5'>Master {translate("levels")}</h2>
           <div className="w-full flex flex-col">
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
@@ -430,7 +486,7 @@ const logOut = () => {
           </div>
          
         </div>
-        <div id='legend' className='w-full my-10'>
+        <div style={{opacity: errorModal || loginModal  ? "10%": "100%"}} id='legend' className='w-full my-10'>
           <h2 className='text-center uppercase text-6xl my-5'>Legend {translate("levels")}</h2>
           <div className="w-full flex flex-col">
           <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
@@ -451,31 +507,17 @@ const logOut = () => {
           
         </div>
         
-      </section>
-            
-
-
-
-
-
-
-
-
-            {/* Total:  {nftPrice} + Gas */}
-            {/* Mint Status */}
-            {/* {status && (
-      <div className="flex items-center justify-center">
-        {status}
-      </div>
-    )} */}
-
-
-
-            {/* Right Hero Section - Video/Image Bird PASS */}
-
         
+      </section>
 
-      {/* Content + footer Section */}
+      <Footer />
+
+
+
+
+
+
+          
 
     </>
   )
