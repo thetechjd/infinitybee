@@ -13,22 +13,43 @@ export default function Header(props){
 
 
     const [packages, setPackages] = useState(false);
+    const [pmenu, setPmenu] = useState(false);
+    const [amenu, setAmenu] = useState(false)
+    const [lmenu, setLmenu] = useState(false)
     const [about, setAbout] = useState(false);
     const [languages, setLanguages] = useState(false);
    
     
 
 
-    const showPackages = () => {
-        setPackages(!packages);
+    const showPackages = (bool) => {
+      setPackages(bool)
     }
 
-    const showAbout = () => {
-      setAbout(!about);
+    
+    const showPmenu = (bool) => {
+        setPmenu(bool);
+       
     }
 
-    const showLanguages = () => {
-      setLanguages(!languages);
+
+
+    const showAbout = (bool) => {
+      setAbout(bool);
+    }
+
+    const showAmenu = (bool) => {
+      setAmenu(bool);
+     
+  }
+
+
+    const showLanguages = (bool) => {
+      setLanguages(bool);
+    }
+
+    const showLmenu = (bool) => {
+      setLmenu(bool)
     }
 
     return(
@@ -118,13 +139,17 @@ export default function Header(props){
 
 
               
-              <li className='relative'>
-                <a href="/"  onMouseEnter={showPackages} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                  <p className='rounded uppercase text-xs font-black
+              <li className='relative' >
+                <div onMouseEnter={()=> {showPackages(true)}} 
+                onMouseLeave={()=> {setTimeout(() => {
+                  if(!pmenu){ 
+                    showPackages(false)}}, 300)}} 
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                  <p className='relative rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("packages")}</p>
-                </a>
-                {packages &&(
-                    <div onMouseLeave={showPackages} className='absolute my-2'>
+          </div>
+          {(packages || pmenu) &&(
+                    <div onMouseEnter={()=> {showPmenu(true)}} onMouseLeave={()=> {showPackages(false); showPmenu(false)}} className='absolute dropdown-column my-2'>
                     <a href='#adventurer'><div  className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Mercury <span id="price" className='flex w-1/2'>200 USDT</span></div></a>
                     <a href='#adventurer'><div  className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Mars <span id="price" className='flex w-1/2'>500 USDT</span></div></a>
                     <a href='#adventurer'><div  className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Venus <span id="price"  className='flex w-1/2'>1.1K USDT</span></div></a>
@@ -135,17 +160,19 @@ export default function Header(props){
                     <a href='#legend'><div  className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Jupiter <span id="price" className='flex w-1/2'>48K USDT</span></div></a>
                 </div>
                 )}
-                
-
 
               </li>
               <li className='relative'>
-                <a href="/" onMouseEnter={showAbout} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                <div onMouseEnter={()=> {showAbout(true)}} 
+                onMouseLeave={()=> {setTimeout(() => {
+                  if(!amenu){ 
+                    showAbout(false)}}, 300)}} 
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
                   <p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("about")}</p>
-                </a>
-                {about &&(
-                    <div onMouseLeave={showAbout} className='absolute my-2'>
+                </div>
+                {(about || amenu) &&(
+                    <div onMouseEnter={()=> {showAmenu(true)}} onMouseLeave={()=> {showAbout(false); showAmenu(false)}} className='absolute my-2'>
                     <div className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>White paper</div>
                     <div className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Roadmap</div>
                     <div className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>About IFB token</div>
@@ -157,12 +184,16 @@ export default function Header(props){
                 )}
               </li>
               <li className='relative'>
-                <a href="/" onMouseEnter={showLanguages} className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                <div onMouseEnter={()=> {showLanguages(true)}} 
+                onMouseLeave={()=> {setTimeout(() => {
+                  if(!lmenu){ 
+                    showLanguages(false)}}, 300)}} 
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
                   <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.lang}</p> <img src={`/images/${props.lang}_icon.png`} className='w-[20px]' /></span>
-                </a>
-                {languages &&(
-                    <div onMouseLeave={showLanguages} className='absolute my-2'>
+                </div>
+                {(languages || lmenu) &&(
+                    <div onMouseEnter={()=> {showLmenu(true)}} onMouseLeave={()=> {showLanguages(false); showLmenu(false)}} className='absolute my-2'>
                     <div onClick={()=> {props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO')}} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>English</p>: <p>Romanian</p>}</div>
                     <div onClick={()=> {props.lang === 'ES' ? props.setLang('EN'): props.setLang('ES')}} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p>: <p>Spanish</p>}</div>
                     <div onClick={()=> {props.lang === 'FR' ? props.setLang('EN'): props.setLang('FR')}} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'FR' ? <p>English</p>: <p>French</p>}</div>

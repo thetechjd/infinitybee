@@ -389,7 +389,7 @@ const logOut = () => {
       )}
      
 
-      <section style={{zIndex: loginModal  ? "-10": "0"}} className="relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10" id="">
+      <section style={{zIndex: loginModal  ? "-10": "0"}} className="relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden" id="">
 
 
         <div style={{opacity: errorModal || loginModal  ? "10%": "100%" }} className='w-full h-full'>
