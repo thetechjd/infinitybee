@@ -1,7 +1,8 @@
 import Input from '../components/Input'
 
 export default function LoginModal(props){
-
+    
+    
 
 
 return (
@@ -17,8 +18,10 @@ return (
                         {props.variant === 'register' ? (
                             <>
                             {props.walletAddress ? (
-                                
+                                <div className='flex flex-col'>
+                                <p>Wallet Address</p>
                                  <p className='text-sm'>{props.walletAddress}</p>
+                                 </div>
                             
                             ):(
                                 <button onClick={props.connectWallet} className='bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
@@ -38,19 +41,43 @@ return (
                         
                         />
                         <Input 
+                        style={{border: props.errorMessage ? "#fff": null}}
                         label="Password"
-                        onChange={(e) => props.setPassword(e.target.value)}
+                        onChange={(e) => props.handlePassword(e.target.value)}
                         id='password'
-                        type='password'
+                        type={props.show ? 'text':'password'}
                         value={props.password}
+                        error={props.errorMessage ? true:false}
+                        show={props.show}
+                        togglePw={props.togglePw}
+                        
+                        
+                        
+                        />
+                        <p className='text-4xs text-red-500'>{props.errorMessage}</p>
+                        <Input 
+                        label="Re-Type Password"
+                        onChange={(e) => props.handlePwCheck(e.target.value)}
+                        id='pwcheck'
+                        type={props.show ? 'text':'password'}
+                        value={props.pwCheck}
+                        error={props.errorMessage ? true:false}
+                        show={props.show}
+                        togglePw={props.togglePw}
+                        
+                        
+
                         
                         />
                         </>
                         ): (
                             <>
                              {props.walletAddress ? (
-                                
-                                <p className='text-sm'> {props.walletAddress}</p>
+                                <div className='flex flex-col'>
+                                <p>Wallet Address</p>
+                                 <p className='text-sm'>{props.walletAddress}</p>
+                                 </div>
+                            
                            
                            ):(
                                <button onClick={props.connectWallet} className='bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
@@ -75,8 +102,10 @@ return (
                         label="Password"
                         onChange={(e) => props.setPassword(e.target.value)}
                         id='password'
-                        type='password'
+                        type={props.show ? 'text':'password'}
                         value={props.password}
+                        show={props.show}
+                        togglePw={props.togglePw}
                         
                         />
                                  </>

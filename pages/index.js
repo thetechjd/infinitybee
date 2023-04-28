@@ -112,6 +112,14 @@ export default function Home() {
   const [lang, setLang] = useState("EN");
   const [errorModal, setErrorModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
+  const [pwCheck, setPwCheck] = useState('');
+  const [showPw, setShowPw] = useState(false)
+
+  const [show, setShow] = useState(false);
+
+  const togglePw = () => {
+        setShow(!show)
+    }
 
 
 
@@ -175,6 +183,9 @@ export default function Home() {
       setLoginModal(!loginModal);
     }
 
+
+   
+
  
 
   const signUp = () => {
@@ -229,7 +240,26 @@ const logOut = () => {
     // An error happened.
   });
 }
+
+const handlePassword = (value) => {
+  setErrorMessage('')
+  if(value.length < 8){
+    setErrorMessage('Password must be at least 8 characters.')
+  }  
+    setPassword(value);
+    
   
+
+}
+
+const handlePwCheck = (check) => {
+  if (password !== check){
+    setErrorMessage('Passwords don\'t match!')
+  }
+    setPwCheck(check)
+  
+}
+   
 
 
 
@@ -381,9 +411,18 @@ const logOut = () => {
          variant={variant}
          setEmail={setEmail}
          email={email}
+         handlePassword={handlePassword}
+         handlePwCheck={handlePwCheck}
          setPassword={setPassword}
          password={password}
          showLoginModal={showLoginModal}
+         errorMessage={errorMessage}
+         setErrorMessage={setErrorMessage}
+         pwCheck={pwCheck}
+         togglePw={togglePw}
+         show={show}
+        
+
          />
    
       )}

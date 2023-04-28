@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import HidePassword from '../components/HidePassword'
 
 
 
@@ -9,15 +10,27 @@ const Input = ({
     onChange,
     value,
     label,
-    type
+    type,
+    error,
+    show,
+    togglePw
+    
 }) => {
+    
+   
+    
     return (
-        <div className='relative'>
+        <div className='relative w-full'>
+        <div className='flex flex-row justify-between'>
         <input
         onChange={onChange}
         type={type}
         value={value}
         id={id}
+        error={error}
+        show={show}
+        togglePw={togglePw}
+        style={{ borderTopRightRadius: id === 'password' || id === 'pwcheck' ? "0px": null, borderBottomRightRadius: id === 'password' || id === 'pwcheck' ? "0px": null, borderColor: error ? "red": null, borderWidth: error ? "2px": null}}
         className='
         block
         rounded-md
@@ -58,7 +71,17 @@ const Input = ({
         htmlFor={id}
         >
             {label}
+            
         </label>
+        {(id === 'password' || id === 'pwcheck') &&(
+            <HidePassword
+            togglePw={togglePw}
+            show={show}
+             />
+
+        )}
+       
+        </div>
         </div>
     )
 }
