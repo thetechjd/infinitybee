@@ -19,7 +19,14 @@ import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted }
 
 
 import {initializeApp} from 'firebase/app'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendSignInLinkToEmail, signOut, sendEmailVerification} from 'firebase/auth';
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  sendSignInLinkToEmail, 
+  signOut, 
+  sendEmailVerification, 
+  sendPasswordResetEmail} from 'firebase/auth';
 
 import es from '../utils/es.json';
 import fr from '../utils/fr.json';
@@ -75,8 +82,8 @@ const providerOptions = {
     options: {
       rpc: "https://eth-mainnet.g.alchemy.com/v2/trNMW5_zO5iGvlX4OZ3SjVF-5hLNVsN5" // required
     }
-  },
-  coinbasewallet: {
+  }
+ /* coinbasewallet: {
     package: CoinbaseWalletSDK, // Required
     options: {
       appName: "Highlight Card", // Required
@@ -84,7 +91,7 @@ const providerOptions = {
       chainId: 1, // Optional. It defaults to 1 if not provided
       darkMode: true // Optional. Use dark theme, defaults to false
     }
-  }
+  }*/
 
 };
 
@@ -112,11 +119,17 @@ export default function Home() {
   const [lang, setLang] = useState("EN");
   const [errorModal, setErrorModal] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
+  const [verificationWall, setVerificationWall] = useState(false)
   const [pwCheck, setPwCheck] = useState('');
-  const [showPw, setShowPw] = useState(false)
-
   const [show, setShow] = useState(false);
+  const [reset, setReset] = useState(false);
 
+  
+
+  
+  
+  
+  
   const togglePw = () => {
         setShow(!show)
     }
@@ -197,12 +210,13 @@ export default function Home() {
     sendEmailVerification(user);
     setUser(user);
     setUser({emailVerified: false})
-    })
     showLoginModal(false)
+    showVerificationWall(true)
+    })
+   
   
   .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
+    console.log(error)
     // ..
   });
   }
@@ -241,6 +255,22 @@ const logOut = () => {
   });
 }
 
+const resetPassword = () => {
+  setTimeout(() => {setErrorMessage('')
+}, 5000
+  )
+
+sendPasswordResetEmail(auth, email)
+  .then(() => {
+    // Password reset email sent
+    setErrorMessage('A reset email has been sent to your email address!')
+  })
+  .catch((error) => {
+    // An error occurred while sending the password reset email
+    console.log(error)
+  });
+}
+
 const handlePassword = (value) => {
   setErrorMessage('')
   if(value.length < 8){
@@ -253,11 +283,16 @@ const handlePassword = (value) => {
 }
 
 const handlePwCheck = (check) => {
+  setErrorMessage('')
   if (password !== check){
     setErrorMessage('Passwords don\'t match!')
   }
     setPwCheck(check)
   
+}
+
+const showVerificationWall = (bool) => {
+  setVerificationWall(bool)
 }
    
 
@@ -388,6 +423,15 @@ const handlePwCheck = (check) => {
         <link rel="icon" href="/" />
       </Head>
 
+      {verificationWall &&(
+        <div className='flex flex-col absolute -my-10 items-center justify-center bg-transparent w-full h-full z-50'>
+          <div className='flex flex-col border-2 rounded-sm items-center justify-center border-black p-5'>
+          <h3 className="text-center text-black">Please check your email. A verification email has been sent to the address provided.</h3>
+          <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={()=> {showVerificationWall(false); showLoginModal}}>Sign In</button>
+          </div>
+        </div>
+      )}
+
       <Header 
       setIsNavOpen={setIsNavOpen}
       isNavOpen={isNavOpen}
@@ -416,22 +460,31 @@ const handlePwCheck = (check) => {
          setPassword={setPassword}
          password={password}
          showLoginModal={showLoginModal}
+         loginModal={loginModal}
          errorMessage={errorMessage}
          setErrorMessage={setErrorMessage}
          pwCheck={pwCheck}
          togglePw={togglePw}
          show={show}
+         resetPassword={resetPassword}
+         reset={reset}
+         setReset={setReset}
+         
         
 
          />
    
       )}
+
+     
      
 
-      <section style={{zIndex: loginModal  ? "-10": "0"}} className="relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden" id="">
+      <section style={{zIndex: loginModal  ? "-10": "0", opacity: verificationWall ? "0%": "100%"}} className="relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden" 
+         id="">
 
 
-        <div style={{opacity: errorModal || loginModal  ? "10%": "100%" }} className='w-full h-full'>
+        <div style={{opacity: errorModal || loginModal  ? "10%": "100%" }} className='w-full h-full'
+        >
           <div className='flex flex-col md:flex-row w-3/4 md:w-full m-auto mx-4 justify-between'>
           <div className='flex flex-col uppercase mx-4 m-auto w-full md:w-2/3 '>
           <h1 className="uppercase tracking-tighter text-5xl md:text-8xl justify-start text-start"><span className="text-6xl md:text-8xl">InfinityBee</span><br></br><span className="whitespace-nowrap">Token {translate("presale")}</span></h1>

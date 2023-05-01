@@ -53,7 +53,7 @@ export default function Header(props){
     }
 
     return(
-        <header className='fixed w-full top-0 md:px-8 px-5 pt-5 pb-3 z-70 transition-colors duration-500 z-40 flex-none md:z-50 bg-lavender'>
+        <header className='fixed w-full top-0 md:px-8 px-5 pt-5 pb-3 z-70 transition-colors duration-500 z-30 flex-none md:z-40 bg-lavender'>
 
         {/* Header Container */}
         <div className='flex h-full items-center justify-center max-w-11xl mx-auto border-opacity-0'>
@@ -135,7 +135,7 @@ export default function Header(props){
               </div>
             </section>
 
-            <ul className="DESKTOP-MENU hidden lg:h-full space-x-2 lg:flex mr-10">
+            <ul className="DESKTOP-MENU hidden lg:h-full space-x-5 lg:flex mr-10">
 
 
               
@@ -210,9 +210,9 @@ export default function Header(props){
           text-white md:flex'>{props.success ? "Logout" : props.translate("login")}</p>
                 </button>
               </li>
-              <li className='flex h-full items-center my-auto'>
+             {/*} <li className='flex h-full items-center my-auto'>
                 <img src='/images/basket.png' className='flex w-[20px] hover:w-[30px] items-center justify-center'/>
-              </li>
+                </li>*/}
               
               {/* CONNECT WALLET */}
              
