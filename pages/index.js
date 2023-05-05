@@ -598,6 +598,10 @@ const showVerificationWall = (bool) => {
 
           
         </div>
+        <div style={{opacity: errorModal || loginModal  ? "10%": "100%"}} id='roadmap' className='w-full my-10 justify-center'>
+          <h2 className='text-center uppercase text-6xl my-5'>Roadmap</h2>
+          <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded'/>
+        </div>
         
         
       </section>
