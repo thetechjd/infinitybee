@@ -1,5 +1,6 @@
 import { createAlchemyWeb3 } from "@alch/alchemy-web3";
 import { useRef, useCallback, useEffect, useState } from "react";
+import {useRouter} from 'next/router';
 import Web3 from "web3";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -8,7 +9,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import Input from '../components/Input'
+import Input from '../components/Input';
 import LoginModal from '../components/LoginModal'
 import { useStatus } from "../context/statusContext";
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
@@ -66,14 +67,36 @@ const actionCodeSettings = {
 };
 
 
+const formatter = new Intl.NumberFormat('es-ES');
+
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
-
+//ABIs
 const contractABI = require("../pages/contract-abi.json");
-const contractAddress = "0xC33a621432EAC8f537850b657CcDE0a4E250c984";
+const fiatABI = require("../pages/fiat-abi.json");
+const beeABI = require("../pages/bee-abi.json");
+
+//smart contracts
+const contractAddress = require("../config/icoconfig.json").icoAddress;
+const fiatAddress = require("../config/icoconfig.json").fiatAddress;
+const beeAddress = require("../config/icoconfig.json").beeAddress;
 
 
+
+const web3 = createAlchemyWeb3('https://eth-sepolia.g.alchemy.com/v2/tZgBg81RgxE0pkpnQ6pjNpddJBd6nR_b');
+
+
+const baseContract = new web3.eth.Contract(
+  contractABI,
+  contractAddress
+);
+
+const beeContract = new web3.eth.Contract(
+  beeABI,
+  beeAddress
+);
 
 
 
@@ -124,6 +147,17 @@ export default function Home() {
   const [pwCheck, setPwCheck] = useState('');
   const [show, setShow] = useState(false);
   const [reset, setReset] = useState(false);
+  const [sold, setSold] = useState(0);
+  const [remaining, setRemaining] = useState(0);
+  const [refCode, setRefCode] = useState(0);
+
+  const router = useRouter();
+  const ref = router.query.ref || null;
+
+
+
+
+  
 
 
 
@@ -193,8 +227,8 @@ export default function Home() {
     setErrorModal(!errorModal)
   }
 
-  const showLoginModal = () => {
-    setLoginModal(!loginModal);
+  const showLoginModal = (bool) => {
+    setLoginModal(bool);
   }
 
 
@@ -234,7 +268,10 @@ export default function Home() {
         setUser(user);
         console.log(user);
         setSuccess(true);
+
+        if(walletAddress){
         showLoginModal(false)
+        }
 
       })
       .catch((error) => {
@@ -326,7 +363,8 @@ export default function Home() {
       }
     }*/
 
-  async function connectWallet() {
+  async function connectWallet(e) {
+    e.preventDefault();
 
     try {
 
@@ -345,6 +383,8 @@ export default function Home() {
         const address = accounts[0];
         setAddress(address);
 
+        showLoginModal(true)
+
 
       }
     } catch (error) {
@@ -357,36 +397,41 @@ export default function Home() {
   }
 
 
-  const claimTicket = async (e) => {
-    e.preventDefault();
-    const nftContract = new provider.eth.Contract(
+  const getSold = async() => {
+    const amountSold = await baseContract.methods.sold().call();
+    const amountRemaining = await beeContract.methods.balanceOf(contractAddress).call();
+    setSold(amountSold);
+    setRemaining(amountRemaining);
+  }
+
+  useEffect( async () => {
+    getSold()
+  }, [])
+
+  const buyTokens = async (pack, usdt) => {
+
+    const icoContract = new provider.eth.Contract(
       contractABI,
       contractAddress
     )
+    
+    const fiatContract = new provider.eth.Contract(
+      fiatABI,
+      fiatAddress
+    );
 
-    try {
-      let tickets = await nftContract.methods.balanceOf(walletAddress, 1).call();
-      if (tickets > 0) {
-        if (email.includes('@')) {
-          setErrorMessage('');
-          await nftContract.methods.setApprovalForAll(contractAddress, true).send({ from: walletAddress })
-            .then(() => {
-              nftContract.methods.claimTicket(email).send({ from: walletAddress })
-            })
-        } else {
-          setErrorMessage('Please input a valid email address.')
-        }
+    let refValue;
 
-      } else {
-        setErrorMessage('You have no tickets to redeem!')
-      }
-    } catch (error) {
-      setErrorMessage('You have no tickets to redeem!');
+   
+
+    if (ref > 0){
+      refValue = ref;
+    } else {
+      refValue = 0;
     }
+    console.log("This is the refValue: "+ refValue)
 
-  }
 
-  const buyTokens = async (usdt) => {
 
 
     const total = usdt * 10 ** 6;
@@ -394,7 +439,11 @@ export default function Home() {
     if (user && walletAddress) {
       //Buy token logic
 
-      console.log("You bought tokens!")
+      await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(() => {
+        icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+      })
+  
+  
     } else {
       setErrorMessage('You must login first to redeem tokens');
       showModal();
@@ -430,7 +479,7 @@ export default function Home() {
         <div className='flex flex-col absolute -my-10 items-center justify-center bg-transparent w-full h-full z-50'>
           <div className='flex flex-col border-2 rounded-sm items-center justify-center border-black p-5'>
             <h3 className="text-center text-black">Please check your email. A verification email has been sent to the address provided.</h3>
-            <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={() => { showVerificationWall(false); showLoginModal }}>Sign In</button>
+            <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={() => { showVerificationWall(false); showLoginModal(true) }}>Sign In</button>
           </div>
         </div>
       )}
@@ -504,9 +553,9 @@ export default function Home() {
               <img src='/images/beelogo.png' className='p-4 w-3/4 md:w-2/3 mx-auto justify-center' />
               <div className='flex flex-col my-auto mx-4 md:mx-0 w-full text-center'>
                 <p>{translate("sold")}</p>
-                <h3 className='text-2xl'>23.000.000</h3>
+                <h3 className='text-2xl'>{sold ? formatter.format(sold/10**18): 0}</h3>
                 <p>{translate("remaining")}</p>
-                <h3 className='text-2xl'>67.000.000</h3>
+                <h3 className='text-2xl'>{remaining ? formatter.format(remaining/10**18): 0}</h3>
               </div>
             </div>
 
@@ -542,18 +591,18 @@ export default function Home() {
             <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(200) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
+                <button onClick={() => { buyTokens(0, 200) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
 
 
 
               </div>
               <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(500) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                <button onClick={() => { buyTokens(3, 500) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(1100) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                <button onClick={() => { buyTokens(1, 1100) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
               </div>
             </div>
 
@@ -565,15 +614,15 @@ export default function Home() {
             <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(2300) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                <button onClick={() => { buyTokens(2, 2300) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(5000) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                <button onClick={() => { buyTokens(7, 5000) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(11000) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                <button onClick={() => { buyTokens(6, 11000) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
               </div>
 
             </div>
@@ -587,11 +636,11 @@ export default function Home() {
             <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
               <div className='flex flex-col w-full md:w-1/2'>
                 <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(23000) }} className='flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                <button onClick={() => { buyTokens(5, 23000) }} className='flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/2'>
                 <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(48000) }} className='flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                <button onClick={() => { buyTokens(4, 48000) }} className='flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
               </div>
 
 
@@ -602,7 +651,7 @@ export default function Home() {
 
         </div>
         <div id='faq' className='pb-3 pt-12 px-4 flex flex-col w-full'>
-          <h2 className='text-center uppercase text-6xl my-5'>How It Works</h2>
+          <h2 className='text-center uppercase text-6xl my-5'>{translate("howitworks")}</h2>
           <div className='px-4 py-8 text-white text-sm bg-gray-900 rounded-md border-4 my-2'>
             <details className="accordion">
               <summary className="">{translate("what")}</summary>
@@ -611,8 +660,8 @@ export default function Home() {
                 <p>{translate("following4")}</p>
                 <ul className="flex flex-col mx-5">
                   <li>{translate("personalneeds")}</li>
-                  <li>Personal / individual projects (goals, dreams).</li>
-                  <li>E.g.: a house, a car, holidays, school fees, etc.</li>
+                  <li>{translate("goalsdreams")}</li>
+                  <li>{translate("housecar")}</li>
                   <li>b. For medical problems (Individuals)</li>
                   <li>E.g.: medical treatment, surgery, medical assistance, etc.</li>
                   <li>c. For Business type projects (company)</li>
@@ -630,7 +679,7 @@ export default function Home() {
           </div>
           <div className='px-4 py-8 text-white text-sm bg-gray-900 rounded-md border-4 my-2'>
             <details className="accordion">
-              <summary>WHEN A LEVEL IS :  ACTIVATED / NOT ACTIVATED / FROZEN</summary>
+              <summary>{translate("levelfrozen")}</summary>
               <div>
                 <p>Each Level (box) is activated only once and works without a deadline (expiration date).
                   The last position occupied in the cycle Closes it and, at the same time, Reopens a new Cycle. This is done automatically by the system, thanks to the SmartContract.
@@ -646,7 +695,7 @@ export default function Home() {
           </div>
           <div className='px-4 py-8 text-white text-sm bg-gray-900 rounded-md border-4 my-2'>
             <details className="accordion">
-              <summary>UPGRADE STRATEGY</summary>
+              <summary>{translate("upgradestrategy")}</summary>
               <div>
                 <p>Both systems Matrix Bee3 and Matrix Bee4 are working in parallel ‒ simultaneously; this means that, the number of activated levels in one system will be equal to the number of activated levels in the other system.</p>
                 <p>This means that every time we want to move to the next level (to Upgrade), we will activate both Levels (boxes) (with the same number and same values) from both Matrix Bee3 and Matrix Bee4 systems.</p>
@@ -662,7 +711,7 @@ export default function Home() {
           </div>
           <div className='px-4 py-8 text-white text-sm bg-gray-900 rounded-md border-4 my-2'>
             <details className="accordion">
-              <summary>HOW TO ACTIVATE</summary>
+              <summary>{translate("activate")}</summary>
               <div>
                 <p>All levels from 1 to 9 can be activated at any time, as many you choose, in ascending order, without skipping one or more levels (boxes).
                   Each level (box) once activated remains so forever and for an infinite number of Cycles.
@@ -677,7 +726,7 @@ export default function Home() {
           </div>
           <div className='px-4 py-8 text-white text-sm bg-gray-900 rounded-md border-4 my-2'>
             <details className="accordion">
-            <summary>BE CAREFUL OF THE NOTIFICATION BELL</summary>
+            <summary>{translate("notificationbell")}</summary>
             <p>Every time there is an important event, the system will notify you by displaying a bell.</p>
             <p>1. When you are exceeded by a direct (on an unactivated level) and you need to Upgrade.</p>
             <p className='text-pinkk'>MESSAGE</p>
@@ -696,7 +745,7 @@ export default function Home() {
 
           <div className='px-4 py-8 text-white text-sm bg-gray-900 rounded-md border-4 my-2'>
             <details className="accordion">
-            <summary>SYMBOLS & COLORS</summary>
+            <summary>{translate("symbolsandcolors")}</summary>
             <p>All the people who will occupy positions in the two systems: Matrix Bee3 & Matrix Bee4, are represented with the help of Sacred Geometry through the symbol FLOWER OF LIFE.</p>
             <ul className='flex flex-col mx-5'>
               <li>
@@ -758,7 +807,7 @@ export default function Home() {
           </div>
           <div className='px-4 py-8 text-white text-sm bg-gray-900 rounded-md border-4 my-2'>
             <details className="accordion">
-            <summary>MONEY DISTRIBUTION</summary>
+            <summary>{translate("moneydist")}</summary>
             <p>The distribution of funds in Matrix Bee3 is done as follows:</p>
             <p>All the money from the first two positions (1, 2) goes directly to your wallet, and those from the 3rd position goes to the person who gave you the chance to enter into this Community.
               With the three occupied positions, this Cycle closes - reopening the next Cycle with another three free positions; in this order you can receive the next funds for your project.
