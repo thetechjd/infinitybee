@@ -42,6 +42,7 @@ module.exports = {
         lavender: '#31294a',
         peach: '#ff5050',
         greenn: 'var(--clr-green)',
+        beesecondary: '#2c2b4b',
         background: 'var(--clr-background)'
       },
     },
