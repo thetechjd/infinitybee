@@ -312,7 +312,7 @@ export default function Home() {
 
         if (walletAddress) {
           showLoginModal(false)
-        }
+        } 
 
       })
       .catch((error) => {
@@ -500,23 +500,23 @@ export default function Home() {
 
   const getReferrer = async () => {
 
-    if(ref > 0){
+    if (ref > 0) {
 
       try {
 
         const q = query(collection(db, "users"))
-  
+
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
           if ((doc.data().user.referralCode) == ref) {
             return doc
           }
-  
+
         })
       } catch (err) {
         console.log(err)
       }
-  
+
     }
 
   }
@@ -557,52 +557,52 @@ export default function Home() {
         icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
       })
 
-/*
-      if(ref > 0){
-
-        const referrer = await getReferrer();
-
-        let timeNow = Date.now()
-
-        let term = referrer.data().user.termStart
-
-        let lastMonth = referrer.data().user.lastMonth;
-
-        let thisMonth = referrer.data().user.thisMonth;
-
-        let updatedUserData;
-
-        if(timeNow > (term + (2592000 * 1000))) {
-
-          let nextTerm = timeHelper.getLastMonth();
-
-          lastMonth += thisMonth
-
-          thisMonth += usdt * .05
-
-
-          updatedUserData = {
-            termStart: nextTerm,
-            lastMonth: lastMonth,
-            thisMonth: thisMonth,
-          }
-
-          await updateUser(referrer.id, updatedUserData)
-
-
-
-
-        } else {
-
-          thisMonth += usdt * .05
-
-          updatedUserData = {
-            thisMonth: thisMonth
-          }
-
-          await updateUser(referrer.id, updatedUserData)
-        }
-      }*/
+      /*
+            if(ref > 0){
+      
+              const referrer = await getReferrer();
+      
+              let timeNow = Date.now()
+      
+              let term = referrer.data().user.termStart
+      
+              let lastMonth = referrer.data().user.lastMonth;
+      
+              let thisMonth = referrer.data().user.thisMonth;
+      
+              let updatedUserData;
+      
+              if(timeNow > (term + (2592000 * 1000))) {
+      
+                let nextTerm = timeHelper.getLastMonth();
+      
+                lastMonth += thisMonth
+      
+                thisMonth += usdt * .05
+      
+      
+                updatedUserData = {
+                  termStart: nextTerm,
+                  lastMonth: lastMonth,
+                  thisMonth: thisMonth,
+                }
+      
+                await updateUser(referrer.id, updatedUserData)
+      
+      
+      
+      
+              } else {
+      
+                thisMonth += usdt * .05
+      
+                updatedUserData = {
+                  thisMonth: thisMonth
+                }
+      
+                await updateUser(referrer.id, updatedUserData)
+              }
+            }*/
 
 
 
@@ -618,9 +618,9 @@ export default function Home() {
 
 
   const updateUser = async (id, userObject) => {
-    
 
-  
+
+
 
     const documentRef = doc(db, "users", id);
     const documentSnapshot = await getDoc(documentRef);
@@ -646,7 +646,7 @@ export default function Home() {
 
     console.log('Copied!')
     navigator.clipboard.writeText
-      (`http://https://infinitybee.vercel.app?ref=${item.data().user.referralCode}`);
+      (`https://infinitybee.vercel.app?ref=${item.data().user.referralCode}`);
 
     setCopyMessage('Copied!');
     setTimeout(() => setCopyMessage(""), 1500);
@@ -781,6 +781,22 @@ export default function Home() {
               <button onClick={() => { setErrorMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
               <div onClick={() => { setErrorMessage(""); }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
                 <p className='text-red-800'>{errorMessage}</p>
+              </div>
+            </div>
+
+
+          </div>
+        )}
+
+        {warningMessage && (
+          <div className='fixed flex w-1/2 h-full m-auto items-center'>
+
+
+            <div className='relative flex flex-row bg-white p-4 rounded border-4 border-gray-300 justify-center mx-auto z-40 w-3/4'>
+              <button onClick={() => { setWarningMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
+              <div onClick={() => { setWarningMessage(""); }} className='flex justify-center m-auto p-4 my-2 bg-white text-center items-center tracking-wider'>
+                <p className='text-black'>{warningMessage}</p>
+                <img src='/images/Loading_icon.gif' className='flex justify-center w-1/2 m-auto' />
               </div>
             </div>
 
