@@ -424,6 +424,7 @@ export default function Home() {
         const address = accounts[0];
         setAddress(address);
         fetchReferralCode(address.toLowerCase());
+        getTotalRefRevenue(address)
 
         showLoginModal(true)
 
@@ -496,6 +497,30 @@ export default function Home() {
 
   }
 
+
+  const getReferrer = async () => {
+
+    if(ref > 0){
+
+      try {
+
+        const q = query(collection(db, "users"))
+  
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          if ((doc.data().user.referralCode) == ref) {
+            return doc
+          }
+  
+        })
+      } catch (err) {
+        console.log(err)
+      }
+  
+    }
+
+  }
+
   const buyTokens = async (pack, usdt) => {
 
     const icoContract = new provider.eth.Contract(
@@ -532,6 +557,55 @@ export default function Home() {
         icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
       })
 
+/*
+      if(ref > 0){
+
+        const referrer = await getReferrer();
+
+        let timeNow = Date.now()
+
+        let term = referrer.data().user.termStart
+
+        let lastMonth = referrer.data().user.lastMonth;
+
+        let thisMonth = referrer.data().user.thisMonth;
+
+        let updatedUserData;
+
+        if(timeNow > (term + (2592000 * 1000))) {
+
+          let nextTerm = timeHelper.getLastMonth();
+
+          lastMonth += thisMonth
+
+          thisMonth += usdt * .05
+
+
+          updatedUserData = {
+            termStart: nextTerm,
+            lastMonth: lastMonth,
+            thisMonth: thisMonth,
+          }
+
+          await updateUser(referrer.id, updatedUserData)
+
+
+
+
+        } else {
+
+          thisMonth += usdt * .05
+
+          updatedUserData = {
+            thisMonth: thisMonth
+          }
+
+          await updateUser(referrer.id, updatedUserData)
+        }
+      }*/
+
+
+
 
     } else {
       setErrorMessage('You must login first to redeem tokens');
@@ -543,11 +617,36 @@ export default function Home() {
   }
 
 
+  const updateUser = async (id, userObject) => {
+    
+
+  
+
+    const documentRef = doc(db, "users", id);
+    const documentSnapshot = await getDoc(documentRef);
+
+    if (documentSnapshot.exists()) {
+      const existingUserData = documentSnapshot.data().user;
+      const updatedUser = { ...existingUserData, ...userObject };
+
+      try {
+        await updateDoc(documentRef, { user: updatedUser })
+
+
+        console.log(`User profile ${storedUser.id} updated successfully!`);
+      } catch (error) {
+        console.error("Error updating document:", error);
+      }
+    }
+  }
+
+
+
   const copyText = (item) => {
 
     console.log('Copied!')
     navigator.clipboard.writeText
-      (`http://localhost:3000?ref=${item.data().user.referralCode}`);
+      (`http://https://infinitybee.vercel.app?ref=${item.data().user.referralCode}`);
 
     setCopyMessage('Copied!');
     setTimeout(() => setCopyMessage(""), 1500);
