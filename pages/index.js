@@ -25,6 +25,8 @@ import { doc, updateDoc, addDoc, deleteDoc, getDoc, getDocs, collection, query, 
 import { initializeApp } from 'firebase/app'
 import {
   getAuth,
+  setPersistence,
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendSignInLinkToEmail,
@@ -75,6 +77,10 @@ const formatter = new Intl.NumberFormat('es-ES');
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+
+
+
+
 
 // Create a reference to the Firebase Storage
 const db = getFirestore(app);
@@ -165,6 +171,7 @@ export default function Home() {
 
   const router = useRouter();
   const ref = router.query.ref || null;
+
 
 
 
@@ -273,6 +280,10 @@ export default function Home() {
   }
 
 
+  
+
+
+
 
 
 
@@ -302,7 +313,17 @@ export default function Home() {
 
 
   const signIn = () => {
-    signInWithEmailAndPassword(auth, email, password)
+    setPersistence(auth, browserLocalPersistence)
+  .then(async () => {
+    // Existing and future Auth states are now persisted in the current
+    // session only. Closing the window would clear any existing state even
+    // if a user forgets to sign out.
+    // ...
+    // New sign-in will be persisted with session persistence.
+   
+ 
+
+    return await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
@@ -319,7 +340,9 @@ export default function Home() {
         const errorCode = error.code;
         const errorMessage = error.message;
       });
+    })
   }
+
 
   const logOut = () => {
     signOut(auth).then(() => {
