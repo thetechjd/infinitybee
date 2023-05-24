@@ -164,14 +164,30 @@ export default function Home() {
   const [reset, setReset] = useState(false);
   const [sold, setSold] = useState(0);
   const [remaining, setRemaining] = useState(0);
-  const [refCode, setRefCode] = useState(0);
+  const [refCode, setRefCode] = useState("");
   const [totalRefRevenue, setTotalRefRevenue] = useState(0);
   const [activeRefCode, setActiveRefCode] = useState();
   const [copyMessage, setCopyMessage] = useState('')
+  const [loggedIn, setLoggedIn] = useState(false)
 
   const router = useRouter();
   const ref = router.query.ref || null;
 
+
+  useEffect(() => {
+    const logStatus = localStorage.getItem("loggedIn")
+    setLoggedIn(logStatus)
+    console.log(localStorage.getItem("loggedIn"))
+    setAddress(localStorage.getItem("address"))
+
+
+  }, [])
+
+
+  useEffect(() => {
+    setRefCode(String(ref))
+    console.log('Ref value set!')
+  }, [ref])
 
 
 
@@ -280,7 +296,7 @@ export default function Home() {
   }
 
 
-  
+
 
 
 
@@ -313,17 +329,7 @@ export default function Home() {
 
 
   const signIn = () => {
-    setPersistence(auth, browserLocalPersistence)
-  .then(async () => {
-    // Existing and future Auth states are now persisted in the current
-    // session only. Closing the window would clear any existing state even
-    // if a user forgets to sign out.
-    // ...
-    // New sign-in will be persisted with session persistence.
-   
- 
-
-    return await signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
@@ -331,17 +337,24 @@ export default function Home() {
         console.log(user);
         setSuccess(true);
 
+        setLoggedIn(true)
+
+        localStorage.setItem("loggedIn", true)
+        console.log("You are logged in.");
+
         if (walletAddress) {
+          localStorage.setItem("address", walletAddress);
           showLoginModal(false)
-        } 
+        }
 
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
       });
-    })
+
   }
+
 
 
   const logOut = () => {
@@ -351,6 +364,9 @@ export default function Home() {
       setEmail("")
       setPassword("")
       disconnect();
+      setLoggedIn(false)
+      localStorage.setItem("loggedIn", false)
+      console.log("You are logged out");
 
     }).catch((error) => {
       // An error happened.
@@ -521,121 +537,320 @@ export default function Home() {
   }
 
 
-  const getReferrer = async () => {
+  const getReferrer = async (code) => {
 
-    if (ref > 0) {
+    let reference;
 
-      try {
+    try {
 
-        const q = query(collection(db, "users"))
+      console.log('Querying...')
 
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          if ((doc.data().user.referralCode) == ref) {
-            return doc
-          }
 
-        })
-      } catch (err) {
-        console.log(err)
-      }
 
+      const q = query(collection(db, "users"));
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+
+        if (doc.data().user.referralCode === code) {
+          reference = doc;
+        }
+
+
+      })
+
+      return reference;
+    } catch (err) {
+      console.log(err)
     }
+
+
 
   }
 
+
   const buyTokens = async (pack, usdt) => {
 
-    const icoContract = new provider.eth.Contract(
-      contractABI,
-      contractAddress
-    )
+    try {
 
-    const fiatContract = new provider.eth.Contract(
-      fiatABI,
-      fiatAddress
-    );
+      const icoContract = new web3.eth.Contract(
+        contractABI,
+        contractAddress
+      )
 
-    let refValue;
+      const fiatContract = new web3.eth.Contract(
+        fiatABI,
+        fiatAddress
+      );
 
-
-
-    if (ref > 0) {
-      refValue = ref;
-    } else {
-      refValue = 0;
-    }
-    console.log("This is the refValue: " + refValue)
+      let refValue;
 
 
 
+      if (ref > 0) {
+        refValue = ref;
+      } else {
+        refValue = 0;
+      }
+      console.log("This is the refValue: " + refValue)
 
-    const total = usdt * 10 ** 6;
 
-    if (user && walletAddress) {
-      //Buy token logic
 
-      await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(() => {
-        setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
-        icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-      })
 
-      /*
-            if(ref > 0){
-      
-              const referrer = await getReferrer();
-      
+      const total = usdt * 10 ** 6;
+
+      if ((user || loggedIn) && walletAddress) {
+        //Buy token logic
+        setWarningMessage("Please approve payment...");
+        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
+          setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
+          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+        }).then(async () => {
+          await getSold();
+         setWarningMessage("");
+        }).then((async ()=> {
+
+          if (refCode.length > 0) {
+            console.log(refCode)
+
+            try {
+              const referrer = await getReferrer(refCode)
+
+              console.log(referrer)
+
               let timeNow = Date.now()
-      
-              let term = referrer.data().user.termStart
-      
-              let lastMonth = referrer.data().user.lastMonth;
-      
-              let thisMonth = referrer.data().user.thisMonth;
-      
+
+              let term = referrer.data().user.termStart;
+
+              let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
+
+              let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
+
               let updatedUserData;
-      
-              if(timeNow > (term + (2592000 * 1000))) {
-      
+
+
+              if (timeNow > (term + (2592000 * 1000))) {
+
                 let nextTerm = timeHelper.getLastMonth();
-      
+
                 lastMonth += thisMonth
-      
+
                 thisMonth += usdt * .05
-      
-      
+
+
                 updatedUserData = {
                   termStart: nextTerm,
                   lastMonth: lastMonth,
                   thisMonth: thisMonth,
                 }
-      
+
                 await updateUser(referrer.id, updatedUserData)
-      
-      
-      
-      
+
+
+
               } else {
-      
+
                 thisMonth += usdt * .05
-      
+
                 updatedUserData = {
                   thisMonth: thisMonth
                 }
-      
+
                 await updateUser(referrer.id, updatedUserData)
               }
-            }*/
 
 
 
 
-    } else {
-      setErrorMessage('You must login first to redeem tokens');
-      showModal();
 
 
 
+
+
+
+            } catch (err) {
+              console.log(err)
+            }
+
+
+
+          }
+        
+
+
+        }))
+      }
+
+
+
+    } catch (err) {
+
+
+      const icoContract = new provider.eth.Contract(
+        contractABI,
+        contractAddress
+      )
+
+      const fiatContract = new provider.eth.Contract(
+        fiatABI,
+        fiatAddress
+      );
+
+      let refValue;
+
+
+
+      if (ref > 0) {
+        refValue = ref;
+      } else {
+        refValue = 0;
+      }
+      console.log("This is the refValue: " + refValue)
+
+
+
+
+      const total = usdt * 10 ** 6;
+
+      if ((user || loggedIn) && walletAddress) {
+        //Buy token logic
+        setWarningMessage("Please approve payment...");
+
+        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
+          setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
+          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+        }).then(async () => {
+          await getSold();
+          showModal()
+        }).then(async() => {
+
+
+          if (refCode.length > 0) {
+            console.log(refCode)
+
+            try {
+              const referrer = await getReferrer(refCode)
+
+              console.log(referrer)
+
+              let timeNow = Date.now()
+
+              let term = referrer.data().user.termStart;
+
+              let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
+
+              let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
+
+              let updatedUserData;
+
+
+              if (timeNow > (term + (2592000 * 1000))) {
+
+                let nextTerm = timeHelper.getLastMonth();
+
+                lastMonth += thisMonth
+
+                thisMonth += usdt * .05
+
+
+                updatedUserData = {
+                  termStart: nextTerm,
+                  lastMonth: lastMonth,
+                  thisMonth: thisMonth,
+                }
+
+                await updateUser(referrer.id, updatedUserData)
+
+
+
+              } else {
+
+                thisMonth += usdt * .05
+
+                updatedUserData = {
+                  thisMonth: thisMonth
+                }
+
+                await updateUser(referrer.id, updatedUserData)
+              }
+
+
+
+
+
+
+
+
+
+
+            } catch (err) {
+              console.log(err)
+            }
+
+
+
+          }
+        })
+        
+        
+
+        /*
+              if(ref > 0){
+        
+                const referrer = await getReferrer();
+        
+                let timeNow = Date.now()
+        
+                let term = referrer.data().user.termStart
+        
+                let lastMonth = referrer.data().user.lastMonth;
+        
+                let thisMonth = referrer.data().user.thisMonth;
+        
+                let updatedUserData;
+        
+                if(timeNow > (term + (2592000 * 1000))) {
+        
+                  let nextTerm = timeHelper.getLastMonth();
+        
+                  lastMonth += thisMonth
+        
+                  thisMonth += usdt * .05
+        
+        
+                  updatedUserData = {
+                    termStart: nextTerm,
+                    lastMonth: lastMonth,
+                    thisMonth: thisMonth,
+                  }
+        
+                  await updateUser(referrer.id, updatedUserData)
+        
+        
+        
+        
+                } else {
+        
+                  thisMonth += usdt * .05
+        
+                  updatedUserData = {
+                    thisMonth: thisMonth
+                  }
+        
+                  await updateUser(referrer.id, updatedUserData)
+                }
+              }*/
+
+
+
+
+      } else {
+        setErrorMessage('You must login first to redeem tokens');
+        showModal();
+
+
+
+      }
     }
   }
 
@@ -656,7 +871,7 @@ export default function Home() {
         await updateDoc(documentRef, { user: updatedUser })
 
 
-        console.log(`User profile ${storedUser.id} updated successfully!`);
+        console.log(`User profile ${id} updated successfully!`);
       } catch (error) {
         console.error("Error updating document:", error);
       }
@@ -719,6 +934,8 @@ export default function Home() {
         success={success}
         logOut={logOut}
         showLoginModal={showLoginModal}
+        loggedIn={loggedIn}
+        setLoggedIn={setLoggedIn}
 
 
       />
@@ -763,7 +980,40 @@ export default function Home() {
 
         <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
         >
-          <div className='flex flex-col md:flex-row w-3/4 md:w-full m-auto mx-4 justify-between'>
+          <div className='flex flex-row w-full px-3 py-4 mx-4 justify-between'>
+          <h1 className="uppercase tracking-tighter text-5xl md:text-8xl justify-start text-start"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
+          <img src='/images/beelogo.png' className='w-[300px] mr-8 my-auto items-center justify-center' />
+          </div>
+          
+          <div className='flex flex-row w-full m-auto justify-between mt-4 mx-4 px-4'>
+            <h3 className="text-bluee text-2xl">{translate("currency")}</h3>
+                
+            
+            <p className='flex mr-24 px-6 text-3xl'>{translate("sold")}</p>
+
+          </div>
+          <div className='flex flex-row w-full m-auto justify-between  mx-4 px-4'>
+          <h3 className='text-2xl'>{translate("used")}</h3>
+          <h3 className='flex mr-20 px-6 text-3xl'>{sold ? formatter.format(sold / 10 ** 18) : 0}</h3>
+          
+          </div>
+          <div className='flex flex-row w-full m-auto justify-between mx-4 px-4'>
+          <h3 className='text-pinkk text-2xl'>{translate("decentralized")}</h3>
+          
+          </div>
+
+          <div className='flex flex-row w-full m-auto justify-between mx-4 px-4'>
+            
+          <h3 className='text-2xl'>{translate("world")}</h3>
+          <p className='flex mx-16 px-8 text-2xl'>{translate("remaining")}</p>
+          </div>
+          <div className='flex flex-row w-full m-auto justify-between mx-4 px-4'>
+          <h3 className='text-purplee text-2xl'>{translate("matrix")}</h3>
+          <h3 className='flex mr-12 px-6 text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
+          </div>
+
+
+          {/*<div className='flex flex-col md:flex-row w-3/4 md:w-full m-auto mx-4 justify-between'>
             <div className='flex flex-col uppercase mx-4 m-auto w-full md:w-2/3 '>
               <h1 className="uppercase tracking-tighter text-5xl md:text-8xl justify-start text-start"><span className="text-6xl md:text-8xl">InfinityBee</span><br></br><span className="whitespace-nowrap">Token {translate("presale")}</span></h1>
               <div className='md:flex flex-col mt-12 w-full hidden'>
@@ -776,7 +1026,7 @@ export default function Home() {
 
             </div>
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='flex flex-row md:flex-col uppercase w-3/4 md:w-1/3 m-auto mx-8 max-h-[500px] items-start justify-center'>
-              <img src='/images/beelogo.png' className='p-4 w-3/4 md:w-2/3 mx-auto justify-center' />
+              <img src='/images/beelogo.png' className='p-4 w-[300px] mx-auto justify-center' />
               <div className='flex flex-col my-auto mx-4 md:mx-0 w-full text-center'>
                 <p>{translate("sold")}</p>
                 <h3 className='text-2xl'>{sold ? formatter.format(sold / 10 ** 18) : 0}</h3>
@@ -785,7 +1035,7 @@ export default function Home() {
               </div>
             </div>
 
-          </div>
+      </div>*/}
 
           <div className='flex flex-row justify-between m-auto mx-4 px-8'>
             <div className='flex flex-col uppercase'>
@@ -797,12 +1047,12 @@ export default function Home() {
           </div>
         </div>
         {errorMessage && (
-          <div className='fixed flex w-full h-full m-auto items-center'>
+          <div className='fixed flex w-full h-full m-auto items-center z-40'>
 
 
-            <div className='relative flex flex-row bg-red-100 p-4 rounded border-4 justify-center mx-auto z-40 w-3/4'>
-              <button onClick={() => { setErrorMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
-              <div onClick={() => { setErrorMessage(""); }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
+            <div className='fixed flex flex-row bg-red-100 p-4 rounded border-4 justify-center mx-auto z-40 w-full'>
+              <button onClick={() => { setErrorMessage(""); showModal() }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
+              <div onClick={() => { setErrorMessage(""); showModal() }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
                 <p className='text-red-800'>{errorMessage}</p>
               </div>
             </div>
@@ -812,14 +1062,14 @@ export default function Home() {
         )}
 
         {warningMessage && (
-          <div className='fixed flex w-1/2 h-full m-auto items-center'>
+          <div className='fixed flex w-full h-full m-auto justify-center items-center'>
 
 
-            <div className='relative flex flex-row bg-white p-4 rounded border-4 border-gray-300 justify-center mx-auto z-40 w-3/4'>
+            <div className='relative flex flex-col bg-white p-4 rounded border-4 border-gray-300 justify-between mx-auto z-40 w-1/2'>
               <button onClick={() => { setWarningMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
-              <div onClick={() => { setWarningMessage(""); }} className='flex justify-center m-auto p-4 my-2 bg-white text-center items-center tracking-wider'>
+              <div onClick={() => { setWarningMessage(""); }} className='flex flex-col justify-center m-auto p-8 my-4 bg-white text-center items-center tracking-wider'>
                 <p className='text-black'>{warningMessage}</p>
-                <img src='/images/Loading_icon.gif' className='flex justify-center w-1/2 m-auto' />
+                <img src='/images/Loading_icon.gif' className='flex flex-col mt-4 justify-center w-1/2 m-auto' />
               </div>
             </div>
 
