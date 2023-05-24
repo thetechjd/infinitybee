@@ -150,7 +150,7 @@ export default function Header(props) {
             </div>
           </section>
 
-          <ul className="DESKTOP-MENU hidden lg:h-full space-x-5 lg:flex mr-8">
+          <ul className="DESKTOP-MENU hidden lg:h-full space-x-5 lg:flex mr-20">
 
 
 

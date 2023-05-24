@@ -980,6 +980,25 @@ export default function Home() {
 
         <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
         >
+
+          <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96'>
+          <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
+          
+          <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
+          <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
+          <p className='m-auto text-3xl'>{translate("sold")}</p>
+          <h3 className='my-auto  whitespace-nowrap mx-4 text-2xl'>{translate("used")}</h3>
+          <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold / 10 ** 18) : 0}</h3>
+          <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk text-2xl'>{translate("decentralized")}</h3>
+          <div></div>
+          <h3 className='my-auto uppercase whitespace-nowrap mx-4 text-2xl'>{translate("world")}</h3>
+          <p className='m-auto text-3xl'>{translate("remaining")}</p>
+          <h3 className='my-auto whitespace-nowrap mx-4 text-purplee text-2xl'>{translate("matrix")}</h3>
+          <h3 className='m-auto text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
+
+          </div>
+
+          {/*}
           <div className='flex flex-row w-full px-3 py-4 mx-4 justify-between'>
           <h1 className="uppercase tracking-tighter text-5xl md:text-8xl justify-start text-start"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
           <img src='/images/beelogo.png' className='w-[300px] mr-8 my-auto items-center justify-center' />
@@ -1010,7 +1029,7 @@ export default function Home() {
           <div className='flex flex-row w-full m-auto justify-between mx-4 px-4'>
           <h3 className='text-purplee text-2xl'>{translate("matrix")}</h3>
           <h3 className='flex mr-12 px-6 text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
-          </div>
+      </div>*/}
 
 
           {/*<div className='flex flex-col md:flex-row w-3/4 md:w-full m-auto mx-4 justify-between'>
