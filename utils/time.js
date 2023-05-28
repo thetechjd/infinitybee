@@ -25,9 +25,26 @@ return timestampInMilliseconds
 
 }
 
+function dateHelper(timestamp){
+
+    const date = new Date(timestamp);
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+console.log(formattedDate);
+
+return formattedDate
+
+}
 
 
 
-module.exports = {getLastMonth};
+
+
+
+module.exports = {getLastMonth, dateHelper};
 
 

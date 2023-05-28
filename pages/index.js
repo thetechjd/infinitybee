@@ -42,6 +42,7 @@ import cn from '../utils/cn.json';
 import it from '../utils/it.json';
 import ro from '../utils/ro.json';
 import en from '../utils/en.json';
+import { NetworkLockedRounded } from "@material-ui/icons";
 
 
 
@@ -152,6 +153,7 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [variant, setVariant] = useState('login');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loginMessage, setLoginMessage] = useState('');
   const [warningMessage, setWarningMessage] = useState('');
   const [success, setSuccess] = useState(false);
   const [user, setUser] = useState();
@@ -171,10 +173,10 @@ export default function Home() {
   const [loggedIn, setLoggedIn] = useState(false)
 
   const router = useRouter();
-  const ref = router.query.ref || null;
+  const ref = router.query.ref || "";
 
 
-  useEffect(() => {
+useEffect(() => {
     const logStatus = localStorage.getItem("loggedIn")
     setLoggedIn(logStatus)
     console.log(localStorage.getItem("loggedIn"))
@@ -182,6 +184,11 @@ export default function Home() {
 
 
   }, [])
+/*
+  useEffect(() => {
+    console.log(localStorage.setItem("address", ""))
+    console.log(localStorage.setItem("loggedIn", false))
+  }, [])*/
 
 
   useEffect(() => {
@@ -306,7 +313,7 @@ export default function Home() {
 
   const signUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in 
         const user = userCredential.user;
         console.log(user);
@@ -315,6 +322,20 @@ export default function Home() {
         setUser({ emailVerified: false })
         showLoginModal(false)
         showVerificationWall(true)
+
+        try {
+          const docRef = await addDoc(collection(db, "users"), {
+            user: {
+              address: walletAddress,
+              createdAt: Date.now(),
+              termStart: timeHelper.getLastMonth()
+            }
+          });
+
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
       })
 
 
@@ -375,14 +396,14 @@ export default function Home() {
 
   const resetPassword = () => {
     setTimeout(() => {
-      setErrorMessage('')
+      setLoginMessage('')
     }, 5000
     )
 
     sendPasswordResetEmail(auth, email)
       .then(() => {
         // Password reset email sent
-        setErrorMessage('A reset email has been sent to your email address!')
+        setLoginMessage('A reset email has been sent to your email address!')
       })
       .catch((error) => {
         // An error occurred while sending the password reset email
@@ -391,9 +412,9 @@ export default function Home() {
   }
 
   const handlePassword = (value) => {
-    setErrorMessage('')
+    setLoginMessage('')
     if (value.length < 8) {
-      setErrorMessage('Password must be at least 8 characters.')
+      setLoginMessage('Password must be at least 8 characters.')
     }
     setPassword(value);
 
@@ -402,9 +423,9 @@ export default function Home() {
   }
 
   const handlePwCheck = (check) => {
-    setErrorMessage('')
+    setLoginMessage('')
     if (password !== check) {
-      setErrorMessage('Passwords don\'t match!')
+      setLoginMessage('Passwords don\'t match!')
     }
     setPwCheck(check)
 
@@ -509,7 +530,19 @@ export default function Home() {
 
         .then(async () => {
 
+          let userObject = {
+            referralCode: newCode,
+          }
+
           try {
+            const userId = await getId(walletAddress).then(async () => {
+              await updateUser(userId.id, userObject)
+            } )
+          } catch (err){
+            console.log(err)
+          }
+
+          /*try {
             const docRef = await addDoc(collection(db, "users"), {
               user: {
                 referralCode: newCode,
@@ -522,7 +555,7 @@ export default function Home() {
             console.log("Document written with ID: ", docRef.id);
           } catch (e) {
             console.error("Error adding document: ", e);
-          }
+          }*/
 
 
         })
@@ -534,6 +567,33 @@ export default function Home() {
 
 
 
+  }
+
+  const getId = async (address) => {
+
+    let userId;
+
+    try {
+
+      console.log('Retrieving user id...')
+
+      const q = query(collection(db, "users"));
+
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach((doc) => {
+        if ((doc.data().user.address).toLowerCase() === address.toLowerCase()){
+          
+          userId = doc
+
+          console.log(userId)
+        }
+      })
+
+      return userId;
+    } catch (err){
+      console.log(err)
+    }
   }
 
 
@@ -571,7 +631,7 @@ export default function Home() {
 
   const buyTokens = async (pack, usdt) => {
 
-    try {
+    if(!provider){
 
       const icoContract = new web3.eth.Contract(
         contractABI,
@@ -587,8 +647,8 @@ export default function Home() {
 
 
 
-      if (ref > 0) {
-        refValue = ref;
+      if (refCode.length > 0) {
+        refValue = refCode;
       } else {
         refValue = 0;
       }
@@ -607,74 +667,117 @@ export default function Home() {
           await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
         }).then(async () => {
           await getSold();
-         setWarningMessage("");
-        }).then((async ()=> {
+          setWarningMessage("");
+        }).then((async () => {
 
-          if (refCode.length > 0) {
-            console.log(refCode)
+          let round = await icoContract.methods.current_round().call();
 
-            try {
-              const referrer = await getReferrer(refCode)
+          let amount;
 
-              console.log(referrer)
-
-              let timeNow = Date.now()
-
-              let term = referrer.data().user.termStart;
-
-              let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
-
-              let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-
-              let updatedUserData;
-
-
-              if (timeNow > (term + (2592000 * 1000))) {
-
-                let nextTerm = timeHelper.getLastMonth();
-
-                lastMonth += thisMonth
-
-                thisMonth += usdt * .05
+          switch (pack) {
+            case 1:
+              amount = usdt + (usdt * .02);
+            case 2:
+              amount = usdt + (usdt * .03);
+            case 3:
+              amount = usdt + (usdt * .01);
+            case 4:
+              amount = usdt + (usdt * .25);
+            case 5:
+              amount = usdt + (usdt * .15);
+            case 6:
+              amount = usdt + (usdt * .1)
+            case 7:
+              amount = usdt + (usdt * .07)
+            default:
+              amount = usdt;
 
 
-                updatedUserData = {
-                  termStart: nextTerm,
-                  lastMonth: lastMonth,
-                  thisMonth: thisMonth,
+          }
+
+          let newOrderData = {
+            order: {
+              date: Date.now(),
+              package: pack,
+              price: usdt,
+              round: round,
+              amount: amount,
+              value: usdt,
+            }
+          }
+
+          await newOrder(newOrderData).then(async () => {
+
+            if (refCode.length > 0) {
+              console.log(refCode)
+  
+              try {
+                const referrer = await getReferrer(refCode)
+  
+                console.log(referrer)
+  
+                let timeNow = Date.now()
+  
+                let term = referrer.data().user.termStart;
+  
+                let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
+  
+                let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
+  
+  
+  
+  
+                let updatedUserData;
+  
+  
+                if (timeNow > (term + (2592000 * 1000))) {
+  
+                  let nextTerm = timeHelper.getLastMonth();
+  
+                  lastMonth += thisMonth
+  
+                  thisMonth += usdt * .05
+  
+  
+                  updatedUserData = {
+                    termStart: nextTerm,
+                    lastMonth: lastMonth,
+                    thisMonth: thisMonth,
+                  }
+  
+                  await updateUser(referrer.id, updatedUserData)
+  
+  
+  
+                } else {
+  
+                  thisMonth += usdt * .05
+  
+                
+  
+                  updatedUserData = {
+                    thisMonth: thisMonth
+                  }
+  
+                  await updateUser(referrer.id, updatedUserData)
+  
+                 
                 }
-
-                await updateUser(referrer.id, updatedUserData)
-
-
-
-              } else {
-
-                thisMonth += usdt * .05
-
-                updatedUserData = {
-                  thisMonth: thisMonth
-                }
-
-                await updateUser(referrer.id, updatedUserData)
+  
+  
+              } catch (err) {
+                console.log(err)
               }
-
-
-
-
-
-
-
-
-
-
-            } catch (err) {
-              console.log(err)
+  
+  
+  
             }
 
 
 
-          }
+          })
+
+
         
 
 
@@ -683,7 +786,7 @@ export default function Home() {
 
 
 
-    } catch (err) {
+    } else {
 
 
       const icoContract = new provider.eth.Contract(
@@ -700,8 +803,8 @@ export default function Home() {
 
 
 
-      if (ref > 0) {
-        refValue = ref;
+      if (refCode.length > 0) {
+        refValue = refCode;
       } else {
         refValue = 0;
       }
@@ -722,7 +825,47 @@ export default function Home() {
         }).then(async () => {
           await getSold();
           showModal()
-        }).then(async() => {
+        }).then(async () => {
+
+          let round = await icoContract.methods.current_round().call();
+
+          let amount;
+
+          switch (pack) {
+            case 1:
+              amount = usdt + (usdt * .02);
+            case 2:
+              amount = usdt + (usdt * .03);
+            case 3:
+              amount = usdt + (usdt * .01);
+            case 4:
+              amount = usdt + (usdt * .25);
+            case 5:
+              amount = usdt + (usdt * .15);
+            case 6:
+              amount = usdt + (usdt * .1)
+            case 7:
+              amount = usdt + (usdt * .07)
+            default:
+              amount = usdt;
+
+
+          }
+
+          let newOrderData = {
+            order: {
+              date: Date.now(),
+              package: pack,
+              price: usdt,
+              round: round,
+              amount: amount,
+              value: usdt,
+            }
+          } 
+          
+          await newOrder(newOrderData).then(async () => {
+
+          
 
 
           if (refCode.length > 0) {
@@ -791,8 +934,9 @@ export default function Home() {
 
           }
         })
-        
-        
+        })
+
+
 
         /*
               if(ref > 0){
@@ -852,6 +996,40 @@ export default function Home() {
 
       }
     }
+  }
+
+  const newOrder = async (order) => {
+
+    const userId = await getId(walletAddress)
+
+      console.log('This is the userId: ' + userId.id)
+
+   
+
+    const documentRef = doc(db, "users", userId.id);
+    const documentSnapshot = await getDoc(documentRef);
+
+    if (documentSnapshot.exists()) {
+      const existingUserData = documentSnapshot.data().user;
+
+      if(!existingUserData.orders) {
+
+        existingUserData.orders = [];
+
+      }
+      const updatedUser = { ...existingUserData }
+
+      try {
+
+        updatedUser.orders.push(order);
+
+        await updateDoc(documentRef, { user: updatedUser })
+      } catch (err) {
+        console.log(err)
+      }
+
+    }
+  
   }
 
 
@@ -956,8 +1134,8 @@ export default function Home() {
           password={password}
           showLoginModal={showLoginModal}
           loginModal={loginModal}
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
+          loginMessage={loginMessage}
+          setLoginMessage={setLoginMessage}
           pwCheck={pwCheck}
           togglePw={togglePw}
           show={show}
@@ -982,19 +1160,19 @@ export default function Home() {
         >
 
           <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96'>
-          <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
-          
-          <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
-          <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
-          <p className='m-auto text-3xl'>{translate("sold")}</p>
-          <h3 className='my-auto  whitespace-nowrap mx-4 text-2xl'>{translate("used")}</h3>
-          <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold / 10 ** 18) : 0}</h3>
-          <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk text-2xl'>{translate("decentralized")}</h3>
-          <div></div>
-          <h3 className='my-auto uppercase whitespace-nowrap mx-4 text-2xl'>{translate("world")}</h3>
-          <p className='m-auto text-3xl'>{translate("remaining")}</p>
-          <h3 className='my-auto whitespace-nowrap mx-4 text-purplee text-2xl'>{translate("matrix")}</h3>
-          <h3 className='m-auto text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
+            <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
+
+            <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
+            <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
+            <p className='m-auto text-3xl'>{translate("sold")}</p>
+            <h3 className='my-auto  whitespace-nowrap mx-4 text-2xl'>{translate("used")}</h3>
+            <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold / 10 ** 18) : 0}</h3>
+            <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk text-2xl'>{translate("decentralized")}</h3>
+            <div></div>
+            <h3 className='my-auto uppercase whitespace-nowrap mx-4 text-2xl'>{translate("world")}</h3>
+            <p className='m-auto text-3xl'>{translate("remaining")}</p>
+            <h3 className='my-auto whitespace-nowrap mx-4 text-purplee text-2xl'>{translate("matrix")}</h3>
+            <h3 className='m-auto text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
 
           </div>
 

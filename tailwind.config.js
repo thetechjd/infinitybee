@@ -43,7 +43,8 @@ module.exports = {
         peach: '#ff5050',
         greenn: 'var(--clr-green)',
         beesecondary: '#2c2b4b',
-        background: 'var(--clr-background)'
+        background: 'var(--clr-background)',
+        slate950: '#020617',
       },
     },
   },

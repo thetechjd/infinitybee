@@ -63,7 +63,7 @@ export default function Header(props) {
   }
 
   return (
-    <header className='fixed w-full top-0 md:px-8 px-5 pt-5 pb-3 z-70 transition-colors duration-500 z-30 flex-none md:z-40 bg-lavender'>
+    <header className='fixed w-full top-0 md:px-8 px-5 pt-2 pb-2 z-70 transition-colors duration-500 z-30 flex-none md:z-40 bg-slate950'>
 
       {/* Header Container */}
       <div className='flex h-full items-center justify-center max-w-11xl mx-auto border-opacity-0'>
@@ -248,7 +248,7 @@ export default function Header(props) {
               </div>
               {(office || omenu) && (
                 <div onMouseEnter={() => { showOmenu(true) }} onMouseLeave={() => { showOffice(false); showOmenu(false) }} className='absolute ml-8 my-2'>
-              <div className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Back Office</div>
+              <a href='/backoffice'><div className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Back Office</div></a>
               <div onClick={props.loggedIn ? props.logOut : props.showLoginModal} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>
                 <p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.loggedIn ? "Logout" : props.translate("login")}</p>
