@@ -176,19 +176,24 @@ export default function Home() {
   const ref = router.query.ref || "";
 
 
-useEffect(() => {
+  useEffect(() => {
+    
     const logStatus = localStorage.getItem("loggedIn")
+    
     setLoggedIn(logStatus)
+  
     console.log(localStorage.getItem("loggedIn"))
     setAddress(localStorage.getItem("address"))
 
 
   }, [])
-/*
-  useEffect(() => {
-    console.log(localStorage.setItem("address", ""))
-    console.log(localStorage.setItem("loggedIn", false))
-  }, [])*/
+
+  
+  /*
+    useEffect(() => {
+      console.log(localStorage.setItem("address", ""))
+      console.log(localStorage.setItem("loggedIn", false))
+    }, [])*/
 
 
   useEffect(() => {
@@ -295,7 +300,9 @@ useEffect(() => {
 
 
   const showModal = () => {
-    setErrorModal(!errorModal)
+    if(errorModal) setErrorModal(false)
+    else setErrorModal(true)
+    
   }
 
   const showLoginModal = (bool) => {
@@ -314,6 +321,10 @@ useEffect(() => {
   const signUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
+
+
+
+
         // Signed in 
         const user = userCredential.user;
         console.log(user);
@@ -331,6 +342,39 @@ useEffect(() => {
               termStart: timeHelper.getLastMonth()
             }
           });
+
+          //Get ref Code
+          let refValue;
+
+          if (refCode.length > 0) {
+            refValue = refCode;
+          } else {
+            refValue = 0;
+          }
+          console.log("This is the refValue: " + refValue)
+
+
+          try {
+            const referrer = await getReferrer(refCode)
+
+            let current = referrer.data().user.signUps ? Number(referrer.data().user.signUps) : 0;
+
+            let updated = current + 1;
+
+            let refData = {
+              signUps: updated
+            }
+
+            await updateUser(referrer.id, refData)
+
+          } catch (err) {
+            console.log(err)
+          }
+
+
+
+
+
 
           console.log("Document written with ID: ", docRef.id);
         } catch (e) {
@@ -387,7 +431,10 @@ useEffect(() => {
       disconnect();
       setLoggedIn(false)
       localStorage.setItem("loggedIn", false)
+      localStorage.setItem("address", "")
       console.log("You are logged out");
+
+      router.push('/')
 
     }).catch((error) => {
       // An error happened.
@@ -502,9 +549,9 @@ useEffect(() => {
 
   const getSold = async () => {
     const amountSold = await baseContract.methods.sold().call();
-    const amountRemaining = await beeContract.methods.balanceOf(contractAddress).call();
+    //const amountRemaining = await beeContract.methods.balanceOf(contractAddress).call();
     setSold(amountSold);
-    setRemaining(amountRemaining);
+    setRemaining(100_000_000 * 10 ** 18 - amountSold);
   }
 
   useEffect(async () => {
@@ -537,8 +584,8 @@ useEffect(() => {
           try {
             const userId = await getId(walletAddress).then(async () => {
               await updateUser(userId.id, userObject)
-            } )
-          } catch (err){
+            })
+          } catch (err) {
             console.log(err)
           }
 
@@ -582,8 +629,8 @@ useEffect(() => {
       const querySnapshot = await getDocs(q);
 
       querySnapshot.forEach((doc) => {
-        if ((doc.data().user.address).toLowerCase() === address.toLowerCase()){
-          
+        if ((doc.data().user.address).toLowerCase() === address.toLowerCase()) {
+
           userId = doc
 
           console.log(userId)
@@ -591,7 +638,7 @@ useEffect(() => {
       })
 
       return userId;
-    } catch (err){
+    } catch (err) {
       console.log(err)
     }
   }
@@ -630,370 +677,379 @@ useEffect(() => {
 
 
   const buyTokens = async (pack, usdt) => {
+    let storedAddress = localStorage.getItem("address")
+    if (walletAddress.toLowerCase() === storedAddress.toLowerCase()) {
 
-    if(!provider){
-
-      const icoContract = new web3.eth.Contract(
-        contractABI,
-        contractAddress
-      )
-
-      const fiatContract = new web3.eth.Contract(
-        fiatABI,
-        fiatAddress
-      );
-
-      let refValue;
-
-
-
-      if (refCode.length > 0) {
-        refValue = refCode;
-      } else {
-        refValue = 0;
-      }
-      console.log("This is the refValue: " + refValue)
-
-
-
-
-      const total = usdt * 10 ** 6;
-
-      if ((user || loggedIn) && walletAddress) {
-        //Buy token logic
-        setWarningMessage("Please approve payment...");
-        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-          setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
-          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-        }).then(async () => {
-          await getSold();
-          setWarningMessage("");
-        }).then((async () => {
-
-          let round = await icoContract.methods.current_round().call();
-
-          let amount;
-
-          switch (pack) {
-            case 1:
-              amount = usdt + (usdt * .02);
-            case 2:
-              amount = usdt + (usdt * .03);
-            case 3:
-              amount = usdt + (usdt * .01);
-            case 4:
-              amount = usdt + (usdt * .25);
-            case 5:
-              amount = usdt + (usdt * .15);
-            case 6:
-              amount = usdt + (usdt * .1)
-            case 7:
-              amount = usdt + (usdt * .07)
-            default:
-              amount = usdt;
-
-
-          }
-
-          let newOrderData = {
-            order: {
-              date: Date.now(),
-              package: pack,
-              price: usdt,
-              round: round,
-              amount: amount,
-              value: usdt,
-            }
-          }
-
-          await newOrder(newOrderData).then(async () => {
-
-            if (refCode.length > 0) {
-              console.log(refCode)
-  
-              try {
-                const referrer = await getReferrer(refCode)
-  
-                console.log(referrer)
-  
-                let timeNow = Date.now()
-  
-                let term = referrer.data().user.termStart;
-  
-                let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
-  
-                let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-  
-  
-  
-  
-                let updatedUserData;
-  
-  
-                if (timeNow > (term + (2592000 * 1000))) {
-  
-                  let nextTerm = timeHelper.getLastMonth();
-  
-                  lastMonth += thisMonth
-  
-                  thisMonth += usdt * .05
-  
-  
-                  updatedUserData = {
-                    termStart: nextTerm,
-                    lastMonth: lastMonth,
-                    thisMonth: thisMonth,
-                  }
-  
-                  await updateUser(referrer.id, updatedUserData)
-  
-  
-  
-                } else {
-  
-                  thisMonth += usdt * .05
-  
-                
-  
-                  updatedUserData = {
-                    thisMonth: thisMonth
-                  }
-  
-                  await updateUser(referrer.id, updatedUserData)
-  
-                 
-                }
-  
-  
-              } catch (err) {
-                console.log(err)
-              }
-  
-  
-  
-            }
-
-
-
-          })
-
-
-        
-
-
-        }))
-      }
-
-
+      setErrorMessage("Alert! You are attempting to use an address that we do not recognize! Please only connect the wallet address that you registered with and try again.")
 
     } else {
 
 
-      const icoContract = new provider.eth.Contract(
-        contractABI,
-        contractAddress
-      )
 
-      const fiatContract = new provider.eth.Contract(
-        fiatABI,
-        fiatAddress
-      );
+      if (!provider) {
 
-      let refValue;
+        const icoContract = new web3.eth.Contract(
+          contractABI,
+          contractAddress
+        )
 
+        const fiatContract = new web3.eth.Contract(
+          fiatABI,
+          fiatAddress
+        );
 
-
-      if (refCode.length > 0) {
-        refValue = refCode;
-      } else {
-        refValue = 0;
-      }
-      console.log("This is the refValue: " + refValue)
+        let refValue;
 
 
 
-
-      const total = usdt * 10 ** 6;
-
-      if ((user || loggedIn) && walletAddress) {
-        //Buy token logic
-        setWarningMessage("Please approve payment...");
-
-        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-          setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
-          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-        }).then(async () => {
-          await getSold();
-          showModal()
-        }).then(async () => {
-
-          let round = await icoContract.methods.current_round().call();
-
-          let amount;
-
-          switch (pack) {
-            case 1:
-              amount = usdt + (usdt * .02);
-            case 2:
-              amount = usdt + (usdt * .03);
-            case 3:
-              amount = usdt + (usdt * .01);
-            case 4:
-              amount = usdt + (usdt * .25);
-            case 5:
-              amount = usdt + (usdt * .15);
-            case 6:
-              amount = usdt + (usdt * .1)
-            case 7:
-              amount = usdt + (usdt * .07)
-            default:
-              amount = usdt;
+        if (refCode.length > 0) {
+          refValue = refCode;
+        } else {
+          refValue = 0;
+        }
+        console.log("This is the refValue: " + refValue)
 
 
-          }
 
-          let newOrderData = {
-            order: {
-              date: Date.now(),
-              package: pack,
-              price: usdt,
-              round: round,
-              amount: amount,
-              value: usdt,
+
+        const total = usdt * 10 ** 6;
+
+        if ((user || loggedIn) && walletAddress) {
+          //Buy token logic
+          setWarningMessage("Please approve payment...");
+          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
+            setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
+            await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+          }).then(async () => {
+            await getSold();
+            setWarningMessage("");
+          }).then((async () => {
+
+            let round = await icoContract.methods.current_round().call();
+
+            let amount;
+
+            switch (pack) {
+              case 1:
+                amount = usdt + (usdt * .02);
+              case 2:
+                amount = usdt + (usdt * .03);
+              case 3:
+                amount = usdt + (usdt * .01);
+              case 4:
+                amount = usdt + (usdt * .25);
+              case 5:
+                amount = usdt + (usdt * .15);
+              case 6:
+                amount = usdt + (usdt * .1)
+              case 7:
+                amount = usdt + (usdt * .07)
+              default:
+                amount = usdt;
+
+
             }
-          } 
-          
-          await newOrder(newOrderData).then(async () => {
 
-          
+            let newOrderData = {
+              order: {
+                date: Date.now(),
+                package: pack,
+                price: usdt,
+                round: round,
+                amount: amount,
+                value: usdt,
+              }
+            }
 
+            await newOrder(newOrderData).then(async () => {
 
-          if (refCode.length > 0) {
-            console.log(refCode)
+              if (refCode.length > 0) {
+                console.log(refCode)
 
-            try {
-              const referrer = await getReferrer(refCode)
+                try {
+                  const referrer = await getReferrer(refCode)
 
-              console.log(referrer)
+                  console.log(referrer)
 
-              let timeNow = Date.now()
+                  let timeNow = Date.now()
 
-              let term = referrer.data().user.termStart;
+                  let term = referrer.data().user.termStart;
 
-              let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
+                  let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
 
-              let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-
-              let updatedUserData;
-
-
-              if (timeNow > (term + (2592000 * 1000))) {
-
-                let nextTerm = timeHelper.getLastMonth();
-
-                lastMonth += thisMonth
-
-                thisMonth += usdt * .05
+                  let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
 
 
-                updatedUserData = {
-                  termStart: nextTerm,
-                  lastMonth: lastMonth,
-                  thisMonth: thisMonth,
+
+
+                  let updatedUserData;
+
+
+                  if (timeNow > (term + (2592000 * 1000))) {
+
+                    let nextTerm = timeHelper.getLastMonth();
+
+                    lastMonth += thisMonth
+
+                    thisMonth += usdt * .05
+
+
+                    updatedUserData = {
+                      termStart: nextTerm,
+                      lastMonth: lastMonth,
+                      thisMonth: thisMonth,
+                    }
+
+                    await updateUser(referrer.id, updatedUserData)
+
+
+
+                  } else {
+
+                    thisMonth += usdt * .05
+
+
+
+                    updatedUserData = {
+                      thisMonth: thisMonth
+                    }
+
+                    await updateUser(referrer.id, updatedUserData)
+
+
+                  }
+
+
+                } catch (err) {
+                  console.log(err)
                 }
 
-                await updateUser(referrer.id, updatedUserData)
 
 
-
-              } else {
-
-                thisMonth += usdt * .05
-
-                updatedUserData = {
-                  thisMonth: thisMonth
-                }
-
-                await updateUser(referrer.id, updatedUserData)
               }
 
 
 
+            })
 
 
 
 
 
-
-
-            } catch (err) {
-              console.log(err)
-            }
-
-
-
-          }
-        })
-        })
-
-
-
-        /*
-              if(ref > 0){
-        
-                const referrer = await getReferrer();
-        
-                let timeNow = Date.now()
-        
-                let term = referrer.data().user.termStart
-        
-                let lastMonth = referrer.data().user.lastMonth;
-        
-                let thisMonth = referrer.data().user.thisMonth;
-        
-                let updatedUserData;
-        
-                if(timeNow > (term + (2592000 * 1000))) {
-        
-                  let nextTerm = timeHelper.getLastMonth();
-        
-                  lastMonth += thisMonth
-        
-                  thisMonth += usdt * .05
-        
-        
-                  updatedUserData = {
-                    termStart: nextTerm,
-                    lastMonth: lastMonth,
-                    thisMonth: thisMonth,
-                  }
-        
-                  await updateUser(referrer.id, updatedUserData)
-        
-        
-        
-        
-                } else {
-        
-                  thisMonth += usdt * .05
-        
-                  updatedUserData = {
-                    thisMonth: thisMonth
-                  }
-        
-                  await updateUser(referrer.id, updatedUserData)
-                }
-              }*/
-
+          }))
+        }
 
 
 
       } else {
-        setErrorMessage('You must login first to redeem tokens');
-        showModal();
+
+
+        const icoContract = new provider.eth.Contract(
+          contractABI,
+          contractAddress
+        )
+
+        const fiatContract = new provider.eth.Contract(
+          fiatABI,
+          fiatAddress
+        );
+
+        let refValue;
 
 
 
+        if (refCode.length > 0) {
+          refValue = refCode;
+        } else {
+          refValue = 0;
+        }
+        console.log("This is the refValue: " + refValue)
+
+
+
+
+        const total = usdt * 10 ** 6;
+
+        if ((user || loggedIn) && walletAddress) {
+          //Buy token logic
+          setWarningMessage("Please approve payment...");
+
+          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
+            setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
+            await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+          }).then(async () => {
+            await getSold();
+            showModal()
+          }).then(async () => {
+
+            let round = await icoContract.methods.current_round().call();
+
+            let amount;
+
+            switch (pack) {
+              case 1:
+                amount = usdt + (usdt * .02);
+              case 2:
+                amount = usdt + (usdt * .03);
+              case 3:
+                amount = usdt + (usdt * .01);
+              case 4:
+                amount = usdt + (usdt * .25);
+              case 5:
+                amount = usdt + (usdt * .15);
+              case 6:
+                amount = usdt + (usdt * .1)
+              case 7:
+                amount = usdt + (usdt * .07)
+              default:
+                amount = usdt;
+
+
+            }
+
+            let newOrderData = {
+              order: {
+                date: Date.now(),
+                package: pack,
+                price: usdt,
+                round: round,
+                amount: amount,
+                value: usdt,
+              }
+            }
+
+            await newOrder(newOrderData).then(async () => {
+
+
+
+
+              if (refCode.length > 0) {
+                console.log(refCode)
+
+                try {
+                  const referrer = await getReferrer(refCode)
+
+                  console.log(referrer)
+
+                  let timeNow = Date.now()
+
+                  let term = referrer.data().user.termStart;
+
+                  let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
+
+                  let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
+
+                  let updatedUserData;
+
+
+                  if (timeNow > (term + (2592000 * 1000))) {
+
+                    let nextTerm = timeHelper.getLastMonth();
+
+                    lastMonth += thisMonth
+
+                    thisMonth += usdt * .05
+
+
+                    updatedUserData = {
+                      termStart: nextTerm,
+                      lastMonth: lastMonth,
+                      thisMonth: thisMonth,
+                    }
+
+                    await updateUser(referrer.id, updatedUserData)
+
+
+
+                  } else {
+
+                    thisMonth += usdt * .05
+
+                    updatedUserData = {
+                      thisMonth: thisMonth
+                    }
+
+                    await updateUser(referrer.id, updatedUserData)
+                  }
+
+
+
+
+
+
+
+
+
+
+                } catch (err) {
+                  console.log(err)
+                }
+
+
+
+              }
+            })
+          })
+
+
+
+          /*
+                if(ref > 0){
+          
+                  const referrer = await getReferrer();
+          
+                  let timeNow = Date.now()
+          
+                  let term = referrer.data().user.termStart
+          
+                  let lastMonth = referrer.data().user.lastMonth;
+          
+                  let thisMonth = referrer.data().user.thisMonth;
+          
+                  let updatedUserData;
+          
+                  if(timeNow > (term + (2592000 * 1000))) {
+          
+                    let nextTerm = timeHelper.getLastMonth();
+          
+                    lastMonth += thisMonth
+          
+                    thisMonth += usdt * .05
+          
+          
+                    updatedUserData = {
+                      termStart: nextTerm,
+                      lastMonth: lastMonth,
+                      thisMonth: thisMonth,
+                    }
+          
+                    await updateUser(referrer.id, updatedUserData)
+          
+          
+          
+          
+                  } else {
+          
+                    thisMonth += usdt * .05
+          
+                    updatedUserData = {
+                      thisMonth: thisMonth
+                    }
+          
+                    await updateUser(referrer.id, updatedUserData)
+                  }
+                }*/
+
+
+
+
+        } else {
+          setErrorMessage('You must login first to redeem tokens');
+          showModal();
+
+
+
+        }
       }
     }
   }
@@ -1002,9 +1058,9 @@ useEffect(() => {
 
     const userId = await getId(walletAddress)
 
-      console.log('This is the userId: ' + userId.id)
+    console.log('This is the userId: ' + userId.id)
 
-   
+
 
     const documentRef = doc(db, "users", userId.id);
     const documentSnapshot = await getDoc(documentRef);
@@ -1012,7 +1068,7 @@ useEffect(() => {
     if (documentSnapshot.exists()) {
       const existingUserData = documentSnapshot.data().user;
 
-      if(!existingUserData.orders) {
+      if (!existingUserData.orders) {
 
         existingUserData.orders = [];
 
@@ -1029,7 +1085,7 @@ useEffect(() => {
       }
 
     }
-  
+
   }
 
 
@@ -1248,8 +1304,8 @@ useEffect(() => {
 
 
             <div className='fixed flex flex-row bg-red-100 p-4 rounded border-4 justify-center mx-auto z-40 w-full'>
-              <button onClick={() => { setErrorMessage(""); showModal() }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
-              <div onClick={() => { setErrorMessage(""); showModal() }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
+              <button onClick={() => { setErrorMessage("");  }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
+              <div onClick={() => { setErrorMessage(""); }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
                 <p className='text-red-800'>{errorMessage}</p>
               </div>
             </div>
@@ -1341,42 +1397,7 @@ useEffect(() => {
 
 
         </div>
-        <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='referral' className='w-full mx-2 my-10 justify-center bg-beesecondary bg-opacity-40'>
-          <h2 className='text-center uppercase text-6xl my-5'>Your Referral Code</h2>
 
-          <h2 className='flex px-6 py-2'>Your Stats ($BUSD)</h2>
-          <div className='flex flex-col lg:flex-row w-full px-3 my-5 mx-3 items-center justify-center lg:justify-between'>
-
-            <span className='flex w-1/2 lg:w-full text-2xl mx-2 py-2'><p>Last Month:</p><span className='text-5xl pl-2 pr-1 text-green-400'>$</span><p className='text-green-400 text-5xl px-2'>0</p></span>
-
-            <span className='flex w-1/2 lg:w-full text-2xl mx-2 py-2'><p>This Month:</p><span className='text-5xl pl-2 pr-1 text-green-400'>$</span><p className='text-5xl text-green-400 px-2'>0</p></span>
-
-            <span className='flex w-1/2 lg:w-full text-2xl mx-2 py-2'><p>Total:</p><span className='text-5xl pl-2 pr-1 text-green-400'>$</span><p className='text-green-400 text-5xl px-2'>{totalRefRevenue / 10 ** 6} </p></span>
-          </div>
-
-          {activeRefCode ? (
-            <>
-              <button onClick={() => { copyText(activeRefCode) }} className="flex w-1/2 lg:w-1/5 rounded-md mx-auto my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-4">
-                {copyMessage ? copyMessage : "Copy Your Referral Link"}
-                <img src='/images/Copy.png' alt="" />
-              </button>
-
-
-            </>
-
-          ) : (
-            <button onClick={generateReferralCode} className="flex w-1/2 lg:w-1/5 rounded-md mx-auto my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-4">
-              <img src='/images/Copy.png' alt="" />
-
-              Generate Referral Code
-
-            </button>
-
-          )}
-
-
-
-        </div>
         <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='roadmap' className='w-full my-10 justify-center'>
           <h2 className='text-center uppercase text-6xl my-5'>Roadmap</h2>
           <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded' />

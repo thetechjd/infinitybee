@@ -214,7 +214,7 @@ export default function Home() {
         console.log(storedAddress)
 
 
-    }, [walletAddress])
+    }, [])
 
 
 
@@ -239,11 +239,17 @@ export default function Home() {
         //let userAddress;
         if (walletAddress !== undefined) {
             // userAddress = localStorage.getItem("address");
+            try {
             const balance = await beeContract.methods.balanceOf(walletAddress).call();
             setBalance(balance)
-        }
+            } catch (err){
+                console.log(err)
+            }
+        } 
 
     }, [walletAddress])
+
+    
 
 
     //Retrieve Orders
@@ -302,6 +308,36 @@ export default function Home() {
 
         setTotalRefRevenue(totalRev);
     }
+
+
+    const getId = async (address) => {
+
+        let userId;
+    
+        try {
+    
+          console.log('Retrieving user id...')
+    
+          const q = query(collection(db, "users"));
+    
+          const querySnapshot = await getDocs(q);
+    
+          querySnapshot.forEach((doc) => {
+            if ((doc.data().user.address).toLowerCase() === address.toLowerCase()) {
+    
+              userId = doc
+    
+              console.log(userId)
+            }
+          })
+    
+          return userId;
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    
+    
 
 
 
@@ -449,8 +485,12 @@ export default function Home() {
             disconnect();
             setLoggedIn(false)
             localStorage.setItem("loggedIn", false)
+            localStorage.setItem("address", "")
             console.log("You are logged out");
 
+            router.push('/')
+
+            
         }).catch((error) => {
             // An error happened.
         });
@@ -1158,14 +1198,14 @@ export default function Home() {
                 <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
                 >
 
-                    <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-4 gap-x-48'>
+                    <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-4 gap-x-28'>
 
-                        <span className='flex flex-row w-full items-center'><p className='flex justify-start whitespace-nowrap'>Your Personal Referral Link:</p>
+                        <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
                                 {activeRefCode ? (
                                     <div className='flex flex-row items-center '>
-                                        <button onClick={() => { copyText(activeRefCode) }} className="flex w-full whitespace-nowrap rounded-md ml-5 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-4">
-                                            {copyMessage ? copyMessage : "Copy Your Referral Link"}
+                                        <button onClick={() => { copyText(activeRefCode) }} className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
+                                            {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
 
                                         </button>
                                         <div onClick={() => { copyText(activeRefCode) }}>

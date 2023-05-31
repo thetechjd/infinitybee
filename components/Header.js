@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 
 
@@ -20,6 +20,10 @@ export default function Header(props) {
   const [about, setAbout] = useState(false);
   const [languages, setLanguages] = useState(false);
   const [office, setOffice] = useState(false)
+  
+
+
+  
 
 
 
