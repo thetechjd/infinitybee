@@ -255,7 +255,7 @@ export default function Header(props) {
               <a href='/backoffice'><div className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Back Office</div></a>
               <div onClick={props.loggedIn ? props.logOut : props.showLoginModal} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>
                 <p className='rounded uppercase text-xs font-black
-          text-white md:flex'>{props.loggedIn ? "Logout" : props.translate("login")}</p>
+          text-white md:flex'>{props.loggedIn != false ? "Logout" : props.translate("login")}</p>
               </div>
               </div>
               )}

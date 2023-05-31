@@ -178,9 +178,7 @@ export default function Home() {
 
   useEffect(() => {
     
-    const logStatus = localStorage.getItem("loggedIn")
-    
-    setLoggedIn(logStatus)
+    setLoggedIn(localStorage.getItem("loggedIn"))
   
     console.log(localStorage.getItem("loggedIn"))
     setAddress(localStorage.getItem("address"))
@@ -434,7 +432,7 @@ export default function Home() {
       localStorage.setItem("address", "")
       console.log("You are logged out");
 
-      router.push('/')
+      
 
     }).catch((error) => {
       // An error happened.

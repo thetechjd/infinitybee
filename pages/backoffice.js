@@ -1085,6 +1085,8 @@ export default function Home() {
         }
     }
 
+
+
     const getDiscount = (pack, price) => {
         switch (pack) {
             case 0:
@@ -1105,6 +1107,29 @@ export default function Home() {
                 return parseInt(price + (price * .07)).toFixed(0)
             default:
                 return price
+        }
+    }
+
+    const getPackage = (pack) => {
+        switch (pack) {
+            case 0:
+                return 'Mercury'
+            case 1:
+                return 'Venus'
+            case 2:
+                return 'Earth'
+            case 3:
+                return 'Mars'
+            case 4:
+                return 'Jupiter'
+            case 5:
+                return 'Saturn'
+            case 6:
+                return 'Uranus'
+            case 7:
+                return 'Neptune'
+            default:
+                return pack
         }
     }
 
@@ -1232,7 +1257,7 @@ export default function Home() {
 
                             </span></span>
                         <span className='flex items-center'><p>Your Income</p></span>
-                        <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.timesReferred ? activeRefCode.data().user.timesReferred : 0) : 0}</p></span>
+                        <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
                         <span className='flex flex-row w-full items-center'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6}</p></span>
                         <span className='flex flex-row w-full whitespace-nowrap justify-end items-center'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesReferred ? activeRefCode.data().user.timesReferred : 0) : 0}</p></span>
                         <span className='flex flex-row w-full items-center'>
@@ -1247,7 +1272,7 @@ export default function Home() {
                                 <>
                                     <p className='mr-2'>Last Month:</p>
 
-                                    <p>{activeRefCode ? (activeRefCode.data().user.thisMonth ? activeRefCode.data().user.thisMonth : 0) : 0}</p><div onClick={toggleMonths}><ArrowDropUpOutlined /></div><div onClick={toggleMonths}><ArrowDropDownOutlined /></div>
+                                    <p>{activeRefCode ? (activeRefCode.data().user.lastMonth ? activeRefCode.data().user.lastMonth : 0) : 0}</p><div onClick={toggleMonths}><ArrowDropUpOutlined /></div><div onClick={toggleMonths}><ArrowDropDownOutlined /></div>
                                 </>
 
                             )}
@@ -1365,7 +1390,7 @@ export default function Home() {
                             <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
                                 <td className='flex w-full justify-center text-center'>{key}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.package}</td>
+                                <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.package, item.order.amount)}</td>
