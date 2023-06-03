@@ -23,7 +23,7 @@ import ArrowDropDownOutlined from '@material-ui/icons/ArrowDropDownOutlined';
 
 //const CountUp = require('react-countup')
 
-const { dateHelper, getLastMonth } = require('../utils/time');
+const { dateHelper, getLastMonth, getMonth, monthHelper } = require('../utils/time');
 
 
 
@@ -180,6 +180,15 @@ export default function Home() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [balance, setBalance] = useState(0)
     const [isThisMonth, setIsThisMonth] = useState(true)
+    const [referrals, setReferrals] = useState();
+    const [bonus, setBonus] = useState(0)
+    const [lastBonus, setLastBonus] = useState(0);
+    const [lastMonthDisabled, setLastMonthDisabled] = useState(false)
+
+
+    const [thisMonth, setThisMonth] = useState("")
+    const [lastMonth, setLastMonth] = useState("")
+
 
 
     //Pagination
@@ -216,6 +225,11 @@ export default function Home() {
 
     }, [])
 
+    useEffect(() => {
+        setThisMonth(convertMonth(monthHelper(Date.now())))
+        setLastMonth(convertMonth(monthHelper(Date.now()) - 1))
+    }, [])
+
 
 
     useEffect(() => {
@@ -230,9 +244,13 @@ export default function Home() {
     }, [walletAddress])
 
 
-    useEffect(() => {
-        fetchReferralCode(localStorage.getItem("address").toLowerCase())
+    useEffect(async () => {
+        await fetchReferralCode(localStorage.getItem("address").toLowerCase())
+    
+
     }, [walletAddress])
+
+   
 
 
     useEffect(async () => {
@@ -240,16 +258,133 @@ export default function Home() {
         if (walletAddress !== undefined) {
             // userAddress = localStorage.getItem("address");
             try {
-            const balance = await beeContract.methods.balanceOf(walletAddress).call();
-            setBalance(balance)
-            } catch (err){
+                const balance = await beeContract.methods.balanceOf(walletAddress).call();
+                const totalRev = await baseContract.methods.getTotalRefRevenue(walletAddress).call();
+                console.log(totalRev)
+                setTotalRefRevenue(totalRev);
+                setBalance(balance)
+            } catch (err) {
                 console.log(err)
             }
-        } 
+        }
 
     }, [walletAddress])
 
-    
+
+    const fetchReferrals = async (address) => {
+        let list = [];
+
+        try {
+            const q = query(collection(db, "users"))
+
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                
+                    if (doc.data().user.address === address) {
+                        doc.data().user.referrals.forEach((x) => {
+                            list.push(x)
+                        })
+                    }
+                })
+               
+            
+            console.log(list)
+            setReferrals(list)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        fetchReferrals(localStorage.getItem("address"));
+    }, [walletAddress])
+
+
+    const getMonthTotal = (input) => {
+        console.log(input)
+        let amount = 0;
+        setBonus(0)
+        
+        let month = getMonth();
+        console.log(month)
+
+        console.log(referrals.length)
+
+        referrals.forEach((y) => {
+            if (input === "thisMonth") {
+                
+                if (monthHelper(y.referral.date) === month) {
+                    console.log(y.referral)
+                    amount += y.referral.bonus
+                }
+            } else if (input === "lastMonth") {
+                
+                if ((monthHelper(y.referral.date)) === (month - 1)) {
+                    console.log(y.referral)
+                    amount += y.referral.bonus
+                }
+
+            } 
+
+        })
+
+        //console.log('This is this month amount' + thisMonthAmount)
+        //console.log('This is last month amount' + lastMonthAmount)
+        
+       
+        setBonus(amount)
+        
+
+        
+        
+        toggleMonths();
+    }
+
+    const lastMonthDisable = (doc) => {
+        console.log(doc)
+        const firstMonth = doc.data().user.createdAt;
+        if (monthHelper(firstMonth) === monthHelper(Date.now())) {
+            setLastMonthDisabled(true)
+        }
+    }
+
+    /*useEffect(() => {
+        lastMonthDisable()
+    }, [activeRefCode])*/
+
+    const convertMonth = (month) => {
+        switch (month) {
+            case 1:
+                return 'January'
+            case 2:
+                return 'February'
+            case 3:
+                return 'March'
+            case 4:
+                return 'April'
+            case 5:
+                return 'May'
+            case 6:
+                return 'June'
+            case 7:
+                return 'July'
+            case 8:
+                return 'August'
+            case 9:
+                return 'September'
+            case 10:
+                return 'October'
+            case 11:
+                return 'November'
+            case 12:
+                return 'December'
+            default:
+                return 'This Month'
+        }
+    }
+
+
+
 
 
     //Retrieve Orders
@@ -291,6 +426,8 @@ export default function Home() {
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 if ((doc.data().user.address).toLowerCase() == address) {
+                    console.log(doc)
+                    lastMonthDisable(doc)
                     setActiveRefCode(doc)
                 }
 
@@ -305,7 +442,7 @@ export default function Home() {
 
     const getTotalRefRevenue = async (address) => {
         const totalRev = await baseContract.methods.getTotalRefRevenue(address).call();
-
+        console.log(totalRev)
         setTotalRefRevenue(totalRev);
     }
 
@@ -313,31 +450,31 @@ export default function Home() {
     const getId = async (address) => {
 
         let userId;
-    
+
         try {
-    
-          console.log('Retrieving user id...')
-    
-          const q = query(collection(db, "users"));
-    
-          const querySnapshot = await getDocs(q);
-    
-          querySnapshot.forEach((doc) => {
-            if ((doc.data().user.address).toLowerCase() === address.toLowerCase()) {
-    
-              userId = doc
-    
-              console.log(userId)
-            }
-          })
-    
-          return userId;
+
+            console.log('Retrieving user id...')
+
+            const q = query(collection(db, "users"));
+
+            const querySnapshot = await getDocs(q);
+
+            querySnapshot.forEach((doc) => {
+                if ((doc.data().user.address).toLowerCase() === address.toLowerCase()) {
+
+                    userId = doc
+
+                    console.log(userId)
+                }
+            })
+
+            return userId;
         } catch (err) {
-          console.log(err)
+            console.log(err)
         }
-      }
-    
-    
+    }
+
+
 
 
 
@@ -490,7 +627,7 @@ export default function Home() {
 
             router.push('/')
 
-            
+
         }).catch((error) => {
             // An error happened.
         });
@@ -1158,14 +1295,7 @@ export default function Home() {
                 <link rel="icon" href="/" />
             </Head>
 
-            {verificationWall && (
-                <div className='flex flex-col absolute -my-10 items-center justify-center bg-transparent w-full h-full z-50'>
-                    <div className='flex flex-col border-2 rounded-sm items-center justify-center border-black p-5'>
-                        <h3 className="text-center text-black">Please check your email. A verification email has been sent to the address provided.</h3>
-                        <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={() => { showVerificationWall(false); showLoginModal(true) }}>Sign In</button>
-                    </div>
-                </div>
-            )}
+            
 
             <Header
                 setIsNavOpen={setIsNavOpen}
@@ -1259,20 +1389,21 @@ export default function Home() {
                         <span className='flex items-center'><p>Your Income</p></span>
                         <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
                         <span className='flex flex-row w-full items-center'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6}</p></span>
-                        <span className='flex flex-row w-full whitespace-nowrap justify-end items-center'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesReferred ? activeRefCode.data().user.timesReferred : 0) : 0}</p></span>
+                        <span className='flex flex-row w-full whitespace-nowrap justify-end items-center'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
                         <span className='flex flex-row w-full items-center'>
 
                             {isThisMonth ? (
                                 <>
-                                    <p className='mr-2'>This Month:</p>
+                                    <p className='mr-2'>{thisMonth}</p>
 
-                                    <p>{activeRefCode ? (activeRefCode.data().user.thisMonth ? activeRefCode.data().user.thisMonth : 0) : 0}</p><div onClick={toggleMonths}><ArrowDropUpOutlined /></div><div onClick={toggleMonths}><ArrowDropDownOutlined /></div>
+                                    <p>{activeRefCode ? (bonus) : 0} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
                                 </>
                             ) : (
                                 <>
-                                    <p className='mr-2'>Last Month:</p>
+                                {console.log('This is the last month bonus: ' + bonus)}
+                                    <p className='mr-2'>{lastMonth}</p>
 
-                                    <p>{activeRefCode ? (activeRefCode.data().user.lastMonth ? activeRefCode.data().user.lastMonth : 0) : 0}</p><div onClick={toggleMonths}><ArrowDropUpOutlined /></div><div onClick={toggleMonths}><ArrowDropDownOutlined /></div>
+                                    <p>{activeRefCode ? (bonus) : 0} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
                                 </>
 
                             )}
@@ -1388,7 +1519,7 @@ export default function Home() {
                         </tr>
                         {currentOrders.map((item, key) => (
                             <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
-                                <td className='flex w-full justify-center text-center'>{key}</td>
+                                <td className='flex w-full justify-center text-center'>{key + 1}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>

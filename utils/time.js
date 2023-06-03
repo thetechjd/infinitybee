@@ -1,4 +1,13 @@
 
+
+function getMonth () {
+  const date = new Date
+
+  const month = date.getMonth() + 1
+
+  return month;
+}
+
 function getLastMonth (){
 
     const date = new Date
@@ -25,6 +34,14 @@ return timestampInMilliseconds
 
 }
 
+function monthHelper(timestamp){
+  const date = new Date(timestamp);
+
+  const month = date.getMonth() + 1
+
+  return month
+}
+
 function dateHelper(timestamp){
 
     const date = new Date(timestamp);
@@ -45,6 +62,6 @@ return formattedDate
 
 
 
-module.exports = {getLastMonth, dateHelper};
+module.exports = {getMonth, getLastMonth, monthHelper, dateHelper};
 
 

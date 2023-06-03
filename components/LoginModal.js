@@ -29,8 +29,8 @@ export default function LoginModal(props) {
         <>
             {/*<div className='absolute bg-black w-full bg-transparent z-0'>*/}
 
-            <div className='absolute flex w-full justify-center z-0'>
-                <div ref={wrapperRef} className='relative bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full'>
+            <div className='absolute flex items-center w-full justify-center z-0'>
+                <div ref={wrapperRef} className='relative bg-black bg-opacity-70 px-16 py-10 self-center mt-10 lg:w-2/5 lg:max-w-md rounded-md w-full'>
                     <div onClick={() => { props.showLoginModal(false); props.setReset(false) }} className='flex right justify-end'>
                         <p className='text-white'>X</p>
                     </div>

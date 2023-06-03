@@ -10,7 +10,9 @@ import Head from 'next/head';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Input from '../components/Input';
-import LoginModal from '../components/LoginModal'
+import LoginModal from '../components/LoginModal';
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Cancel from '@material-ui/icons/Cancel';
 import { useStatus } from "../context/statusContext";
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
 //const CountUp = require('react-countup')
@@ -177,16 +179,16 @@ export default function Home() {
 
 
   useEffect(() => {
-    
+
     setLoggedIn(localStorage.getItem("loggedIn"))
-  
+
     console.log(localStorage.getItem("loggedIn"))
     setAddress(localStorage.getItem("address"))
 
 
   }, [])
 
-  
+
   /*
     useEffect(() => {
       console.log(localStorage.setItem("address", ""))
@@ -298,9 +300,9 @@ export default function Home() {
 
 
   const showModal = () => {
-    if(errorModal) setErrorModal(false)
+    if (errorModal) setErrorModal(false)
     else setErrorModal(true)
-    
+
   }
 
   const showLoginModal = (bool) => {
@@ -432,7 +434,7 @@ export default function Home() {
       localStorage.setItem("address", "")
       console.log("You are logged out");
 
-      
+
 
     }).catch((error) => {
       // An error happened.
@@ -675,382 +677,414 @@ export default function Home() {
 
 
   const buyTokens = async (pack, usdt) => {
-    let storedAddress = localStorage.getItem("address")
-    if (walletAddress.toLowerCase() === storedAddress.toLowerCase()) {
+    //let storedAddress = localStorage.getItem("address")
+    //if (walletAddress.toLowerCase() === storedAddress.toLowerCase()) {
 
-      setErrorMessage("Alert! You are attempting to use an address that we do not recognize! Please only connect the wallet address that you registered with and try again.")
+    //  setErrorMessage("Alert! You are attempting to use an address that we do not recognize! Please only connect the wallet address that you registered with and try again.")
 
-    } else {
+    // } else {
 
 
 
-      if (!provider) {
+    if (!provider) {
 
-        const icoContract = new web3.eth.Contract(
-          contractABI,
-          contractAddress
-        )
+      const icoContract = new web3.eth.Contract(
+        contractABI,
+        contractAddress
+      )
 
-        const fiatContract = new web3.eth.Contract(
-          fiatABI,
-          fiatAddress
-        );
+      const fiatContract = new web3.eth.Contract(
+        fiatABI,
+        fiatAddress
+      );
 
-        let refValue;
+      let refValue;
 
 
 
-        if (refCode.length > 0) {
-          refValue = refCode;
-        } else {
-          refValue = 0;
-        }
-        console.log("This is the refValue: " + refValue)
-
-
-
-
-        const total = usdt * 10 ** 6;
-
-        if ((user || loggedIn) && walletAddress) {
-          //Buy token logic
-          setWarningMessage("Please approve payment...");
-          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-            setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
-            await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-          }).then(async () => {
-            await getSold();
-            setWarningMessage("");
-          }).then((async () => {
-
-            let round = await icoContract.methods.current_round().call();
-
-            let amount;
-
-            switch (pack) {
-              case 1:
-                amount = usdt + (usdt * .02);
-              case 2:
-                amount = usdt + (usdt * .03);
-              case 3:
-                amount = usdt + (usdt * .01);
-              case 4:
-                amount = usdt + (usdt * .25);
-              case 5:
-                amount = usdt + (usdt * .15);
-              case 6:
-                amount = usdt + (usdt * .1)
-              case 7:
-                amount = usdt + (usdt * .07)
-              default:
-                amount = usdt;
-
-
-            }
-
-            let newOrderData = {
-              order: {
-                date: Date.now(),
-                package: pack,
-                price: usdt,
-                round: round,
-                amount: amount,
-                value: usdt,
-              }
-            }
-
-            await newOrder(newOrderData).then(async () => {
-
-              if (refCode.length > 0) {
-                console.log(refCode)
-
-                try {
-                  const referrer = await getReferrer(refCode)
-
-                  console.log(referrer)
-
-                  let timeNow = Date.now()
-
-                  let term = referrer.data().user.termStart;
-
-                  let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
-
-                  let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-
-
-
-
-                  let updatedUserData;
-
-
-                  if (timeNow > (term + (2592000 * 1000))) {
-
-                    let nextTerm = timeHelper.getLastMonth();
-
-                    lastMonth += thisMonth
-
-                    thisMonth += usdt * .05
-
-
-                    updatedUserData = {
-                      termStart: nextTerm,
-                      lastMonth: lastMonth,
-                      thisMonth: thisMonth,
-                    }
-
-                    await updateUser(referrer.id, updatedUserData)
-
-
-
-                  } else {
-
-                    thisMonth += usdt * .05
-
-
-
-                    updatedUserData = {
-                      thisMonth: thisMonth
-                    }
-
-                    await updateUser(referrer.id, updatedUserData)
-
-
-                  }
-
-
-                } catch (err) {
-                  console.log(err)
-                }
-
-
-
-              }
-
-
-
-            })
-
-
-
-
-
-          }))
-        }
-
-
-
+      if (refCode.length > 0) {
+        refValue = refCode;
       } else {
-
-
-        const icoContract = new provider.eth.Contract(
-          contractABI,
-          contractAddress
-        )
-
-        const fiatContract = new provider.eth.Contract(
-          fiatABI,
-          fiatAddress
-        );
-
-        let refValue;
-
-
-
-        if (refCode.length > 0) {
-          refValue = refCode;
-        } else {
-          refValue = 0;
-        }
-        console.log("This is the refValue: " + refValue)
+        refValue = 0;
+      }
+      console.log("This is the refValue: " + refValue)
 
 
 
 
-        const total = usdt * 10 ** 6;
+      const total = usdt * 10 ** 6;
 
-        if ((user || loggedIn) && walletAddress) {
-          //Buy token logic
-          setWarningMessage("Please approve payment...");
+      if ((user || loggedIn) && walletAddress) {
+        //Buy token logic
+        setWarningMessage("Please approve payment...");
+        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
+          setWarningMessage("Almost done! Please wait for confirmation...");
+          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+        }).then(async () => {
+          setWarningMessage("Success!");
+          await getSold();
+          setWarningMessage("");
+          
+        }).then((async () => {
 
-          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-            setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
-            await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-          }).then(async () => {
-            await getSold();
-            showModal()
-          }).then(async () => {
+          let round = await icoContract.methods.current_round().call();
 
-            let round = await icoContract.methods.current_round().call();
+          let amount;
 
-            let amount;
-
-            switch (pack) {
-              case 1:
-                amount = usdt + (usdt * .02);
-              case 2:
-                amount = usdt + (usdt * .03);
-              case 3:
-                amount = usdt + (usdt * .01);
-              case 4:
-                amount = usdt + (usdt * .25);
-              case 5:
-                amount = usdt + (usdt * .15);
-              case 6:
-                amount = usdt + (usdt * .1)
-              case 7:
-                amount = usdt + (usdt * .07)
-              default:
-                amount = usdt;
+          switch (pack) {
+            case 1:
+              amount = usdt + (usdt * .02);
+            case 2:
+              amount = usdt + (usdt * .03);
+            case 3:
+              amount = usdt + (usdt * .01);
+            case 4:
+              amount = usdt + (usdt * .25);
+            case 5:
+              amount = usdt + (usdt * .15);
+            case 6:
+              amount = usdt + (usdt * .1)
+            case 7:
+              amount = usdt + (usdt * .07)
+            default:
+              amount = usdt;
 
 
+          }
+
+          let newOrderData = {
+            order: {
+              date: Date.now(),
+              package: pack,
+              price: usdt,
+              round: round,
+              amount: amount,
+              value: usdt,
             }
+          }
 
-            let newOrderData = {
-              order: {
-                date: Date.now(),
-                package: pack,
-                price: usdt,
-                round: round,
-                amount: amount,
-                value: usdt,
-              }
-            }
+          await newOrder(newOrderData).then(async () => {
 
-            await newOrder(newOrderData).then(async () => {
+            if (refCode.length > 0) {
+              console.log(refCode)
+
+              try {
+                const referrer = await getReferrer(refCode)
+
+                console.log(referrer)
 
 
 
+               
 
-              if (refCode.length > 0) {
-                console.log(refCode)
+                //let term = referrer.data().user.termStart;
 
-                try {
-                  const referrer = await getReferrer(refCode)
+                //let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
 
-                  console.log(referrer)
+                //let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
 
-                  let timeNow = Date.now()
-
-                  let term = referrer.data().user.termStart;
-
-                  let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
-
-                  let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-
-                  let updatedUserData;
+                let timesBought = referrer.data().user.timesBought ? Number(referrer.data().user.timesBought) : 0;
 
 
-                  if (timeNow > (term + (2592000 * 1000))) {
-
-                    let nextTerm = timeHelper.getLastMonth();
-
-                    lastMonth += thisMonth
-
-                    thisMonth += usdt * .05
+                timesBought += 1;
 
 
-                    updatedUserData = {
-                      termStart: nextTerm,
-                      lastMonth: lastMonth,
-                      thisMonth: thisMonth,
-                    }
+                let updatedUserData = {
+                  timesBought: timesBought
+                }
 
-                    await updateUser(referrer.id, updatedUserData)
-
-
-
-                  } else {
-
-                    thisMonth += usdt * .05
-
-                    updatedUserData = {
-                      thisMonth: thisMonth
-                    }
-
-                    await updateUser(referrer.id, updatedUserData)
+                let newReferralData = {
+                  referral: {
+                    date: Date.now(),
+                    bonus: usdt * .05
                   }
-
-
-
-
-
-
-
-
-
-
-                } catch (err) {
-                  console.log(err)
                 }
 
 
 
+
+               /* if (timeNow > (term + (2592000 * 1000))) {
+
+                  let nextTerm = timeHelper.getLastMonth();
+
+                  lastMonth += thisMonth
+
+                  thisMonth += usdt * .05
+
+                  timesBought += 1;
+
+
+                  updatedUserData = {
+                    termStart: nextTerm,
+                    lastMonth: lastMonth,
+                    thisMonth: thisMonth,
+                    timesBought: timesBought
+                  }*/
+
+                  await updateUser(referrer.id, updatedUserData)
+
+                  await newReferral(referrer.id, newReferralData )
+
+
+
+               /* } else {
+
+                  thisMonth += usdt * .05
+                  timesBought += 1
+
+
+
+                  updatedUserData = {
+                    thisMonth: thisMonth,
+                    timesBought: timesBought
+                  }
+
+                  await updateUser(referrer.id, updatedUserData)
+
+
+                }*/
+
+
+              } catch (err) {
+                console.log(err)
               }
-            })
+
+
+
+            }
+
+
+
           })
 
 
 
-          /*
-                if(ref > 0){
+
+
+        }))
+      }
+
+
+
+    } else {
+
+
+      const icoContract = new provider.eth.Contract(
+        contractABI,
+        contractAddress
+      )
+
+      const fiatContract = new provider.eth.Contract(
+        fiatABI,
+        fiatAddress
+      );
+
+      let refValue;
+
+
+
+      if (refCode.length > 0) {
+        refValue = refCode;
+      } else {
+        refValue = 0;
+      }
+      console.log("This is the refValue: " + refValue)
+
+
+
+
+      const total = usdt * 10 ** 6;
+
+      if ((user || loggedIn) && walletAddress) {
+        //Buy token logic
+        setWarningMessage("Please approve payment...");
+
+        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
+          setWarningMessage("Almost done! Please wait for confirmation...");
+          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+        }).then(async () => {
+          setWarningMessage("Success!");
+          await getSold();
+          setWarningMessage("");
           
-                  const referrer = await getReferrer();
-          
-                  let timeNow = Date.now()
-          
-                  let term = referrer.data().user.termStart
-          
-                  let lastMonth = referrer.data().user.lastMonth;
-          
-                  let thisMonth = referrer.data().user.thisMonth;
-          
-                  let updatedUserData;
-          
-                  if(timeNow > (term + (2592000 * 1000))) {
-          
-                    let nextTerm = timeHelper.getLastMonth();
-          
-                    lastMonth += thisMonth
-          
-                    thisMonth += usdt * .05
-          
-          
-                    updatedUserData = {
-                      termStart: nextTerm,
-                      lastMonth: lastMonth,
-                      thisMonth: thisMonth,
-                    }
-          
-                    await updateUser(referrer.id, updatedUserData)
-          
-          
-          
-          
-                  } else {
-          
-                    thisMonth += usdt * .05
-          
-                    updatedUserData = {
-                      thisMonth: thisMonth
-                    }
-          
-                    await updateUser(referrer.id, updatedUserData)
+        }).then(async () => {
+
+          let round = await icoContract.methods.current_round().call();
+
+          let amount;
+
+          switch (pack) {
+            case 1:
+              amount = usdt + (usdt * .02);
+            case 2:
+              amount = usdt + (usdt * .03);
+            case 3:
+              amount = usdt + (usdt * .01);
+            case 4:
+              amount = usdt + (usdt * .25);
+            case 5:
+              amount = usdt + (usdt * .15);
+            case 6:
+              amount = usdt + (usdt * .1)
+            case 7:
+              amount = usdt + (usdt * .07)
+            default:
+              amount = usdt;
+
+
+          }
+
+          let newOrderData = {
+            order: {
+              date: Date.now(),
+              package: pack,
+              price: usdt,
+              round: round,
+              amount: amount,
+              value: usdt,
+            }
+          }
+
+          await newOrder(newOrderData).then(async () => {
+
+
+
+
+            if (refCode.length > 0) {
+              console.log(refCode)
+
+              try {
+                const referrer = await getReferrer(refCode)
+
+                console.log(referrer)
+
+                let timesBought = referrer.data().user.timesBought ? Number(referrer.data().user.timesBought) : 0;
+
+
+                timesBought += 1;
+
+
+                let updatedUserData = {
+                  timesBought: timesBought
+                }
+
+                let newReferral = {
+                  referral: {
+                    date: Date.now(),
+                    bonus: usdt * .05
                   }
-                }*/
+                }
+
+
+                await updateUser(referrer.id, updatedUserData)
+
+                await newReferral(referrer.id, updatedReferralData )
 
 
 
 
-        } else {
-          setErrorMessage('You must login first to redeem tokens');
-          showModal();
+
+
+              } catch (err) {
+                console.log(err)
+              }
 
 
 
-        }
+            }
+          })
+        })
+
+
+
+        /*
+              if(ref > 0){
+        
+                const referrer = await getReferrer();
+        
+                let timeNow = Date.now()
+        
+                let term = referrer.data().user.termStart
+        
+                let lastMonth = referrer.data().user.lastMonth;
+        
+                let thisMonth = referrer.data().user.thisMonth;
+        
+                let updatedUserData;
+        
+                if(timeNow > (term + (2592000 * 1000))) {
+        
+                  let nextTerm = timeHelper.getLastMonth();
+        
+                  lastMonth += thisMonth
+        
+                  thisMonth += usdt * .05
+        
+        
+                  updatedUserData = {
+                    termStart: nextTerm,
+                    lastMonth: lastMonth,
+                    thisMonth: thisMonth,
+                  }
+        
+                  await updateUser(referrer.id, updatedUserData)
+        
+        
+        
+        
+                } else {
+        
+                  thisMonth += usdt * .05
+        
+                  updatedUserData = {
+                    thisMonth: thisMonth
+                  }
+        
+                  await updateUser(referrer.id, updatedUserData)
+                }
+              }*/
+
+
+
+
+      } else {
+        setErrorMessage('You must login first to redeem tokens');
+        showModal();
+
+
+
+      }
+    }
+    //}
+  }
+
+  const newReferral = async (id, referral) => {
+
+
+    console.log('Generating new referral item with ' + id)
+
+    const documentRef = doc(db, "users", id);
+    const documentSnapshot = await getDoc(documentRef)
+
+    if (documentSnapshot.exists()) {
+      const existingUserData = documentSnapshot.data().user;
+
+      if (!existingUserData.referrals) {
+        existingUserData.referrals = [];
+      }
+
+      const updatedUser = { ...existingUserData }
+
+      try {
+        updatedUser.referrals.push(referral)
+
+        await updateDoc(documentRef, { user: updatedUser })
+      } catch (err) {
+        console.log(err)
       }
     }
   }
+
 
   const newOrder = async (order) => {
 
@@ -1085,6 +1119,7 @@ export default function Home() {
     }
 
   }
+
 
 
   const updateUser = async (id, userObject) => {
@@ -1152,7 +1187,7 @@ export default function Home() {
         <div className='flex flex-col absolute -my-10 items-center justify-center bg-transparent w-full h-full z-50'>
           <div className='flex flex-col border-2 rounded-sm items-center justify-center border-black p-5'>
             <h3 className="text-center text-black">Please check your email. A verification email has been sent to the address provided.</h3>
-            <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={() => { showVerificationWall(false); showLoginModal(true) }}>Sign In</button>
+            <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={() => { showVerificationWall(false); showLoginModal(true); toggleVariant();  }}>Sign In</button>
           </div>
         </div>
       )}
@@ -1302,7 +1337,7 @@ export default function Home() {
 
 
             <div className='fixed flex flex-row bg-red-100 p-4 rounded border-4 justify-center mx-auto z-40 w-full'>
-              <button onClick={() => { setErrorMessage("");  }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
+              <button onClick={() => { setErrorMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
               <div onClick={() => { setErrorMessage(""); }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
                 <p className='text-red-800'>{errorMessage}</p>
               </div>
@@ -1316,11 +1351,11 @@ export default function Home() {
           <div className='fixed flex w-full h-full m-auto justify-center items-center'>
 
 
-            <div className='relative flex flex-col bg-white p-4 rounded border-4 border-gray-300 justify-between mx-auto z-40 w-1/2'>
-              <button onClick={() => { setWarningMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
-              <div onClick={() => { setWarningMessage(""); }} className='flex flex-col justify-center m-auto p-8 my-4 bg-white text-center items-center tracking-wider'>
-                <p className='text-black'>{warningMessage}</p>
-                <img src='/images/Loading_icon.gif' className='flex flex-col mt-4 justify-center w-1/2 m-auto' />
+            <div className='relative flex flex-col bg-slate950 p-4 rounded border border-gray-500 justify-between mx-auto z-40 w-1/2'>
+              <button onClick={() => { setWarningMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-500'><Cancel /></button>
+              <div onClick={() => { setWarningMessage(""); }} className='flex flex-col justify-center m-auto p-8 my-4 bg-slate950 text-center items-center tracking-wider'>
+                <p className='text-white'>{warningMessage}</p>
+                <div className='mt-5'><CircularProgress /></div>
               </div>
             </div>
 
