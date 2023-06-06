@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import BackOffice from '../components/BackOffice'
 import Input from '../components/Input';
 import LoginModal from '../components/LoginModal';
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -16,6 +17,7 @@ import Cancel from '@material-ui/icons/Cancel';
 import { useStatus } from "../context/statusContext";
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
 //const CountUp = require('react-countup')
+
 
 const timeHelper = require('../utils/time');
 
@@ -169,25 +171,119 @@ export default function Home() {
   const [sold, setSold] = useState(0);
   const [remaining, setRemaining] = useState(0);
   const [refCode, setRefCode] = useState("");
+  const [referrals, setReferrals] = useState([])
   const [totalRefRevenue, setTotalRefRevenue] = useState(0);
   const [activeRefCode, setActiveRefCode] = useState();
   const [copyMessage, setCopyMessage] = useState('')
   const [loggedIn, setLoggedIn] = useState(false)
+  const [showBackOffice, setShowBackOffice] = useState(false)
+  
+
+
+   //Pagination
+   const [orders, setOrders] = useState([])
+   const [currentPage, setCurrentPage] = useState(1);
+   const [ordersPerPage, setOrdersPerPage] = useState(10);
+   const [currentOrders, setCurrentOrders] = useState();
+   const [totalPages, setTotalPages] = useState(0)
+  
+
+
+   // Calculate total number of pages
+   //const totalPages = Math.ceil(orders.length / ordersPerPage);
+
+   // Get current orders for the displayed page
+   const indexOfLastOrder = currentPage * ordersPerPage;
+   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+   //const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+
 
   const router = useRouter();
   const ref = router.query.ref || "";
 
 
   useEffect(() => {
-
-    setLoggedIn(localStorage.getItem("loggedIn"))
-
+    const logStatus = localStorage.getItem("loggedIn")
+    if (logStatus)
+      setLoggedIn(logStatus)
+   
+   
     console.log(localStorage.getItem("loggedIn"))
     setAddress(localStorage.getItem("address"))
-
+    
 
   }, [])
 
+  useEffect(async() => {
+    await fetchOrders(localStorage.getItem("address"))
+    
+   
+  }, [walletAddress])
+
+  useEffect(async() => {
+    await fetchReferrals(localStorage.getItem("address"))
+  }, [walletAddress])
+
+  useEffect(async() => {
+    await fetchReferralCode(localStorage.getItem("address"))
+  }, [walletAddress])
+
+
+
+     //Retrieve Orders
+
+     const fetchOrders = async (address) => {
+      
+      let list = [];
+      try {
+          const q = query(collection(db, "users"))
+  
+          const querySnapshot = await getDocs(q);
+          console.log(querySnapshot)
+          querySnapshot.forEach((doc) => {
+              console.log(doc.data())
+              if ((doc.data().user.address).toLowerCase() == (address).toLowerCase()) {
+                  doc.data().user.orders.forEach((x) => {
+                      list.push(x);
+                  })
+              }
+          })
+          console.log(list)
+          setOrders(list);
+      } catch (err) {
+          console.log(err)
+      }
+  }
+
+  //Retrieve Referrals
+
+  const fetchReferrals = async (address) => {
+    let list = [];
+
+    try {
+        const q = query(collection(db, "users"))
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+
+            if ((doc.data().user.address).toLowerCase() === address.toLowerCase()) {
+                doc.data().user.referrals.forEach((x) => {
+                    list.push(x)
+                })
+            }
+        })
+
+
+        console.log(list)
+        setReferrals(list)
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+ 
+  
 
   /*
     useEffect(() => {
@@ -213,7 +309,7 @@ export default function Home() {
 
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
-        if ((doc.data().user.address).toLowerCase() == address) {
+        if ((doc.data().user.address).toLowerCase() == address.toLowerCase()) {
           setActiveRefCode(doc)
         }
 
@@ -430,9 +526,11 @@ export default function Home() {
       setPassword("")
       disconnect();
       setLoggedIn(false)
-      localStorage.setItem("loggedIn", false)
       localStorage.setItem("address", "")
       console.log("You are logged out");
+      if(showBackOffice) {
+        toggleBackOffice();
+      }
 
 
 
@@ -1161,6 +1259,20 @@ export default function Home() {
 
   }
 
+  const toggleBackOffice = async () => {
+    if(showBackOffice){
+    setShowBackOffice(false)
+    } else {
+      setShowBackOffice(true)
+      await fetchOrders(walletAddress)
+
+    }
+  }
+
+
+  
+
+
 
 
 
@@ -1202,12 +1314,15 @@ export default function Home() {
         logOut={logOut}
         showLoginModal={showLoginModal}
         loggedIn={loggedIn}
-        setLoggedIn={setLoggedIn}
+        toggleBackOffice={toggleBackOffice}
 
 
       />
 
-      {loginModal && (
+      {!showBackOffice ? (
+
+        <>
+         {loginModal && (
         <LoginModal
           signUp={signUp}
           signIn={signIn}
@@ -1438,6 +1553,25 @@ export default function Home() {
 
 
       </section>
+        
+        </>
+
+      ) : (
+
+       
+          <BackOffice
+        walletAddress={walletAddress}
+        orders={orders}
+        referrals={referrals}
+        activeRefCode={activeRefCode}
+
+        />
+  
+
+ 
+      ) }
+
+     
 
 
       <Footer />

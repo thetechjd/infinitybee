@@ -51,7 +51,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
   day: 'numeric',
 });
 
-console.log(formattedDate);
+//console.log(formattedDate);
 
 return formattedDate
 

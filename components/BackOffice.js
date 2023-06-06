@@ -7,10 +7,10 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import Link from 'next/link';
 import Head from 'next/head';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import Input from '../components/Input';
-import LoginModal from '../components/LoginModal'
+import Footer from './Footer';
+import Header from './Header';
+import Input from './Input';
+import LoginModal from './LoginModal'
 import { useStatus } from "../context/statusContext";
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
 import NavigateNext from '@material-ui/icons/NavigateNext';
@@ -84,17 +84,16 @@ const actionCodeSettings = {
 const formatter = new Intl.NumberFormat('es-ES');
 
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+
+
 
 
 
 
 
 // Create a reference to the Firebase Storage
-const db = getFirestore(app);
 
-const storage = getStorage();
+
 
 //ABIs
 const contractABI = require("../pages/contract-abi.json");
@@ -149,13 +148,18 @@ const providerOptions = {
 
 
 
-export default function Home() {
+export default function BackOffice({
+    walletAddress,
+    orders,
+    referrals,
+    activeRefCode
+}) {
 
 
 
     //State variables
     const [provider, setProvider] = useState();
-    const [walletAddress, setAddress] = useState();
+
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -175,26 +179,29 @@ export default function Home() {
     const [remaining, setRemaining] = useState(0);
     const [refCode, setRefCode] = useState("");
     const [totalRefRevenue, setTotalRefRevenue] = useState(0);
-    const [activeRefCode, setActiveRefCode] = useState();
+   
     const [copyMessage, setCopyMessage] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
     const [balance, setBalance] = useState(0)
     const [isThisMonth, setIsThisMonth] = useState(true)
-    const [referrals, setReferrals] = useState();
     const [bonus, setBonus] = useState(0)
     const [lastBonus, setLastBonus] = useState(0);
     const [lastMonthDisabled, setLastMonthDisabled] = useState(false)
+    const [claimTime, setClaimTime] = useState(0)
+
 
 
     const [thisMonth, setThisMonth] = useState("")
     const [lastMonth, setLastMonth] = useState("")
 
 
-
     //Pagination
+    //const [orders, setOrders] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const [ordersPerPage, setOrdersPerPage] = useState(10);
-    const [orders, setOrders] = useState([]);
+
+
+
 
 
     // Calculate total number of pages
@@ -205,6 +212,11 @@ export default function Home() {
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
     const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
+
+
+
+
+
     const router = useRouter();
     const ref = router.query.ref || null;
 
@@ -214,16 +226,8 @@ export default function Home() {
     }, [walletAddress])*/
 
 
-    useEffect(() => {
-        const logStatus = localStorage.getItem("loggedIn")
-        setLoggedIn(logStatus)
-        console.log(localStorage.getItem("loggedIn"))
-        const storedAddress = localStorage.getItem("address")
-        setAddress(storedAddress)
-        console.log(storedAddress)
 
 
-    }, [])
 
     useEffect(() => {
         setThisMonth(convertMonth(monthHelper(Date.now())))
@@ -232,25 +236,20 @@ export default function Home() {
 
 
 
-    useEffect(() => {
-        setRefCode(String(ref))
-        console.log('Ref value set!')
-    }, [ref])
+    /* useEffect(() => {
+          setRefCode(String(ref))
+          console.log('Ref value set!')
+      }, [ref])
+  
+      useEffect(() => {
+          const storedAddress = localStorage.getItem("address");
+          setAddress(storedAddress)
+  
+      }, [walletAddress])*/
+  
+  
+     
 
-    useEffect(() => {
-        const storedAddress = localStorage.getItem("address");
-        setAddress(storedAddress)
-
-    }, [walletAddress])
-
-
-    useEffect(async () => {
-        await fetchReferralCode(localStorage.getItem("address").toLowerCase())
-    
-
-    }, [walletAddress])
-
-   
 
 
     useEffect(async () => {
@@ -263,6 +262,8 @@ export default function Home() {
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
                 setBalance(balance)
+                getMonthTotal("thisMonth")
+                setIsThisMonth(true)
             } catch (err) {
                 console.log(err)
             }
@@ -271,40 +272,24 @@ export default function Home() {
     }, [walletAddress])
 
 
-    const fetchReferrals = async (address) => {
-        let list = [];
 
-        try {
-            const q = query(collection(db, "users"))
 
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                
-                    if (doc.data().user.address === address) {
-                        doc.data().user.referrals.forEach((x) => {
-                            list.push(x)
-                        })
-                    }
-                })
-               
-            
-            console.log(list)
-            setReferrals(list)
-        } catch (err) {
-            console.log(err)
-        }
-    }
 
-    useEffect(() => {
-        fetchReferrals(localStorage.getItem("address"));
-    }, [walletAddress])
+
+   
+
+    /* useEffect(() => {
+         fetchReferrals(localStorage.getItem("address"));
+     }, [walletAddress])*/
 
 
     const getMonthTotal = (input) => {
+       
+        console.log(referrals)
         console.log(input)
         let amount = 0;
         setBonus(0)
-        
+
         let month = getMonth();
         console.log(month)
 
@@ -312,32 +297,36 @@ export default function Home() {
 
         referrals.forEach((y) => {
             if (input === "thisMonth") {
-                
+
                 if (monthHelper(y.referral.date) === month) {
                     console.log(y.referral)
                     amount += y.referral.bonus
                 }
+            setIsThisMonth(true)
             } else if (input === "lastMonth") {
-                
+
                 if ((monthHelper(y.referral.date)) === (month - 1)) {
                     console.log(y.referral)
                     amount += y.referral.bonus
                 }
 
-            } 
+                setIsThisMonth(false)
+
+            }
 
         })
 
         //console.log('This is this month amount' + thisMonthAmount)
         //console.log('This is last month amount' + lastMonthAmount)
-        
-       
+        console.log(amount)
         setBonus(amount)
-        
 
         
+
+
+
+
         
-        toggleMonths();
     }
 
     const lastMonthDisable = (doc) => {
@@ -387,58 +376,10 @@ export default function Home() {
 
 
 
-    //Retrieve Orders
-
-    const fetchOrders = async (address) => {
-        let list = [];
-        try {
-            const q = query(collection(db, "users"))
-
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                if (doc.data().user.address == address) {
-                    doc.data().user.orders.forEach((x) => {
-                        list.push(x);
-                    })
-                }
-            })
-            console.log(list)
-            setOrders(list);
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    useEffect(() => {
-        fetchOrders(localStorage.getItem("address"));
-    }, [walletAddress])
 
 
 
-
-    //RetrieveReferralCode
-    const fetchReferralCode = async (address) => {
-
-        try {
-
-            const q = query(collection(db, "users"))
-
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                if ((doc.data().user.address).toLowerCase() == address) {
-                    console.log(doc)
-                    lastMonthDisable(doc)
-                    setActiveRefCode(doc)
-                }
-
-
-            })
-        } catch (err) {
-            console.log(err)
-        }
-
-
-    };
+   
 
     const getTotalRefRevenue = async (address) => {
         const totalRev = await baseContract.methods.getTotalRefRevenue(address).call();
@@ -478,141 +419,6 @@ export default function Home() {
 
 
 
-
-
-
-
-
-
-
-    const togglePw = () => {
-        setShow(!show)
-    }
-
-
-
-    const toggleVariant = useCallback(() => {
-        setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login')
-    }, [])
-
-
-
-    useEffect(() => {
-        const lngPref = localStorage.getItem("lang-pref")
-        setLang(lngPref || 'EN')
-    }, [])
-
-
-
-
-
-
-
-    const setPreference = () => {
-        localStorage.setItem("lang-pref", lang)
-    }
-
-    useEffect(() => {
-        setPreference()
-        console.log(`Preference changed to ${lang}!`)
-    }, [lang])
-
-
-
-
-
-
-    const translate = (text) => {
-        if (lang === 'ES') {
-            return es[text]
-        } else if (lang === 'RO') {
-            return ro[text]
-        } else if (lang === 'CN') {
-            return cn[text]
-        } else if (lang === 'IT') {
-            return it[text]
-        } else if (lang === 'DE') {
-            return de[text]
-        } else if (lang === 'FR') {
-            return fr[text]
-        }
-        else {
-            return en[text]
-        }
-    }
-
-
-
-    const showModal = () => {
-        setErrorModal(!errorModal)
-    }
-
-    const showLoginModal = (bool) => {
-        setLoginModal(bool);
-    }
-
-
-
-
-
-
-
-
-
-
-    const signUp = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                console.log(user);
-                sendEmailVerification(user);
-                setUser(user);
-                setUser({ emailVerified: false })
-                showLoginModal(false)
-                showVerificationWall(true)
-            })
-
-
-            .catch((error) => {
-                console.log(error)
-                // ..
-            });
-    }
-
-
-
-
-
-    const signIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in 
-                const user = userCredential.user;
-                setUser(user);
-                console.log(user);
-                setSuccess(true);
-
-                setLoggedIn(true)
-
-                localStorage.setItem("loggedIn", true)
-                console.log("You are logged in.");
-
-                if (walletAddress) {
-                    localStorage.setItem("address", walletAddress);
-                    showLoginModal(false)
-                }
-
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-            });
-
-    }
-
-
-
     const logOut = () => {
         signOut(auth).then(() => {
             // Sign-out successful.
@@ -621,118 +427,23 @@ export default function Home() {
             setPassword("")
             disconnect();
             setLoggedIn(false)
-            localStorage.setItem("loggedIn", false)
             localStorage.setItem("address", "")
             console.log("You are logged out");
 
+
+
+
+        }).then(() => {
             router.push('/')
+        })
 
 
-        }).catch((error) => {
-            // An error happened.
-        });
-    }
-
-    const resetPassword = () => {
-        setTimeout(() => {
-            setErrorMessage('')
-        }, 5000
-        )
-
-        sendPasswordResetEmail(auth, email)
-            .then(() => {
-                // Password reset email sent
-                setErrorMessage('A reset email has been sent to your email address!')
-            })
             .catch((error) => {
-                // An error occurred while sending the password reset email
-                console.log(error)
+                // An error happened.
             });
     }
 
-    const handlePassword = (value) => {
-        setErrorMessage('')
-        if (value.length < 8) {
-            setErrorMessage('Password must be at least 8 characters.')
-        }
-        setPassword(value);
 
-
-
-    }
-
-    const handlePwCheck = (check) => {
-        setErrorMessage('')
-        if (password !== check) {
-            setErrorMessage('Passwords don\'t match!')
-        }
-        setPwCheck(check)
-
-    }
-
-    const showVerificationWall = (bool) => {
-        setVerificationWall(bool)
-    }
-
-
-
-
-    /*
-      function addWalletListener() {
-        if (window.ethereum) {
-          window.ethereum.on("accountsChanged", (accounts) => {
-            if (accounts.length > 0) {
-              setWallet(accounts[0]);
-              setStatus("👆🏽 Write a message in the text-field above.");
-            } else {
-              setWallet("");
-              setStatus("🦊 Connect to Metamask using the top right button.");
-            }
-          });
-        } else {
-          setStatus(
-            <p>
-              {" "}
-              🦊{" "}
-              <a target="_blank" href={`https://metamask.io/download.html`}>
-                You must install Metamask, a virtual Ethereum wallet, in your
-                browser.
-              </a>
-            </p>
-          );
-        }
-      }*/
-
-    async function connectWallet(e) {
-        e.preventDefault();
-
-        try {
-
-            let web3Modal = new Web3Modal({
-                theme: 'dark',
-                cacheProvider: false,
-
-                providerOptions,
-
-            });
-            const web3ModalInstance = await web3Modal.connect();
-            const provider = new Web3(web3ModalInstance);
-            if (web3ModalInstance) {
-                setProvider(provider);
-                const accounts = await provider.eth.getAccounts();
-                const address = accounts[0];
-                setAddress(address);
-                fetchReferralCode(address.toLowerCase());
-                getTotalRefRevenue(address)
-
-                showLoginModal(true)
-
-
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     const disconnect = () => {
         setAddress('')
@@ -829,290 +540,6 @@ export default function Home() {
     }
 
 
-    const buyTokens = async (pack, usdt) => {
-
-        try {
-
-            const icoContract = new web3.eth.Contract(
-                contractABI,
-                contractAddress
-            )
-
-            const fiatContract = new web3.eth.Contract(
-                fiatABI,
-                fiatAddress
-            );
-
-            let refValue;
-
-
-
-            if (ref > 0) {
-                refValue = ref;
-            } else {
-                refValue = 0;
-            }
-            console.log("This is the refValue: " + refValue)
-
-
-
-
-            const total = usdt * 10 ** 6;
-
-            if ((user || loggedIn) && walletAddress) {
-                //Buy token logic
-                setWarningMessage("Please approve payment...");
-                await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-                    setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
-                    await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-                }).then(async () => {
-                    await getSold();
-                    setWarningMessage("");
-                }).then((async () => {
-
-                    if (refCode.length > 0) {
-                        console.log(refCode)
-
-                        try {
-                            const referrer = await getReferrer(refCode)
-
-                            console.log(referrer)
-
-                            let timeNow = Date.now()
-
-                            let term = referrer.data().user.termStart;
-
-                            let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
-
-                            let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-
-                            let updatedUserData;
-
-
-                            if (timeNow > (term + (2592000 * 1000))) {
-
-                                let nextTerm = timeHelper.getLastMonth();
-
-                                lastMonth += thisMonth
-
-                                thisMonth += usdt * .05
-
-
-                                updatedUserData = {
-                                    termStart: nextTerm,
-                                    lastMonth: lastMonth,
-                                    thisMonth: thisMonth,
-                                }
-
-                                await updateUser(referrer.id, updatedUserData)
-
-
-
-                            } else {
-
-                                thisMonth += usdt * .05
-
-                                updatedUserData = {
-                                    thisMonth: thisMonth
-                                }
-
-                                await updateUser(referrer.id, updatedUserData)
-                            }
-
-
-
-
-
-
-
-
-
-
-                        } catch (err) {
-                            console.log(err)
-                        }
-
-
-
-                    }
-
-
-
-                }))
-            }
-
-
-
-        } catch (err) {
-
-
-            const icoContract = new provider.eth.Contract(
-                contractABI,
-                contractAddress
-            )
-
-            const fiatContract = new provider.eth.Contract(
-                fiatABI,
-                fiatAddress
-            );
-
-            let refValue;
-
-
-
-            if (ref > 0) {
-                refValue = ref;
-            } else {
-                refValue = 0;
-            }
-            console.log("This is the refValue: " + refValue)
-
-
-
-
-            const total = usdt * 10 ** 6;
-
-            if ((user || loggedIn) && walletAddress) {
-                //Buy token logic
-                setWarningMessage("Please approve payment...");
-
-                await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-                    setWarningMessage("Step 1 of 2 completed. Please wait for confirmation...");
-                    await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-                }).then(async () => {
-                    await getSold();
-                    showModal()
-                }).then(async () => {
-
-
-                    if (refCode.length > 0) {
-                        console.log(refCode)
-
-                        try {
-                            const referrer = await getReferrer(refCode)
-
-                            console.log(referrer)
-
-                            let timeNow = Date.now()
-
-                            let term = referrer.data().user.termStart;
-
-                            let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
-
-                            let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-
-                            let updatedUserData;
-
-
-                            if (timeNow > (term + (2592000 * 1000))) {
-
-                                let nextTerm = timeHelper.getLastMonth();
-
-                                lastMonth += thisMonth
-
-                                thisMonth += usdt * .05
-
-
-                                updatedUserData = {
-                                    termStart: nextTerm,
-                                    lastMonth: lastMonth,
-                                    thisMonth: thisMonth,
-                                }
-
-                                await updateUser(referrer.id, updatedUserData)
-
-
-
-                            } else {
-
-                                thisMonth += usdt * .05
-
-                                updatedUserData = {
-                                    thisMonth: thisMonth
-                                }
-
-                                await updateUser(referrer.id, updatedUserData)
-                            }
-
-
-
-
-
-
-
-
-
-
-                        } catch (err) {
-                            console.log(err)
-                        }
-
-
-
-                    }
-                })
-
-
-
-                /*
-                      if(ref > 0){
-                
-                        const referrer = await getReferrer();
-                
-                        let timeNow = Date.now()
-                
-                        let term = referrer.data().user.termStart
-                
-                        let lastMonth = referrer.data().user.lastMonth;
-                
-                        let thisMonth = referrer.data().user.thisMonth;
-                
-                        let updatedUserData;
-                
-                        if(timeNow > (term + (2592000 * 1000))) {
-                
-                          let nextTerm = timeHelper.getLastMonth();
-                
-                          lastMonth += thisMonth
-                
-                          thisMonth += usdt * .05
-                
-                
-                          updatedUserData = {
-                            termStart: nextTerm,
-                            lastMonth: lastMonth,
-                            thisMonth: thisMonth,
-                          }
-                
-                          await updateUser(referrer.id, updatedUserData)
-                
-                
-                
-                
-                        } else {
-                
-                          thisMonth += usdt * .05
-                
-                          updatedUserData = {
-                            thisMonth: thisMonth
-                          }
-                
-                          await updateUser(referrer.id, updatedUserData)
-                        }
-                      }*/
-
-
-
-
-            } else {
-                setErrorMessage('You must login first to redeem tokens');
-                showModal();
-
-
-
-            }
-        }
-    }
 
 
     const updateUser = async (id, userObject) => {
@@ -1271,8 +698,71 @@ export default function Home() {
     }
 
     const toggleMonths = () => {
-        setIsThisMonth(!isThisMonth)
+        if(isThisMonth){
+            setIsThisMonth(false)
+        }
+        else {
+            setIsThisMonth(true)
+        }
     }
+
+
+    const getTimeLeft = async (address) => {
+        let endTime = await baseContract.methods.getClaimPeriod(address).call();
+
+        let start = (Date.now() / 1000);
+
+        let countdown;
+        if (endTime < start) {
+            countdown = 0;
+        } else {
+            countdown = endTime - start;
+        }
+        console.log(countdown)
+        setClaimTime(countdown);
+
+
+    }
+
+
+
+    function secondsToDhms(seconds) {
+
+        seconds = Number(seconds);
+        var d = Math.floor(seconds / (3600 * 24));
+        var h = Math.floor(seconds % (3600 * 24) / 3600);
+        var m = Math.floor(seconds % 3600 / 60);
+        var s = Math.floor(seconds % 60);
+
+        var dDisplay = d > 0 ? d + ":" : "";
+        var hDisplay = h > 0 ? (h < 10 ? "0" + h + ":" : h + ":") : "";
+        var mDisplay = m > 0 ? (m < 10 ? "0" + m + ":" : m + ":") : "";
+        var sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : "";
+
+
+        if (seconds !== 0) {
+            return `Next Claim Period: ${dDisplay}${hDisplay}${mDisplay}${sDisplay}`;
+        } else {
+            return `Time to claim!`
+        }
+
+
+
+
+    }
+
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+
+            setClaimTime(claimTime => claimTime - 1);
+        }, 1000);
+        return () => clearInterval(interval);
+
+    }, [])
+
+
+
 
 
 
@@ -1295,53 +785,10 @@ export default function Home() {
                 <link rel="icon" href="/" />
             </Head>
 
-            
-
-            <Header
-                setIsNavOpen={setIsNavOpen}
-                isNavOpen={isNavOpen}
-                lang={lang}
-                setLang={setLang}
-                translate={translate}
-                success={success}
-                logOut={logOut}
-                showLoginModal={showLoginModal}
-                loggedIn={loggedIn}
-                setLoggedIn={setLoggedIn}
-
-
-            />
-
-            {loginModal && (
-                <LoginModal
-                    signUp={signUp}
-                    signIn={signIn}
-                    walletAddress={walletAddress}
-                    connectWallet={connectWallet}
-                    toggleVariant={toggleVariant}
-                    variant={variant}
-                    setEmail={setEmail}
-                    email={email}
-                    handlePassword={handlePassword}
-                    handlePwCheck={handlePwCheck}
-                    setPassword={setPassword}
-                    password={password}
-                    showLoginModal={showLoginModal}
-                    loginModal={loginModal}
-                    errorMessage={errorMessage}
-                    setErrorMessage={setErrorMessage}
-                    pwCheck={pwCheck}
-                    togglePw={togglePw}
-                    show={show}
-                    resetPassword={resetPassword}
-                    reset={reset}
-                    setReset={setReset}
 
 
 
-                />
 
-            )}
 
 
 
@@ -1400,7 +847,7 @@ export default function Home() {
                                 </>
                             ) : (
                                 <>
-                                {console.log('This is the last month bonus: ' + bonus)}
+                                    {console.log('This is the last month bonus: ' + bonus)}
                                     <p className='mr-2'>{lastMonth}</p>
 
                                     <p>{activeRefCode ? (bonus) : 0} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
@@ -1503,7 +950,7 @@ export default function Home() {
 
 
 
-                <div className='flex w-full -mt-8 bg-transparent'>
+                <div className='flex w-full mt-3 bg-transparent'>
                     {/* Render the current orders */}
                     <table className='flex flex-col w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
                         <tr className='flex w-full gap-x-6 justify-center bg-slate950 mb-2'>
@@ -1540,7 +987,7 @@ export default function Home() {
             </section>
 
 
-            <Footer />
+
 
 
 
