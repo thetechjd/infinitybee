@@ -637,13 +637,13 @@ export default function BackOffice({
     const getRound = (round) => {
         switch (round) {
             case '0':
-                return `Round 1 / 0.01`
+                return `Round 1 / 0.008`
             case '1':
-                return `Round 2 / 0.02`
+                return `Round 2 / 0.01`
             case '2':
-                return `Round 3 / 0.03`
+                return `Round 3 / 0.015`
             case '3':
-                return `Round 4 / 0.04`
+                return `Round 4 / 0.02`
             default:
                 return `Unknown`
         }
