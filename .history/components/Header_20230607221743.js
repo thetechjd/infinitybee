@@ -77,7 +77,11 @@ export default function Header(props) {
         <div className='flex-grow '>
           <div className='flex flex-row'>
             <Link className='w-1/5' href='/' passHref>
+              {/* <a className='flex items-center'>
 
+                <img alt='' src='/images/beelogo.png' className='h-[40px]' />
+                <span className='px-2'>InfinityBee (IFB)</span>
+              </a> */}
             </Link>
             <div>
 
@@ -87,11 +91,7 @@ export default function Header(props) {
 
         </div>
 
-              {/* <a className='flex items-center'>
 
-                <img alt='' src='/images/beelogo.png' className='h-[40px]' />
-                <span className='px-2'>InfinityBee (IFB)</span>
-              </a> */}
 
         <nav>
 

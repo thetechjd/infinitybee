@@ -77,7 +77,6 @@ export default function Header(props) {
         <div className='flex-grow '>
           <div className='flex flex-row'>
             <Link className='w-1/5' href='/' passHref>
-
             </Link>
             <div>
 

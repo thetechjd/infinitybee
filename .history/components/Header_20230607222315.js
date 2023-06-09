@@ -87,11 +87,11 @@ export default function Header(props) {
 
         </div>
 
-              {/* <a className='flex items-center'>
+        <a className='flex items-center'>
 
-                <img alt='' src='/images/beelogo.png' className='h-[40px]' />
-                <span className='px-2'>InfinityBee (IFB)</span>
-              </a> */}
+<img alt='' src='/images/beelogo.png' className='h-[40px]' />
+<span className='px-2'>InfinityBee (IFB)</span>
+</a>
 
         <nav>
 
