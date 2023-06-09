@@ -30,13 +30,21 @@ export default function LoginModal(props) {
             {/*<div className='absolute bg-black w-full bg-transparent z-0'>*/}
 
             <div className='absolute flex items-center w-full justify-center z-0'>
-                <div ref={wrapperRef} className='relative bg-black bg-opacity-70 px-16 py-10 self-center mt-10 lg:w-2/5 lg:max-w-md rounded-md w-full'>
+                <div ref={wrapperRef} className='ceModal relative bg-black bg-opacity-70 px-16 py-10 self-center mt-10 lg:w-2/5 lg:max-w-md rounded-md w-full'>
                     <div onClick={() => { props.showLoginModal(false); props.setReset(false) }} className='flex right justify-end'>
                         <p className='text-white'>X</p>
                     </div>
                     <h2 className='text-white text-4xl mb-8 font-semibold'>
                         {props.variant === 'login' ? 'Sign in' : 'Register'}
                     </h2>
+                    <div className='ceRight'>
+
+                        {props.variant === 'register' ? 'Already have an account?' : 'Don\'t have and account yet?'}
+                        <br />
+                        <b onClick={props.toggleVariant} className='text-white ml-1 hover:underline cursor-pointer'>
+                        {props.variant === 'register' ? 'Sign in' : 'Register for free Now'}
+                        </b>
+                    </div>
                     <div className='flex flex-col gap-4'>
                         {props.variant === 'register' ? (
                             <>
@@ -52,11 +60,14 @@ export default function LoginModal(props) {
 
                                         ) : (
                                             <>
-                                            <button onClick={props.connectWallet} className='bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
-                                                Connect Wallet
-                                            </button>
+                                             <div>
+                                                <span>Step1</span>
+                                                <button onClick={props.connectWallet} className='ceBtnLogin bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
+                                                    Connect Wallet
+                                                </button>
+                                            </div>
                                              
-                                                <p className='text-red-500'>Connect wallet to complete registration. Note that you will be unable to change your wallet address for the duration of the ICO. </p>
+                                                <p className='text-red-500'>Connect your wallet to complete registration. <br /> Be Careful &nbsp; ! &nbsp; In the future, you will be able to log into this account only with this wallet. </p>
                                                 </>
                                             
 
@@ -66,7 +77,8 @@ export default function LoginModal(props) {
                                 )}
 
 
-
+                                <div>
+                                <span>Step2</span>
                                 <Input
                                     label="Email"
                                     onChange={(e) => props.setEmail(e.target.value)}
@@ -75,6 +87,10 @@ export default function LoginModal(props) {
                                     value={props.email}
 
                                 />
+                                </div>
+
+                                <div>
+                                <span>Step2</span>
                                 <Input
                                     style={{ border: props.loginMessage ? "#fff" : null }}
                                     label="Password"
@@ -89,7 +105,11 @@ export default function LoginModal(props) {
 
 
                                 />
+                                </div>
                                 <p className='text-4xs text-red-500'>{props.loginMessage}</p>
+
+                                <div>
+                                <span>Step3</span>
                                 <Input
                                     label="Re-Type Password"
                                     onChange={(e) => props.handlePwCheck(e.target.value)}
@@ -104,6 +124,7 @@ export default function LoginModal(props) {
 
 
                                 />
+                                </div>
                             </>
                         ) : (
                             <>
@@ -117,9 +138,12 @@ export default function LoginModal(props) {
 
 
                                         ) : (
-                                            <button onClick={props.connectWallet} className='bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
+                                            <div>
+                                            <span>Step1</span>
+                                            <button onClick={props.connectWallet} className='ceBtnLogin bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
                                                 Connect Wallet
                                             </button>
+                                            </div>
 
 
                                         )}
@@ -127,6 +151,8 @@ export default function LoginModal(props) {
                                 )}
 
 
+                                <div>
+                                <span>Step2</span>
                                 <Input
                                     label="Email"
                                     onChange={(e) => props.setEmail(e.target.value)}
@@ -135,8 +161,12 @@ export default function LoginModal(props) {
                                     value={props.email}
 
                                 />
+                                </div>
 
                                 {!props.reset && (
+
+                                    <div>
+                                    <span>Step3</span>
                                     <Input
                                         label="Password"
                                         onChange={(e) => props.setPassword(e.target.value)}
@@ -146,6 +176,7 @@ export default function LoginModal(props) {
                                         show={props.show}
                                         togglePw={props.togglePw}
                                     />
+                                    </div>
                                 )}
 
 
@@ -167,20 +198,20 @@ export default function LoginModal(props) {
                         </>
 
                     ) : (
-                        <button onClick={props.variant === 'login' ? props.signIn : props.signUp} className='bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
+                        <button onClick={props.variant === 'login' ? props.signIn : props.signUp} className='ceModalLogin bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
 
                             {props.variant === 'login' ? 'Login' : 'Sign up'}
                         </button>
                     )}
 
 
-                    <p className='text-neutral-500 mt-12'>
+                    {/* <p className='text-neutral-500 mt-12'>
                         {props.variant === 'register' ? 'Already have an account?' : 'Don\'t have and account yet?'}
 
                         <span onClick={props.toggleVariant} className='text-white ml-1 hover:underline cursor-pointer'>
                             {props.variant === 'register' ? 'Sign in' : 'Create an account'}
                         </span>
-                    </p>
+                    </p> */}
                     <p className='text-neutral-500 mt-12'>
                         {!props.reset && (
                             <span onClick={props.setReset} className='text-white ml-1 hover:underline cursor-pointer'>

@@ -188,6 +188,9 @@ export default function Home() {
    const [totalPages, setTotalPages] = useState(0)
   
 
+   //faq
+   const [faqLeft="1", setFaqLeft] = useState();
+   const [faqRight="1", setFaqRight] = useState();
 
    // Calculate total number of pages
    //const totalPages = Math.ceil(orders.length / ordersPerPage);
@@ -1484,18 +1487,18 @@ export default function Home() {
             <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(0, 200) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
+                <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
 
 
 
               </div>
               <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(3, 500) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                <button onClick={() => { buyTokens(3, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(1, 1100) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
               </div>
             </div>
 
@@ -1507,15 +1510,15 @@ export default function Home() {
             <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(2, 2300) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                <button onClick={() => { buyTokens(2, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(7, 5000) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/3'>
                 <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(6, 11000) }} className='flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
               </div>
 
             </div>
@@ -1529,11 +1532,11 @@ export default function Home() {
             <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
               <div className='flex flex-col w-full md:w-1/2'>
                 <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(5, 23000) }} className='flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
               </div>
               <div className='flex flex-col w-full md:w-1/2'>
                 <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                <button onClick={() => { buyTokens(4, 48000) }} className='flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
               </div>
 
 
@@ -1544,6 +1547,389 @@ export default function Home() {
 
 
 
+        </div>
+
+        <div id='about' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
+          <h2 className='ceHeader text-center uppercase text-6xl my-5'>About IFB token</h2>
+          <div>
+          <p className="ceTitle ceCenter">Cum se numește tokenul, pe ce Blockchain este creat și câte unități are ?</p>
+          <p className="ceDescription ceCenter">Tokenul Ecosistemului nostru se numește InfinityBee (IFB). Este creat pe BNB Smart Chain (BSC), cu un număr total de 1.800.000.000 unități.</p>
+
+          <div className="flex flex-col w-full mx-auto md:flex-row ">
+          <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+          <p className="ceTitle2 ceLeft">La ce se poate folosi Tokenul InfinityBee ( IFB) ?</p>
+          <p className="ceDescription2 ceLeft ">
+Tokenul InfinityBee (IFB) are multiple utilități : <br />
+–  este un activ financiar (IFB) care se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
+–  este un instrument deflaționar datorită strategiilor Be&Bee : Buyback și Burn <br />
+– constituie o valoare materială care poate fi utilizată pentru acțiuni umanitare (donații și finanțări pentru proiecte caritabile), pe platforma BeeNICE și în platforma de crowdfunding BeeGENEROUS <sup>369</sup> <br />
+–  este necesar pentru activarea nivelurilor 3 , 6 , 9 în BeeGENEROUS <sup>369</sup> <br />
+–  utilizat în BeeSAFE (planul economy), investiții periodice în IFB <br />
+–  este unitate de schimb folosită în BeeSHOP pentru cumpărarea / vânzarea de produse / servicii <br />
+–  cu ajutorul token-ului IFB se vor cumpăra NFT-uri din colecțiile ByBee <br />
+–  este un instrument financiar care se folosește în interiorul NFT Lab, pentru vânzarea / cumpărarea de bunuri <br />
+–  se folosește pentru anumite operațiuni și acțiuni din BeeLand  (Metaverse) și BeeGame (platformă de jocuri) <br />
+          </p>
+          </div>
+
+          <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+          <p className="ceTitle2 ceLeft">Cum și de unde se poate obține Tokenul InfinityBee ( IFB) ?</p>
+          <p className="ceDescription2 ceLeft">
+Tokenul InfinityBee (IFB) înainte de Listare, se poate obține prin : <br />
+– participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Pre Sale 3 <br />
+– sistemul de crowdfunding BeeGENEROUS <sup>369</sup>,  în programele :  Matrix Bee3 & Matrix Bee4 și <br />
+– programe de bounty și airdrop <br />
+După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
+          </p>
+
+          <p className="ceTitle2 ceLeft">La ce valoare și când se poate cumpăra ?</p>
+          <p className="ceDescription2 ceLeft">
+Valoarea Tokenului InfinityBee va crește de la o rundă la alta după cum urmează : <br />
+Pre Sale 1 (Q4 2023): valoarea IFB = 0.01 USDT <br />
+Pre Sale 2 (Q1 2024): valoarea IFB = 0.015 USDT <br />
+Pre Sale 3 (Q3 2024): valoarea IFB = 0.02 USDT <br />
+          </p> 
+          </div>
+          </div>    
+
+
+          </div>
+
+        </div>
+
+        <div id='presale' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
+          <h2 className='ceHeader text-center uppercase text-6xl my-5'>PreSale Rounds</h2>
+          <div>
+          <p className="ceDescription ceCenter">Această platformă de ICO este un instrument important din cadrul Ecosistemului Be&Bee și se numește BeeCHANGE.</p>
+
+          <p className="ceDescription ceCenter">
+          Pe această platformă se pot cumpăra tokeni IFB sub formă de pachete. <br />
+Membrii comunității au nevoie de tokeni InfinityBee pentru activarea nivelurilor 3, 6, 9 din BeeGENEROUS <sup>369</sup> și pentru programul BeeSAFE (planul Economy), iar ulterior vor fi folosiți și pentru viitoarele instrumente, din interiorul ecosistemului Be&Bee, pe care le vom dezvolta.
+          </p>
+
+          <div className="flex flex-col w-full mx-auto md:flex-row ">
+          <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+          <p className="ceDescription2 ceLeft">
+          Toate cele 3 runde de Private Sale din perioada ICO-ului se vor desfășura doar pe această platformă (www.infinitybee.io). <br /><br />
+
+          În RUNDA 1 tokenul are valoarea de 0,01 $. <br />
+Pentru această rundă sunt alocați tokeni în cuantum de 3% din numărul total de tokeni. <br /><br />
+
+          În RUNDA 2 tokenul are valoarea de 0,015 $.<br />
+Pentru această rundă sunt alocați tokeni în cuantum de 7% din numărul total de tokeni.<br /><br />
+
+          În RUNDA 3 tokenul are valoarea de 0,02 $.<br />
+Pentru această rundă sunt alocați tokeni în cuantum de 10% din numărul total de tokeni.<br />
+          </p>
+          </div>
+
+          <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+          <p className="ceTitle2 ceLeft">Ce oferte de pachete sunt disponibile ?</p><br />
+          <p className="ceDescription2 ceLeft">
+          În fiecare rundă de Pre Sale a ICO-ului se vor putea cumpăra pachete cu tokeni de 8 valori diferite : <br />
+200 USDT (Mercury) – no Bonus, no Vesting, Releasing 100% <br />
+500 USDT (Mars) – no Bonus, no Vesting, Releasing 100% <br />
+1.100 USDT (Venus) – no Bonus, no Vesting, Releasing 100% <br />
+2.300 USDT (Earth) – 3% Bonus, Vesting 18 months, Releasing 10% <br />
+5.000 USDT (Neptune) – 5% Bonus, Vesting 18 months, Releasing 10% <br />
+11.000 USDT (Uranus) – 7% Bonus, Vesting 18 months, Releasing 10% <br />
+23.000 USDT (Saturn) – 9% Bonus, Vesting 18 months, Releasing 10% <br />
+48.000 USDT (Jupiter) – 12% Bonus, Vesting 18 months, Releasing 10% <br />
+          </p>
+          </div>
+          </div>
+
+
+          </div>
+
+        </div>
+
+        <div id='tokenomics' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
+          <h2 className='ceHeader text-center uppercase text-6xl my-5'>Tokenomics</h2>
+
+          <div className="flex flex-col w-full mx-auto md:flex-row ">
+          <div className="flex flex-col w-full md:w-1/2">
+                <div class="title_default_light title_border text-center">
+                    <h4 class="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
+                </div>
+                <div class="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s"> 
+                    <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" /> 
+                </div>
+                <div class="divider small_divider"></div>
+                <ul class="list_none list_chart text-center">
+                	<li>
+                    	<span class="chart_bx color1"></span>
+                    	<span>Addvisers</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color2"></span>
+                    	<span>Marketing</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color3"></span>
+                    	<span>Public Sale</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color4"></span>
+                    	<span>Pre Sale</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color5"></span>
+                    	<span>Projects</span>
+                    </li>
+                </ul>
+			</div>
+      <div className="flex flex-col w-full md:w-1/2">
+                <div class="title_default_light title_border text-center">
+                    <h4 class="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Distribution</h4>
+                </div>
+                <div class="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft" data-animation="fadeInLeft" data-animation-delay="0.2s"> 
+                    <img src="/images/distribution3.png" alt="distribution3" /> 
+                </div>
+                <div class="divider small_divider"></div>
+                <ul class="list_none list_chart text-center">
+                	<li>
+                    	<span class="chart_bx color1"></span>
+                    	<span>ICO Sale</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color4"></span>
+                    	<span>Build Out</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color2"></span>
+                    	<span>Team &amp; Advisers</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color5"></span>
+                    	<span>Private Investors</span>
+                    </li>
+                    <li>
+                    	<span class="chart_bx color3"></span>
+                    	<span>Bounty</span>
+                    </li>
+                </ul>
+          </div>
+        </div>
+        </div>
+
+        <div id='roadmap' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
+          <h2 className='ceHeader text-center uppercase text-6xl my-5'>Roadmap</h2>
+          <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded' />
+        </div>
+
+        <div id='faq' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
+          <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
+
+          <div className="flex flex-col w-full mx-auto md:flex-row small_space">
+        <div className="ceFaqLeft flex flex-col w-full md:w-1/3">
+          <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
+            <li onClick={() => { setFaqLeft("1") }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
+              <a className={`tab-link ${faqLeft == "1" ? "active" : ""} `} data-toggle="tab" href="#tab1x">General</a>
+            </li>
+            {/* <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+              <a className="tab-link" data-toggle="tab" href="#tab2">Termeni & Definitii </a>
+            </li> */}
+            <li onClick={() => { setFaqLeft("2"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+              <a className={`tab-link ${faqLeft == "2" ? "active" : ""} `} data-toggle="tab" href="#tab3x">Ecosystem</a>
+            </li>
+            <li onClick={() => { setFaqLeft("3"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+              <a className={`tab-link ${faqLeft == "3" ? "active" : ""} `} data-toggle="tab" href="#tab4x">BeeGENEROUS <sup>369</sup></a>
+            </li>
+            <li onClick={() => { setFaqLeft("4"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+              <a className={`tab-link ${faqLeft == "4" ? "active" : ""} `} data-toggle="tab" href="#tab5x">Bonuses & Revenues</a>
+            </li>
+            <li onClick={() => { setFaqLeft("5"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+              <a className={`tab-link ${faqLeft == "5" ? "active" : ""} `} data-toggle="tab" href="#tab6x">Legalitate & Securitate</a>
+            </li>
+          </ul>
+        </div>
+        <div className="ceFaqRight flex flex-col w-full md:w-2/3">
+          <div className="tab-content res_md_mt_30 res_sm_mt_20">
+
+             <div className={`tab-pane fade  ${faqLeft == "1" ? "show active" : ""} `} id="tab1" role="tabpanel">
+                        <div id="accordion1" className="faq_content5">
+                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                            <div className="card-header" id="headingThree">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
+                                  aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru
+                                    ?</span><ins></ins></a> </h6>
+                            </div>
+                            <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
+                              <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
+                            </div>
+                          </div>
+                          <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                            <div className="card-header">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
+                                  aria-controls="collapseOne"><span>Ce este Be&Bee ?</span><ins></ins></a></h6>
+                            </div>
+                            <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
+                              <div className="card-body"> Be&Bee este un ecosistem prietenos în care noi idei și proiecte prind viață, astfel crescând valoarea comunității, ceea ce va duce la revolutionarea sistemelor de Crowdfunding, a Rețelelor de socializare și e-Commerce. <br />
+                                Acest ecosistem este format din mai multe instrumente și este construit pe 3 piloni principali :  Material, Spiritual și Educațional (informațional).</div>
+                            </div>
+                          </div>
+                          <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                            <div className="card-header" id="headingTwo">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
+                                  aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
+                                    proiectului “Be&Bee Community” ?</span><ins></ins></a> </h6>
+                            </div>
+                            <div id="collapseTwo" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="headingTwo" data-parent="#accordion1">
+                              <div className="card-body"> Această Comunitate este un mediu unde oamenii folosesc tehnologia pentru: <br />
+                                – a-și îndeplini visele și pentru a-și atinge obiectivele propuse, <br />
+                                – a-și diversifica sursele de venit, <br />
+                                – a-și promova afacerile, serviciile/bunurile, aducând un plus de valoare în comunitate, <br />
+                                – a socializa, a colabora și pentru a forma legături între ei, <br />
+                                – a-și îmbogăți cunoștințele în diferite domenii precum: Tehnologie, Crypto, NLP, LeaderShip, e-Commerce, Astrologie, Numerologie, Spiritualitate, Parenting, LifeStyle … etc
+                          
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+              </div>
+            <div className={`tab-pane fade  ${faqLeft == "2" ? "show active" : ""} `} id="tab3" role="tabpanel">
+              <div id="accordion3" className="faq_content5">
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                  <div className="card-header" id="headingNine">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
+                        aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span><ins></ins></a>
+                    </h6>
+                  </div>
+                  <div id="collapseNine" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingNine" data-parent="#accordion3">
+                    <div className="card-body">
+                      <div className="listtxt">
+                        <div>
+                          <span>1 &nbsp; BeeGENEROUS <sup>369</sup></span>
+                          <span>5 &nbsp; BeeNiCE</span>
+                          <span>9 &nbsp; MyGift</span>
+                          <span>13 &nbsp; BeeEDU</span>
+                        </div>
+                        <div>
+                          <span>2 &nbsp; InfinityBee (IFB)</span>
+                          <span>6 &nbsp; NFT Lab </span>
+                          <span>10 &nbsp; BeeSHOP</span>
+                          <span>14 &nbsp; BeeLiFE</span>
+                        </div>
+                        <div>
+                          <span>3 &nbsp; BeeSAFE</span>
+                          <span>7 &nbsp; ByBee</span>
+                          <span>11 &nbsp; BeeZumZOOM</span>
+                          <span>15 &nbsp; BeeGAME</span>
+                        </div>
+                        <div>
+                          <span>4 &nbsp; BeeCHANGE</span>
+                          <span>8 &nbsp; BeeCREATIVE</span>
+                          <span>12 &nbsp; NFTCom</span>
+                          <span>16 &nbsp; BeeLAND</span>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={`tab-pane fade  ${faqLeft == "3" ? "show active" : ""} `} id="tab4" role="tabpanel">
+              <div id="accordion4" className="faq_content5">
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                  <div className="card-header" id="headingTen">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                        aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
+                  </div>
+                  <div id="collapseTen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
+                    <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
+                  </div>
+                </div>
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                  <div className="card-header" id="headingEleven">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
+                        aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
+                          platformă ?</span><ins></ins></a> </h6>
+                  </div>
+                  <div id="collapseEleven" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingEleven" data-parent="#accordion4">
+                    <div className="card-body"> Taxa de înscriere se poate plăti cu una din cele 5 cripto-monede : USDT, USDC, BUSD, BNB și EGLD <br />
+                      Activarea nivelurilor de multifinanțare se poate face cu aceleași 5 crypto monede (de mai sus), excepție făcând nivelurile 3, 6 și 9 care se activează doar cu tokenul comunității noastre InfinityBee (IFB).
+                      
+                    </div>
+                  </div>
+                </div>
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="1s">
+                  <div className="card-header" id="heading48">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
+                        aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
+                          ?</span><ins></ins></a> </h6>
+                  </div>
+                  <div id="collapse48" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading48" data-parent="#accordion4">
+                    <div className="card-body"> a. nevoi personale <br />
+                      b. probleme de sănătate <br />
+                      c. proiecte de tip business <br />
+                      d. proiecte umanitare / caritabile
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={`tab-pane fade  ${faqLeft == "4" ? "show active" : ""} `} id="tab5" role="tabpanel">
+              <div id="accordion5" className="faq_content5">
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                  <div className="card-header" id="headingSeventeen">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
+                        aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span><ins></ins></a> </h6>
+                  </div>
+                  <div id="collapseSeventeen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingSeventeen"
+                    data-parent="#accordion5">
+                    <div className="card-body"> Prin distribuirea link-ului tău de invitație vei atrage mai mulți investitori (participanți la ICO). <br />
+Dacă o persoană folosește link-ul tău și cumpără unul sau mai multe pachete cu tokeni InfinityBee, tu vei fi recompensat cu 5% din totalul sumei investite de acea persoană. Acești bani vor intra direct (instant) în portofelul tău cripto. <br />
+Deasemenea, prin folosirea link-ului tău, acea persoană va beneficia și ea de un discount de 5%. <br />
+Prin cumpărarea și deținerea de tokeni InfinityBee poți avea un real profit în timp.
+</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={`tab-pane fade  ${faqLeft == "5" ? "show active" : ""} `} id="tab6" role="tabpanel">
+              <div id="accordion6" className="faq_content5">
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                  <div className="card-header" id="heading61">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
+                        aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span><ins></ins></a> </h6>
+                  </div>
+                  <div id="collapse61" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
+                    <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
+                  </div>
+                </div>
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                  <div className="card-header" id="heading62">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
+                        aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span><ins></ins></a> </h6>
+                  </div>
+                  <div id="collapse62" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
+                    <div className="card-body"> Înainte de a cumpăra un pachet cu tokeni InfinityBee, este necesar să îți creezi un cont pe această platformă de ICO. <br />
+Contul tău personal va fi asociat tot timpul cu portofelul de cripto-monede cu care te-ai autentificat în momentul creării acestuia. Prin urmare, toți tokenii alocați pachetului achiziționat, sunt trimiși numai în acest portofel. <br />
+Fiecare pachet de tokeni are caracteristici proprii și specifice. <br />
+Așadar, în funcție de pachetul achiziționat, fiecare dintre noi va primi cuantumul specificat în componența pachetului în una sau mai multe tranșe. Acest mecanism se execută în mod automat de către smart contractul ICO-ului. <br />
+</div>
+                  </div>
+                </div>
+                <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                  <div className="card-header" id="heading63">
+                    <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
+                        aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
+                  </div>
+                  <div id="collapse63" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
+                    <div className="card-body"> Platforma folosește KYC (Know Your Customer) & AML (Anti Money Laundering)  – 2 elemente de identificare și verificare a membrilor, necesare unui proiect crypto să fie legal și credibil.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      
         </div>
 
         <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='roadmap' className='w-full my-10 justify-center'>

@@ -1,0 +1,25 @@
+.small_space {
+    margin-top: 20px;
+}
+.tab-link {
+    background-color: #4141af;
+}
+
+.tab_s2 .tab-link {
+    border-radius: 0;
+    margin-bottom: 2px;
+    padding: 10px 20px;
+}
+.tab-link {
+    background-color: #071890;
+    border-radius: 5px;
+    color: #fff;
+}
+.tab-link {
+    display: block;
+    padding: 8px 16px;
+    text-transform: capitalize;
+}
+.tab-link.active {
+    background-color: #ff69c9;
+}

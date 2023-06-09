@@ -200,14 +200,14 @@ export default function Header(props) {
               </div>
               {(about || amenu) && (
                 <div onMouseEnter={() => { showAmenu(true) }} onMouseLeave={() => { showAbout(false); showAmenu(false) }} className='absolute justify-center items-center my-2'>
-                  <div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>About IFB token</div>
-                  <div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Tokenomics</div>
-                  <div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Presale Rounds</div>
+                  <a href='#about'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>About IFB token</div></a>
+                  <a href='#tokenomics'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Tokenomics</div></a>
+                  <a href='#presale'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Presale Rounds</div></a>
                   <a href='#roadmap'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Roadmap</div></a>
                   {/*<div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>White paper</div>*/}
-                  <a href="#faq"><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>FAQ</div></a>
+                  <a href='#faq'></a><a href="#faq"><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>FAQ</div></a>
 
-                  <div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Contact Us</div>
+                  {/* <div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Contact Us</div> */}
 
                 </div>
               )}

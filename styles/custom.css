@@ -1,0 +1,233 @@
+.ceModal {
+    padding: 20px 50px;
+    background: #090738;
+}
+.ceModal input{
+    background: #1B186E;
+}
+.ceModalLogin {
+    border-radius: 50px;
+    background-image: linear-gradient(to right, #7448AA 0%,#E45C9E 100%,#7448AA);
+}
+.ceRight {
+    text-align: right;
+}
+
+.ceBtnLogin {
+    margin: 0px;
+    background: #4141AF;
+}
+.ceBtnLogin:hover {
+    background: #282888;
+}
+
+.ceInput {
+
+}
+
+.ceHeader {
+    margin-bottom: 50px;
+}
+.ceTitle {
+    padding-left: 50px;
+    padding-right: 50px;
+    font-size: 25px;
+}
+
+.ceDescription {
+    padding-left: 50px;
+    padding-right: 50px;
+    font-size: 17px;
+    margin-bottom: 50px;
+    text-align: justify;
+}
+
+.ceTitle2 {
+    font-size: 25px;
+}
+
+.ceDescription2 {
+    font-size: 17px;
+    margin-bottom: 50px;
+    text-align: justify;
+}
+
+.ceBtnPrice {
+    background-image: linear-gradient(to right, #7448AA 0%,#E45C9E 100%,#7448AA);
+}
+
+.ceLeft {
+    text-align: left;
+}
+.ceCenter {
+    text-align: center;
+}
+.ceRight {
+    text-align: right;
+}
+.ceCol6 {
+    width: 50%;
+}
+.ceOffset6 {
+    left: 50%;
+    position: relative;
+}
+
+.ceFaqLeft {
+    padding: 0px 50px;
+}
+.ceFaqRight {
+    padding: 0px 50px;
+}
+.faq_content5 .card-header a {
+    background-color: #4a49bf;
+    border-color: #fff;
+    color: #fff;
+    display: block;
+    padding: 15px 40px 15px 15px;
+    position: relative;
+}
+.faq_content5 .card-header a::before {
+    content: "Q.";
+    font-weight: 600;
+    margin-right: 5px;
+}
+.faq_content5 .card-header a::after {
+    color: #ffffff;
+    content: "\f10d";
+    font-family: "Ionicons";
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    right: 15px;
+    top: 14px;
+}
+.faq_content5 .collapse.show .card-body {
+    margin-bottom: -10px;
+}
+.faq_content5 .card-body {
+    background-color: #4141af;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 0 10px;
+}
+.faq_content5 .card-header a span::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 100%;
+    border-style: solid;
+    border-width: 10px 10px 0 0;
+    border-color: #4141af transparent transparent transparent;
+}
+.faq_content5 .card-header a span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 100%;
+    border-style: solid;
+    border-width: 0 10px 10px 0;
+    border-color: transparent #4141af transparent transparent;
+}
+
+.card-body::before {
+    content: "A.";
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.faq_content5 .card {
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 20px;
+}
+
+.collapse:not(.show) {
+    display: none;
+}
+
+.tab-pane {
+    display: none;
+}
+.tab-pane.active {
+    display: block;
+}
+
+.fade:not(.show) {
+    opacity: 0;
+}
+.fade {
+    transition: opacity .15s linear;
+}
+
+.text-center {
+    text-align: center!important;
+}
+
+.list_chart {
+    margin-top: 20px;
+}
+
+.list_chart li {
+    display: inline-block;
+    padding: 0 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.list_none li {
+    list-style: none;
+}
+
+.list_chart li span {
+    color: #fff;
+}
+
+.chart_bx {
+    background-color: #ffffff;
+    display: inline-block;
+    margin-right: 5px;
+    height: 7px;
+    vertical-align: middle;
+    width: 7px;
+}
+
+.color1 {
+	background-color: #f69040;
+}
+.color2 {
+	background-color: #78c596;
+}
+.color3 {
+	background-color: #f17776;
+}
+.color4 {
+	background-color: #0eadc9;
+}
+.color5 {
+	background-color: #4241b8;
+}
+.color6 {
+	background-color: #4449cc;
+}
+.color7 {
+	background-color: #00e1f4;
+}
+.color8 {
+	background-color: #d26187;
+}
+.color9 {
+	background-color: #d4b630;
+}
+.color10 {
+	background-color: #0052ce;
+}
+.color11 {
+	background-color: #5b5da8;
+}
+.color12 {
+	background-color: #9a46cc;
+}
+.color13 {
+	background-color: #d3b62f;
+}
