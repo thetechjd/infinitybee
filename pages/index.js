@@ -1649,63 +1649,63 @@ Pentru această rundă sunt alocați tokeni în cuantum de 10% din numărul tota
 
           <div className="flex flex-col w-full mx-auto md:flex-row ">
           <div className="flex flex-col w-full md:w-1/2">
-                <div class="title_default_light title_border text-center">
-                    <h4 class="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
+                <div className="title_default_light title_border text-center">
+                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
                 </div>
-                <div class="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s"> 
+                <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s"> 
                     <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" /> 
                 </div>
-                <div class="divider small_divider"></div>
-                <ul class="list_none list_chart text-center">
+                <div className="divider small_divider"></div>
+                <ul className="list_none list_chart text-center">
                 	<li>
-                    	<span class="chart_bx color1"></span>
+                    	<span className="chart_bx color1"></span>
                     	<span>Addvisers</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color2"></span>
+                    	<span className="chart_bx color2"></span>
                     	<span>Marketing</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color3"></span>
+                    	<span className="chart_bx color3"></span>
                     	<span>Public Sale</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color4"></span>
+                    	<span className="chart_bx color4"></span>
                     	<span>Pre Sale</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color5"></span>
+                    	<span className="chart_bx color5"></span>
                     	<span>Projects</span>
                     </li>
                 </ul>
 			</div>
       <div className="flex flex-col w-full md:w-1/2">
-                <div class="title_default_light title_border text-center">
-                    <h4 class="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Distribution</h4>
+                <div className="title_default_light title_border text-center">
+                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Distribution</h4>
                 </div>
-                <div class="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft" data-animation="fadeInLeft" data-animation-delay="0.2s"> 
+                <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft" data-animation="fadeInLeft" data-animation-delay="0.2s"> 
                     <img src="/images/distribution3.png" alt="distribution3" /> 
                 </div>
-                <div class="divider small_divider"></div>
-                <ul class="list_none list_chart text-center">
+                <div className="divider small_divider"></div>
+                <ul className="list_none list_chart text-center">
                 	<li>
-                    	<span class="chart_bx color1"></span>
+                    	<span className="chart_bx color1"></span>
                     	<span>ICO Sale</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color4"></span>
+                    	<span className="chart_bx color4"></span>
                     	<span>Build Out</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color2"></span>
+                    	<span className="chart_bx color2"></span>
                     	<span>Team &amp; Advisers</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color5"></span>
+                    	<span className="chart_bx color5"></span>
                     	<span>Private Investors</span>
                     </li>
                     <li>
-                    	<span class="chart_bx color3"></span>
+                    	<span className="chart_bx color3"></span>
                     	<span>Bounty</span>
                     </li>
                 </ul>
