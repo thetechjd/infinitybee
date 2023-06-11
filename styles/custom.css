@@ -56,6 +56,10 @@
     background-image: linear-gradient(to right, #7448AA 0%,#E45C9E 100%,#7448AA);
 }
 
+.ceInfo {
+    background-image: linear-gradient(to bottom, #E45C9E 0%, #7448AA 100%,#E45C9E);
+}
+
 .ceLeft {
     text-align: left;
 }

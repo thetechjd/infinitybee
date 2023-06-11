@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import '../styles/custom.css'
 import '../styles/faq.css'
+import '../styles/planets.css'
 
 import { StatusProvider } from "../context/statusContext"
 
