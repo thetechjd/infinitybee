@@ -77,8 +77,12 @@ export default function Header(props) {
         <div className='flex-grow '>
           <div className='flex flex-row'>
             <Link className='w-1/5' href='/' passHref>
+            <a className='flex items-center'>
 
-            </Link>
+                <img alt='' src='/images/beelogo.png' className='h-[40px]' />
+                <span className='px-2'>InfinityBee (IFB)</span>
+              </a>
+  </Link>
             <div>
 
               <a href='' className='flex px-3 text-xl tracking-widest items-center pt-0.5'>White Paper</a>
