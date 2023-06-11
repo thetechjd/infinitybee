@@ -662,8 +662,8 @@ export default function Home() {
   }
 
   useEffect(async () => {
-    getSold()
-  }, [])
+    await getSold()
+  }, [sold])
 
 
   const generateReferralCode = async () => {

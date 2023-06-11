@@ -206,6 +206,25 @@
                 "type": "address"
             }
         ],
+        "name": "getClaimPeriod",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_addr",
+                "type": "address"
+            }
+        ],
         "name": "getRefByAddress",
         "outputs": [
             {
@@ -234,6 +253,19 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_endTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "nextRound",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -325,6 +357,19 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "_newPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setTokenPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint8",
                 "name": "_newPeriod",
                 "type": "uint8"
@@ -361,7 +406,7 @@
                 "type": "uint256"
             }
         ],
-        "name": "toggleRounds",
+        "name": "startICO",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -374,6 +419,19 @@
                 "internalType": "contract IERC20",
                 "name": "",
                 "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "tokenPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
