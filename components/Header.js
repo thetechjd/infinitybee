@@ -77,12 +77,12 @@ export default function Header(props) {
         <div className='flex-grow '>
           <div className='flex flex-row'>
             <Link className='w-1/5' href='/' passHref>
-            <a className='flex items-center'>
+              <a className='flex items-center'>
 
                 <img alt='' src='/images/beelogo.png' className='h-[40px]' />
                 <span className='px-2'>InfinityBee (IFB)</span>
               </a>
-  </Link>
+            </Link>
             <div>
 
               <a href='' className='flex px-3 text-xl tracking-widest items-center pt-0.5'>White Paper</a>
@@ -91,7 +91,7 @@ export default function Header(props) {
 
         </div>
 
-              {/* <a className='flex items-center'>
+        {/* <a className='flex items-center'>
 
                 <img alt='' src='/images/beelogo.png' className='h-[40px]' />
                 <span className='px-2'>InfinityBee (IFB)</span>
@@ -241,44 +241,73 @@ export default function Header(props) {
               )}
             </li>
 
-            <li className='relative'>
-              <div onMouseEnter={() => { showOffice(true) }}
-                onMouseLeave={() => {
-                  setTimeout(() => {
-                    if (!omenu) {
-                      showOffice(false)
-                    }
-                  }, 300)
-                }}
-                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+
+            {!props.loggedIn ? (
+           
+           
+           <li className='relative'>
+              
+             
+                
+
+                <div onClick={props.showLoginModal}
+                  className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                  <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+text-white md:flex'>Login/Register</p></span>
+                </div>
+
+                </li>
+
+              ) : (
+
+                <li className='relative'>
+                
+                <div onMouseEnter={() => { showOffice(true) }}
+                  onMouseLeave={() => {
+                    setTimeout(() => {
+                      if (!omenu) {
+                        showOffice(false)
+                      }
+                    }, 300)
+                  }}
+                  className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                  <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
           text-white md:flex'>My Account</p></span>
-              </div>
+                </div>
+              
               {(office || omenu) && (
+                
                 <div onMouseEnter={() => { showOmenu(true) }} onMouseLeave={() => { showOffice(false); showOmenu(false) }} className='absolute ml-8 my-2'>
-                  <div onClick={props.loggedIn ? props.toggleBackOffice: null} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Back Office</div>
-                 
-                    <div onClick={props.loggedIn ? props.logOut : props.showLoginModal} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>
+                  <div onClick={props.loggedIn ? props.toggleBackOffice : null} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Back Office</div>
+
+                  <div onClick={props.loggedIn ? props.logOut : props.showLoginModal} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>
                     <p className='rounded uppercase text-xs font-black
               text-white md:flex'>{props.loggedIn ? "Logout" : props.translate("login")}</p>
                   </div>
-                  
-             
-                  
-
-            </div>
+                          
+                 </div>
+              
               )}
-          </li>
-          {/*} <li className='flex h-full items-center my-auto'>
+                
+
+ </li>
+              )}
+              
+
+
+
+
+           
+            {/*} <li className='flex h-full items-center my-auto'>
                 <img src='/images/basket.png' className='flex w-[20px] hover:w-[30px] items-center justify-center'/>
                 </li>*/}
 
-          {/* CONNECT WALLET */}
+            {/* CONNECT WALLET */}
 
 
-        </ul>
-      </nav>
-      <style>{`
+          </ul>
+        </nav>
+        <style>{`
       .hideMenuNav {
         display: none;
       }
@@ -297,7 +326,7 @@ export default function Header(props) {
         align-items: center;
       }
     `}</style>
-    </div>
+      </div>
 
     </header >
   )
