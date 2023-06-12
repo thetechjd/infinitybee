@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import '../styles/animate.css'
 import '../styles/custom.css'
 import '../styles/faq.css'
 import '../styles/planets.css'

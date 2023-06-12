@@ -1542,7 +1542,7 @@ export default function Home() {
                       – participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Pre Sale 3 <br />
                       – sistemul de crowdfunding BeeGENEROUS <sup>369</sup>,  în programele :  Matrix Bee3 & Matrix Bee4 și <br />
                       – programe de bounty și airdrop <br />
-                      După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
+                      După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) 
                     </p>
 
                     <p className="ceTitle2 ceLeft">La ce valoare și când se poate cumpăra ?</p>
@@ -1567,7 +1567,7 @@ export default function Home() {
 
                 <p className="ceDescription ceCenter">
                   Pe această platformă se pot cumpăra tokeni IFB sub formă de pachete. <br />
-                  Membrii comunității au nevoie de tokeni InfinityBee pentru activarea nivelurilor 3, 6, 9 din BeeGENEROUS <sup>369</sup> și pentru programul BeeSAFE (planul Economy), iar ulterior vor fi folosiți și pentru viitoarele instrumente, din interiorul ecosistemului Be&Bee, pe care le vom dezvolta.
+                  Membrii comunității au nevoie de tokeni InfinityBee pentru activarea nivelurilor 3, 6, 9 din BeeGENEROUS <sup>369</sup> <br /> și pentru programul BeeSAFE (planul Economy), iar ulterior vor fi folosiți și pentru viitoarele instrumente, <br /> din interiorul ecosistemului Be&Bee, pe care le vom dezvolta.
                 </p>
 
                 <div className="flex flex-col w-full mx-auto md:flex-row ">
@@ -1587,7 +1587,7 @@ export default function Home() {
                   </div>
 
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
-                    <p className="ceTitle2 ceLeft">Ce oferte de pachete sunt disponibile ?</p><br />
+                    <p className="ceTitle2 ceLeft">Ce oferte de pachete sunt disponibile ?</p>
                     <p className="ceDescription2 ceLeft">
                       În fiecare rundă de Pre Sale a ICO-ului se vor putea cumpăra pachete cu tokeni de 8 valori diferite : <br />
                       200 USDT (Mercury) – no Bonus, no Vesting, Releasing 100% <br />
@@ -1678,16 +1678,19 @@ export default function Home() {
 
             <div id='roadmap' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>Roadmap</h2>
-              <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded' />
+              <div class="align-items-center" style={{position: 'relative'}}>
+              <img src="/images/beeactive.png" className="obj" />
+              <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded roadmap' />
+              </div>
             </div>
 
             <div id='faq' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row small_space">
-                <div className="ceFaqLeft flex flex-col w-full md:w-1/3">
+                <div className="ceFaqLeft flex flex-col w-full md:w-1/3" style={{padding: '50px'}}>
                   <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
-                    <li onClick={() => { setFaqLeft("1") }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
+                    <li onClick={() => { setFaqLeft("1"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
                       <a className={`tab-link ${faqLeft == "1" ? "active" : ""} `} data-toggle="tab" href="#tab1x">General</a>
                     </li>
                     {/* <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.6s">
@@ -1707,12 +1710,12 @@ export default function Home() {
                     </li>
                   </ul>
                 </div>
-                <div className="ceFaqRight flex flex-col w-full md:w-2/3">
+                <div className="ceFaqRight flex flex-col w-full md:w-2/3" style={{padding: '50px'}}>
                   <div className="tab-content res_md_mt_30 res_sm_mt_20">
 
                     <div className={`tab-pane fade  ${faqLeft == "1" ? "show active" : ""} `} id="tab1" role="tabpanel">
                       <div id="accordion1" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingThree">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
                               aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru
@@ -1722,7 +1725,7 @@ export default function Home() {
                             <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
                               aria-controls="collapseOne"><span>Ce este Be&Bee ?</span><ins></ins></a></h6>
@@ -1732,7 +1735,7 @@ export default function Home() {
                               Acest ecosistem este format din mai multe instrumente și este construit pe 3 piloni principali :  Material, Spiritual și Educațional (informațional).</div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTwo">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
                               aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
@@ -1753,7 +1756,7 @@ export default function Home() {
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "2" ? "show active" : ""} `} id="tab3" role="tabpanel">
                       <div id="accordion3" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingNine">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
                               aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span><ins></ins></a>
@@ -1795,7 +1798,7 @@ export default function Home() {
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "3" ? "show active" : ""} `} id="tab4" role="tabpanel">
                       <div id="accordion4" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
                               aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
@@ -1804,7 +1807,7 @@ export default function Home() {
                             <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingEleven">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
                               aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
@@ -1817,7 +1820,7 @@ export default function Home() {
                             </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="1s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
                           <div className="card-header" id="heading48">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
                               aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
@@ -1835,7 +1838,7 @@ export default function Home() {
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "4" ? "show active" : ""} `} id="tab5" role="tabpanel">
                       <div id="accordion5" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingSeventeen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
                               aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span><ins></ins></a> </h6>
@@ -1853,7 +1856,7 @@ export default function Home() {
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "5" ? "show active" : ""} `} id="tab6" role="tabpanel">
                       <div id="accordion6" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading61">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
                               aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span><ins></ins></a> </h6>
@@ -1862,7 +1865,7 @@ export default function Home() {
                             <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading62">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
                               aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span><ins></ins></a> </h6>
@@ -1875,7 +1878,7 @@ export default function Home() {
                             </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading63">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
                               aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
@@ -1893,11 +1896,6 @@ export default function Home() {
 
 
 
-            </div>
-
-            <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='roadmap' className='w-full my-10 justify-center'>
-              <h2 className='text-center uppercase text-6xl my-5'>Roadmap test</h2>
-              <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded' />
             </div>
 
 
