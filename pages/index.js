@@ -177,6 +177,7 @@ export default function Home() {
   const [copyMessage, setCopyMessage] = useState('')
   const [loggedIn, setLoggedIn] = useState(false)
   const [showBackOffice, setShowBackOffice] = useState(false)
+  const [tokenPrice, setTokenPrice] = useState(0)
 
 
 
@@ -656,14 +657,17 @@ export default function Home() {
 
   const getSold = async () => {
     const amountSold = await baseContract.methods.sold().call();
+    const price = await baseContract.methods.tokenPrice().call();
+    console.log(amountSold)
     //const amountRemaining = await beeContract.methods.balanceOf(contractAddress).call();
     setSold(amountSold);
-    setRemaining(100_000_000 * 10 ** 18 - amountSold);
+    setRemaining(100_000_000 * 10 ** 18 - (amountSold * 10 ** 18));
+    setTokenPrice(price)
   }
 
   useEffect(async () => {
     await getSold()
-  }, [sold])
+  }, [])
 
 
   const generateReferralCode = async () => {
@@ -1379,7 +1383,7 @@ export default function Home() {
                 <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
                 <p className='m-auto text-3xl'>{translate("sold")}</p>
                 <h3 className='my-auto  whitespace-nowrap mx-4 text-2xl'>{translate("used")}</h3>
-                <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold / 10 ** 18) : 0}</h3>
+                <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold ) : 0}</h3>
                 <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk text-2xl'>{translate("decentralized")}</h3>
                 <div></div>
                 <h3 className='my-auto uppercase whitespace-nowrap mx-4 text-2xl'>{translate("world")}</h3>
@@ -1443,6 +1447,7 @@ export default function Home() {
                     <div className='card-back items-center m-auto'>
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>62,500 IFB Tokens</p>
+                      <p className='my-1'>{tokenPrice / 10 ** 18} USD</p>
                       <p className='my-1'>Vesting 12 Months</p>
                       <p className='my-1'>No Bonus</p>
                       <p className='my-1'>TGE 10%</p>
