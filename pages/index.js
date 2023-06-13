@@ -245,6 +245,18 @@ export default function Home() {
     setIsFlipped(!isFlipped);
   };
 
+  const setFaqRightGeneral = (val) => {
+    if (val){
+      if (faqRight != val)
+        setFaqRight(val);
+      else
+        setFaqRight(0);
+    }
+    else{
+      setFaqRight(1);
+    }
+  };
+
   useEffect(() => {
     const logStatus = localStorage.getItem("loggedIn")
     if (logStatus)
@@ -1879,22 +1891,22 @@ export default function Home() {
               <div className="flex flex-col w-full mx-auto md:flex-row small_space">
                 <div className="ceFaqLeft flex flex-col w-full md:w-1/3" style={{padding: '50px'}}>
                   <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
-                    <li onClick={() => { setFaqLeft("1"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
+                    <li onClick={() => { setFaqLeft("1"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
                       <a className={`tab-link ${faqLeft == "1" ? "active" : ""} `} data-toggle="tab" href="#tab1x">General</a>
                     </li>
                     {/* <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.6s">
               <a className="tab-link" data-toggle="tab" href="#tab2">Termeni & Definitii </a>
             </li> */}
-                    <li onClick={() => { setFaqLeft("2"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                    <li onClick={() => { setFaqLeft("2"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
                       <a className={`tab-link ${faqLeft == "2" ? "active" : ""} `} data-toggle="tab" href="#tab3x">Ecosystem</a>
                     </li>
-                    <li onClick={() => { setFaqLeft("3"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                    <li onClick={() => { setFaqLeft("3"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
                       <a className={`tab-link ${faqLeft == "3" ? "active" : ""} `} data-toggle="tab" href="#tab4x">BeeGENEROUS <sup>369</sup></a>
                     </li>
-                    <li onClick={() => { setFaqLeft("4"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                    <li onClick={() => { setFaqLeft("4"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                       <a className={`tab-link ${faqLeft == "4" ? "active" : ""} `} data-toggle="tab" href="#tab5x">Bonuses & Revenues</a>
                     </li>
-                    <li onClick={() => { setFaqLeft("5"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                    <li onClick={() => { setFaqLeft("5"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                       <a className={`tab-link ${faqLeft == "5" ? "active" : ""} `} data-toggle="tab" href="#tab6x">Legalitate & Securitate</a>
                     </li>
                   </ul>
@@ -1906,7 +1918,7 @@ export default function Home() {
                       <div id="accordion1" className="faq_content5">
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingThree">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
                               aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru
                                 ?</span><ins></ins></a> </h6>
                           </div>
@@ -1916,7 +1928,7 @@ export default function Home() {
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
                               aria-controls="collapseOne"><span>Ce este Be&Bee ?</span><ins></ins></a></h6>
                           </div>
                           <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
@@ -1926,7 +1938,7 @@ export default function Home() {
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTwo">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
                               aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
                                 proiectului “Be&Bee Community” ?</span><ins></ins></a> </h6>
                           </div>
@@ -1947,7 +1959,7 @@ export default function Home() {
                       <div id="accordion3" className="faq_content5">
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingNine">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
                               aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span><ins></ins></a>
                             </h6>
                           </div>
@@ -1985,7 +1997,7 @@ export default function Home() {
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
                               aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
@@ -2005,7 +2017,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
                       <div id="accordion4" className="faq_content5">
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
                               aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
@@ -2014,7 +2026,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingEleven">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
                               aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
                                 platformă ?</span><ins></ins></a> </h6>
                           </div>
@@ -2027,7 +2039,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
                           <div className="card-header" id="heading48">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
                               aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
                                 ?</span><ins></ins></a> </h6>
                           </div>
@@ -2045,7 +2057,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
                       <div id="accordion5" className="faq_content5">
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingSeventeen">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
                               aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapseSeventeen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingSeventeen"
@@ -2063,7 +2075,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
                       <div id="accordion6" className="faq_content5">
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading61">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
                               aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapse61" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
@@ -2072,7 +2084,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading62">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
                               aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapse62" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
@@ -2085,7 +2097,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading63">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
                               aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapse63" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
