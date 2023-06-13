@@ -18,6 +18,7 @@ import { useStatus } from "../context/statusContext";
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
 //const CountUp = require('react-countup')
 
+import { Chart } from "react-google-charts";
 
 const timeHelper = require('../utils/time');
 
@@ -49,6 +50,38 @@ import en from '../utils/en.json';
 import { NetworkLockedRounded } from "@material-ui/icons";
 
 
+const data1 = [
+  ["Task", "Hours per Day"],
+  ["ICO SEED", 2*42/100],
+  ["ICO Presale 1", 3*42/100],
+  ["ICO Presale 2", 7*42/100],
+  ["ICO Public Sale", 10*42/100],  
+  ["Reserve ", 9*42/100],
+  ["Liquidity  ", 11*42/100],
+]
+const data2 = [
+  ["Task", "Hours per Day"],
+  ["Ecosystem ", 23],
+  ["Treasury ", 25],
+  ["ICO Sale", 22],
+  ["Team & Advisers", 14],  
+  ["Marketing", 5],
+  ["Liquidity  ", 11],
+]
+;
+const options1 = {
+  // title: "My Daily Activities",
+  legend: 'none',
+  // legend : { position : 'bottom' },
+  backgroundColor: 'transparent',
+};
+const options2 = {
+  // title: "My Daily Activities",
+  legend: 'none',
+  // legend : { position : 'bottom' },
+  backgroundColor: 'transparent',
+  is3D: true
+};
 
 const firebaseConfig = {
   apiKey: "AIzaSyACfUR1tmMLp0YRkVDBiRmMGJ5rdMuK_VY",
@@ -1753,43 +1786,19 @@ export default function Home() {
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>Tokenomics</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row ">
-                <div className="flex flex-col w-full md:w-1/2">
-                  <div className="title_default_light title_border text-center">
-                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
-                  </div>
-                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s">
-                    <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" />
-                  </div>
-                  <div className="divider small_divider"></div>
-                  <ul className="list_none list_chart text-center">
-                    <li>
-                      <span className="chart_bx color1"></span>
-                      <span>Addvisers</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color2"></span>
-                      <span>Marketing</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color3"></span>
-                      <span>Public Sale</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color4"></span>
-                      <span>Pre Sale</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color5"></span>
-                      <span>Projects</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex flex-col w-full md:w-1/2">
+              <div className="flex flex-col w-full md:w-1/2">
                   <div className="title_default_light title_border text-center">
                     <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Distribution</h4>
                   </div>
                   <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft" data-animation="fadeInLeft" data-animation-delay="0.2s">
-                    <img src="/images/distribution3.png" alt="distribution3" />
+                    {/* <img src="/images/distribution3.png" alt="distribution3" /> */}
+                    {    <Chart
+      chartType="PieChart"
+      data={data2}
+      options={options2}
+      width={"100%"}
+      height={"500px"}
+    />}
                   </div>
                   <div className="divider small_divider"></div>
                   <ul className="list_none list_chart text-center">
@@ -1812,6 +1821,44 @@ export default function Home() {
                     <li>
                       <span className="chart_bx color3"></span>
                       <span>Bounty</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex flex-col w-full md:w-1/2">
+                  <div className="title_default_light title_border text-center">
+                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
+                  </div>
+                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s">
+                    {/* <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" /> */}
+                    {    <Chart
+      chartType="PieChart"
+      data={data1}
+      options={options1}
+      width={"100%"}
+      height={"300px"}
+    />}
+                  </div>
+                  <div className="divider small_divider"></div>
+                  <ul className="list_none list_chart text-center">
+                    <li>
+                      <span className="chart_bx color1"></span>
+                      <span>Addvisers</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color2"></span>
+                      <span>Marketing</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color3"></span>
+                      <span>Public Sale</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color4"></span>
+                      <span>Pre Sale</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color5"></span>
+                      <span>Projects</span>
                     </li>
                   </ul>
                 </div>
