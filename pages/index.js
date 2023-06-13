@@ -1439,7 +1439,8 @@ export default function Home() {
               <h2 className='text-center uppercase text-6xl my-5'>Adventurer {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
-                  <div className={`flex flex-col mx-auto w-full card ${isFlipped ? 'flipped' : ''}`} onMouseEnter={handleCardFlip} onMouseLeave={handleCardFlip}>
+
+                  {/* <div className={`flex flex-col mx-auto w-full card ${isFlipped ? 'flipped' : ''}`} onMouseEnter={handleCardFlip} onMouseLeave={handleCardFlip}>
                     <div className='card-front'>
                       <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-full mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
@@ -1454,15 +1455,65 @@ export default function Home() {
                       </div>
                       <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-full mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full mt-1 px-8 py-1'>200 USDT</button>
                     </div>
+                  </div> */}
+
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                        <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>25,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-full mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full mt-1 px-8 py-1'>200 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
                   </div>
-                  <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='flex flex-col w-full md:w-1/3'>
-                    <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                    <button onClick={() => { buyTokens(3, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                  
+                  <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                        <button onClick={() => { buyTokens(3, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>62,500 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(3, 500) }} className='ceBtnPrice flex w-full mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full mt-1 px-8 py-1'>500 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
                   </div>
-                  <div className='flex flex-col w-full md:w-1/3'>
-                    <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                    <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>137,500 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
                   </div>
+
                 </div>
 
               </div>
@@ -1471,7 +1522,8 @@ export default function Home() {
               <h2 className='text-center uppercase text-6xl my-5'>Master {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
-                  <div className='flex flex-col w-full md:w-1/3'>
+
+                  {/* <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(2, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
                   </div>
@@ -1482,25 +1534,116 @@ export default function Home() {
                   <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
-                  </div>
+                  </div> */}
 
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(2, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>287,500 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(2, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
                 </div>
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>625,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>                
 
               </div>
-
+            </div>
             </div>
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='legend' className='w-full my-10'>
               <h2 className='text-center uppercase text-6xl my-5'>Legend {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
-                  <div className='flex flex-col w-full md:w-1/2'>
+
+                  {/* <div className='flex flex-col w-full md:w-1/2'>
                     <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/2'>
                     <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
-                  </div>
+                  </div> */}
+
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
 
 
                 </div>
@@ -1511,7 +1654,6 @@ export default function Home() {
 
 
             </div>
-
             <div id='about' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>About IFB token</h2>
               <div>
@@ -1539,7 +1681,7 @@ export default function Home() {
                     <p className="ceTitle2 ceLeft">Cum și de unde se poate obține Tokenul InfinityBee ( IFB) ?</p>
                     <p className="ceDescription2 ceLeft">
                       Tokenul InfinityBee (IFB) înainte de Listare, se poate obține prin : <br />
-                      – participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Pre Sale 3 <br />
+                      – participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Public Sale <br />
                       – sistemul de crowdfunding BeeGENEROUS <sup>369</sup>,  în programele :  Matrix Bee3 & Matrix Bee4 și <br />
                       – programe de bounty și airdrop <br />
                       După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) 
@@ -1550,7 +1692,7 @@ export default function Home() {
                       Valoarea Tokenului InfinityBee va crește de la o rundă la alta după cum urmează : <br />
                       Pre Sale 1 (Q4 2023): valoarea IFB = 0.01 USDT <br />
                       Pre Sale 2 (Q1 2024): valoarea IFB = 0.015 USDT <br />
-                      Pre Sale 3 (Q3 2024): valoarea IFB = 0.02 USDT <br />
+                      Public Sale (Q3 2024): valoarea IFB = 0.02 USDT <br />
                     </p>
                   </div>
                 </div>
@@ -1573,7 +1715,7 @@ export default function Home() {
                 <div className="flex flex-col w-full mx-auto md:flex-row ">
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
                     <p className="ceDescription2 ceLeft">
-                      Toate cele 3 runde de Private Sale din perioada ICO-ului se vor desfășura doar pe această platformă (www.infinitybee.io). <br /><br />
+                      Toate cele 3 runde de Pre Sale din perioada ICO-ului se vor desfășura doar pe această platformă (www.infinitybee.io). <br /><br />
 
                       În RUNDA 1 tokenul are valoarea de 0,01 $. <br />
                       Pentru această rundă sunt alocați tokeni în cuantum de 3% din numărul total de tokeni. <br /><br />
@@ -1792,6 +1934,22 @@ export default function Home() {
 
                               </div>
                             </div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                          <div className="card-header" id="headingTen">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                              aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span><ins></ins></a> </h6>
+                          </div>
+                          <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
+                            <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
+Runda 1: BeeGENEROUS<sup>369</sup>, InfinityBee, BeeSAFE, BeeCHANGE <br />
+Runda 2 : BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
+Runda 3 : BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
+Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
+
+Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
+</div>
                           </div>
                         </div>
                       </div>
