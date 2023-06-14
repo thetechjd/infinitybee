@@ -1,0 +1,68 @@
+
+    .isnotmobile {
+        display: block;
+    }
+    .isnotmobile-grid {
+        display: grid;
+    }
+.ismobile {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .isnotmobile {
+        display: none;
+    }
+    .ismobile {
+        display: block;
+    }
+    section {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .titlemobile {
+        display: flex;
+        flex-flow: column;
+        text-align: center;
+        margin: 0px;
+    }
+    .titlemobile1 {
+        font-size: 70px;
+        text-transform: none;
+    }
+    .titlemobile2 {
+        font-size: 50px;
+        text-transform: none;
+    }
+    .subtitlemobile {
+        font-family: 'Roboto';
+        font-size: 14px;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .subtitlemobile h3 {
+        margin: 0px;
+    }
+    .subtitlemobile2 p {
+        font-size: 30px;
+    }
+    .h2mobile {
+        font-size: 50px;
+    }
+    .roadmap{
+        height: auto;
+    }
+    .obj {
+        display: none;
+    }
+    .ceFaqLeft2{
+        padding: 0px;
+    }
+    .ceFaqRight2 {
+        padding: 0px;
+        margin-top: 50px;
+    }
+    .ceDescription {
+        padding: 0px;
+    }
+  }

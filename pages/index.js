@@ -1418,10 +1418,9 @@ export default function Home() {
             id="">
 
 
-            <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
-            >
+            <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'>
 
-              <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96'>
+              <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96 isnotmobile isnotmobile-grid'>
                 <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
 
                 <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
@@ -1435,6 +1434,30 @@ export default function Home() {
                 <p className='m-auto text-3xl'>{translate("remaining")}</p>
                 <h3 className='my-auto whitespace-nowrap mx-4 text-purplee text-2xl'>{translate("matrix")}</h3>
                 <h3 className='m-auto text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
+
+              </div>
+
+              <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96 ismobile'>
+                <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl titlemobile"><span className="text-6xl md:text-9xl tracking-tightest titlemobile1">InfinityBee</span><span className="text-8xl tracking-wide whitespace-nowrap titlemobile2">Token {translate("presale")}</span></h1>
+
+              <div className="subtitlemobile">
+                <h3 className="my-auto whitespace-nowrap mx-4 text-bluee">{translate("currency")}</h3>
+                <h3 className='my-auto  whitespace-nowrap mx-4'>{translate("used")}</h3>
+                <h3 className='my-auto uppercase whitespace-nowrap mx-4'>{translate("world")}</h3>
+                <h3 className='my-auto whitespace-nowrap mx-4 text-purplee'>{translate("matrix")}</h3>
+                <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk'>{translate("decentralized")}</h3>
+              </div>
+
+              <br /><br />
+                <div className="flex flex-row w-full mx-auto md:flex-row subtitlemobile2">
+                  <div className="flex flex-col w-full md:w-1/2">
+                    <p className='m-auto text-3xl'>{translate("sold")} <br /> {sold ? formatter.format(sold ) : 0}</p>
+                    <p className='m-auto text-3xl'>{translate("remaining")} <br /> {remaining ? formatter.format(remaining / 10 ** 18) : 0}</p>
+                  </div>
+                  <div className="flex flex-col w-full md:w-1/2">
+                    <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
+                  </div>
+                </div>    
 
               </div>
 
@@ -1481,7 +1504,7 @@ export default function Home() {
             )}
 
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='adventurer' className='w-full my-10'>
-              <h2 className='text-center uppercase text-6xl my-5'>Adventurer {translate("levels")}</h2>
+              <h2 className='text-center uppercase text-6xl my-5 h2mobile'>Adventurer {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
 
@@ -1702,12 +1725,12 @@ export default function Home() {
             <div id='about' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>About IFB token</h2>
               <div>
-                <p className="ceTitle ceCenter">Cum se numește tokenul, pe ce Blockchain este creat și câte unități are ?</p>
+                <p className="ceTitle ceCenter ceq">Cum se numește tokenul, pe ce Blockchain este creat și câte unități are ?</p>
                 <p className="ceDescription ceCenter">Tokenul Ecosistemului nostru se numește InfinityBee (IFB). Este creat pe BNB Smart Chain (BSC), cu un număr total de 1.800.000.000 unități.</p>
 
                 <div className="flex flex-col w-full mx-auto md:flex-row ">
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
-                    <p className="ceTitle2 ceLeft">La ce se poate folosi Tokenul InfinityBee ( IFB) ?</p>
+                    <p className="ceTitle2 ceLeft ceq">La ce se poate folosi Tokenul InfinityBee ( IFB) ?</p>
                     <p className="ceDescription2 ceLeft ">
                       Tokenul InfinityBee (IFB) are multiple utilități : <br />
                       –  este un activ financiar (IFB) care se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
@@ -1723,7 +1746,7 @@ export default function Home() {
                   </div>
 
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
-                    <p className="ceTitle2 ceLeft">Cum și de unde se poate obține Tokenul InfinityBee ( IFB) ?</p>
+                    <p className="ceTitle2 ceLeft ceq">Cum și de unde se poate obține Tokenul InfinityBee ( IFB) ?</p>
                     <p className="ceDescription2 ceLeft">
                       Tokenul InfinityBee (IFB) înainte de Listare, se poate obține prin : <br />
                       – participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Public Sale <br />
@@ -1732,7 +1755,7 @@ export default function Home() {
                       După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) 
                     </p>
 
-                    <p className="ceTitle2 ceLeft">La ce valoare și când se poate cumpăra ?</p>
+                    <p className="ceTitle2 ceLeft ceq">La ce valoare și când se poate cumpăra ?</p>
                     <p className="ceDescription2 ceLeft">
                       Valoarea Tokenului InfinityBee va crește de la o rundă la alta după cum urmează : <br />
                       Pre Sale 1 (Q4 2023): valoarea IFB = 0.01 USDT <br />
@@ -1774,7 +1797,7 @@ export default function Home() {
                   </div>
 
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
-                    <p className="ceTitle2 ceLeft">Ce oferte de pachete sunt disponibile ?</p>
+                    <p className="ceTitle2 ceLeft ceq">Ce oferte de pachete sunt disponibile ?</p>
                     <p className="ceDescription2 ceLeft">
                       În fiecare rundă de Pre Sale a ICO-ului se vor putea cumpăra pachete cu tokeni de 8 valori diferite : <br />
                       200 USDT (Mercury) – no Bonus, no Vesting, Releasing 100% <br />
@@ -1795,7 +1818,7 @@ export default function Home() {
             </div>
 
             <div id='tokenomics' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
-              <h2 className='ceHeader text-center uppercase text-6xl my-5'>Tokenomics</h2>
+              <h2 className='ceHeader text-center uppercase text-6xl my-5' style={{fontSize:'55px'}}>Tokenomics</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row ">
               <div className="flex flex-col w-full md:w-1/2">
@@ -1889,7 +1912,7 @@ export default function Home() {
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row small_space">
-                <div className="ceFaqLeft flex flex-col w-full md:w-1/3" style={{padding: '50px'}}>
+                <div className="ceFaqLeft ceFaqLeft2 flex flex-col w-full md:w-1/3">
                   <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
                     <li onClick={() => { setFaqLeft("1"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
                       <a className={`tab-link ${faqLeft == "1" ? "active" : ""} `} data-toggle="tab" href="#tab1x">General</a>
@@ -1911,7 +1934,7 @@ export default function Home() {
                     </li>
                   </ul>
                 </div>
-                <div className="ceFaqRight flex flex-col w-full md:w-2/3" style={{padding: '50px'}}>
+                <div className="ceFaqRight ceFaqRight2 flex flex-col w-full md:w-2/3">
                   <div className="tab-content res_md_mt_30 res_sm_mt_20">
 
                     <div className={`tab-pane fade  ${faqLeft == "1" ? "show active" : ""} `} id="tab1" role="tabpanel">

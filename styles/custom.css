@@ -79,10 +79,15 @@
 }
 
 .ceFaqLeft {
-    /* padding: 0px 50px; */
 }
 .ceFaqRight {
-    /* padding: 0px 50px; */
+}
+
+.ceFaqLeft2 {
+    padding: 50px;
+}
+.ceFaqRight2 {
+    padding: 50px;
 }
 
 .card-body::before {
@@ -269,4 +274,9 @@
 section {
     padding-left: 3rem;
     padding-right: 3rem;
+}
+
+.ceq {
+    color: #00bbf9;
+    padding: 0px;
 }
