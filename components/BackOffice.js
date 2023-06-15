@@ -152,7 +152,8 @@ export default function BackOffice({
     walletAddress,
     orders,
     referrals,
-    activeRefCode
+    activeRefCode,
+    db
 }) {
 
 
@@ -467,11 +468,11 @@ export default function BackOffice({
             setErrorMessage('Please connect wallet before attempting to register a new referral code!')
         } else {
 
-            let newCode;
+            let newCode = 7333174597;
             let newReferralCode;
 
 
-            await baseContract.methods.addReferralAddress(walletAddress).send({ from: walletAddress }).then(async () => {
+           /*await baseContract.methods.addReferralAddress(walletAddress).send({ from: walletAddress }).then(async () => {
 
                 newCode = await baseContract.methods.getRefByAddress(walletAddress).call()
 
@@ -479,11 +480,11 @@ export default function BackOffice({
 
             })
 
-                .then(async () => {
+                .then(async () => {*/
 
 
                     newReferralCode = {
-                        referralCode: newCode
+                        referralCode: String(newCode)
                     }
 
 
@@ -493,7 +494,7 @@ export default function BackOffice({
 
 
 
-                })
+               // })
 
 
         }
@@ -826,7 +827,7 @@ export default function BackOffice({
 
                         <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
-                                {activeRefCode.referralCode ? (
+                                {activeRefCode.data().user.referralCode ? (
                                     <div className='flex flex-row items-center '>
                                         <button onClick={() => { copyText(activeRefCode) }} className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                                             {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}

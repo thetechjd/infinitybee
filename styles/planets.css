@@ -3,7 +3,6 @@
     width: 200px;
     height: 300px;
     perspective: 800px; /* Adjust as needed */
-  
     /* Add transition styles */
     transition: transform 0.6s;
     transform-style: preserve-3d;

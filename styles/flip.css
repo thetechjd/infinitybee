@@ -40,7 +40,7 @@
     position: relative;
     width: 200px;
     height: 300px;
-    perspective: 800px; /* Adjust as needed */
+   perspective: 800px; /* Adjust as needed */
   
     /* Add transition styles */
     transition: transform 0.6s;

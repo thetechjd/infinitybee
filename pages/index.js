@@ -1155,7 +1155,7 @@ export default function Home() {
                   timesBought: timesBought
                 }
 
-                let newReferral = {
+                let newReferralData = {
                   referral: {
                     date: Date.now(),
                     bonus: usdt * .05
@@ -1165,7 +1165,7 @@ export default function Home() {
 
                 await updateUser(referrer.id, updatedUserData)
 
-                await newReferral(referrer.id, updatedReferralData)
+                await newReferral(referrer.id, newReferralData)
 
 
 
@@ -1520,7 +1520,7 @@ export default function Home() {
             )}
 
             {warningMessage && (
-              <div className='fixed flex w-full h-full m-auto justify-center items-center'>
+              <div className='fixed flex w-full h-full m-auto justify-center items-center z-40'>
 
 
                 <div className='relative flex flex-col bg-slate950 p-4 rounded border border-gray-500 text-center items-center justify-between mx-auto z-40 w-1/2'>
@@ -1557,7 +1557,7 @@ export default function Home() {
                     </div>
                   </div>  
                 </div>
-                <div className='flex flex-col w-full z-30  md:w-1/3 flip-card'>
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
                   <div class="cecardfilp">
                     <div class="flip-card-inner">
                       <div class="flip-card-front">
@@ -2190,6 +2190,7 @@ Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
           orders={orders}
           referrals={referrals}
           activeRefCode={activeRefCode}
+          db={db}
 
         />
 
