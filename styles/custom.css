@@ -54,7 +54,7 @@
 
 .ceBtnPrice {
     background-image: linear-gradient(to right, #7448AA 0%,#E45C9E 100%,#7448AA);
-    width: 100%;
+    width: 280px;
 }
 
 .ceInfo {
@@ -263,6 +263,7 @@
 }
 
 .listtxt {
+    font-size: 17px;
 }
 .listtxt>div {
   display: flex;
@@ -274,6 +275,7 @@
 section {
     padding-left: 3rem;
     padding-right: 3rem;
+    overflow-y: hidden;
 }
 
 .ceq {

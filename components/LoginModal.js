@@ -67,7 +67,7 @@ export default function LoginModal(props) {
                                                 </button>
                                             </div>
                                              
-                                                <p className='text-red-500'>Connect your wallet to complete registration. <br /> Be Careful &nbsp; ! &nbsp; In the future, you will be able <br /> to log into this account only with this wallet. </p>
+                                                <p className='text-red-500 text-center'>Connect your wallet to complete registration. <br /> Be Careful &nbsp; ! &nbsp; In the future, you will be able <br /> to log into this account only with this wallet. </p>
                                                 </>
                                             
 

@@ -38,8 +38,10 @@
 
   .cecardfilp {
     position: relative;
-    width: 200px;
-    height: 300px;
+    width: 250px;
+    left: calc(50% - 125px);
+    height: 235px;
+    margin-top: 20px;
    perspective: 800px; /* Adjust as needed */
   
     /* Add transition styles */
