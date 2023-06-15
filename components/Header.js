@@ -85,7 +85,32 @@ export default function Header(props) {
             </Link>
             <div>
 
-              <a href='' className='flex px-3 text-xl tracking-widest items-center pt-0.5'>White Paper</a>
+            <div className='relative ismobile'>
+              <div onMouseEnter={() => { showLanguages(true) }}
+                onMouseLeave={() => {
+                  setTimeout(() => {
+                    if (!lmenu) {
+                      showLanguages(false)
+                    }
+                  }, 300)
+                }}
+                className='sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+          text-white md:flex'>{props.lang}</p> <img src={`/images/${props.lang}_icon.png`} className='w-[20px]' /></span>
+              </div>
+              {(languages || lmenu) && (
+                <div onMouseEnter={() => { showLmenu(true) }} onMouseLeave={() => { showLanguages(false); showLmenu(false) }} className='absolute my-2'>
+                  <div onClick={() => { props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>English</p> : <p>Romanian</p>}</div>
+                  <div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
+                  <div onClick={() => { props.lang === 'FR' ? props.setLang('EN') : props.setLang('FR') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'FR' ? <p>English</p> : <p>French</p>}</div>
+                  <div onClick={() => { props.lang === 'DE' ? props.setLang('EN') : props.setLang('DE') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'DE' ? <p>English</p> : <p>German</p>}</div>
+                  <div onClick={() => { props.lang === 'IT' ? props.setLang('EN') : props.setLang('IT') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'IT' ? <p>English</p> : <p>Italian</p>}</div>
+                  <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>
+                </div>
+              )}
+            </div>
+
+              <a href='' className='flex px-3 text-xl tracking-widest items-center pt-0.5 isnotmobile'>White Paper</a>
             </div>
           </div>
 
@@ -130,13 +155,29 @@ export default function Header(props) {
               <div className=''>
                 <ul className="flex flex-col items-center justify-between min-h-[250px]">
 
+                <li onClick={() => props.setIsNavOpen(false)} className="border-b text-white border-gray-400 my-2 uppercase">
+                    <a href="#adventurer">{props.translate("home")}</a>
+                  </li>
+                  <li onClick={() => { props.setIsNavOpen(false); props.showLoginModal(true) }} className="border-b text-white border-gray-400 my-2 uppercase">
+                    <p>Login/Register</p>
+                  </li>
                   <li onClick={() => props.setIsNavOpen(false)} className="border-b text-white border-gray-400 my-2 uppercase">
                     <a href="#adventurer">{props.translate("packages")}</a>
                   </li>
                   <li className="border-b text-white border-gray-400 my-2 uppercase">
-                    <a href="">{props.translate("about")}</a>
+                    <details href="">
+                      <summary>{props.translate("about")}</summary>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#about">About IFB token</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#presale">Presale Rounds</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#tokenomics">Tokenomics</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#roadmap">Roadmap</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#faq">FAQ</a></p>
+                    </details>
                   </li>
                   <li className="border-b text-white border-gray-400 my-2 uppercase">
+                    <a href="">{props.translate("whitepaper")}</a>
+                  </li>
+                  {/* <li className="border-b text-white border-gray-400 my-2 uppercase">
                     <details href="">
                       <summary>{props.lang}</summary>
                       <p onClick={() => { props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO') }} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>EN</p> : <p>RO</p>}</p>
@@ -146,10 +187,7 @@ export default function Header(props) {
                       <p onClick={() => { props.lang === 'IT' ? props.setLang('EN') : props.setLang('IT') }} className='flex w-full justify-between bg-opacity-60  text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'IT' ? <p>EN</p> : <p>IT</p>}</p>
                       <p onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-opacity-60  text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>EN</p> : <p>CN</p>}</p>
                     </details>
-                  </li>
-                  <li onClick={() => { props.setIsNavOpen(false); props.showLoginModal(true) }} className="border-b text-white border-gray-400 my-2 uppercase">
-                    <p>Login</p>
-                  </li>
+                  </li> */}
 
 
 
@@ -205,8 +243,8 @@ export default function Header(props) {
               {(about || amenu) && (
                 <div onMouseEnter={() => { showAmenu(true) }} onMouseLeave={() => { showAbout(false); showAmenu(false) }} className='absolute justify-center items-center my-2'>
                   <a href='#about'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>About IFB token</div></a>
-                  <a href='#tokenomics'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Tokenomics</div></a>
                   <a href='#presale'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Presale Rounds</div></a>
+                  <a href='#tokenomics'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Tokenomics</div></a>
                   <a href='#roadmap'><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>Roadmap</div></a>
                   {/*<div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>White paper</div>*/}
                   <a href='#faq'></a><a href="#faq"><div className='flex w-full justify-center bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>FAQ</div></a>

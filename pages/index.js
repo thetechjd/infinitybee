@@ -18,6 +18,7 @@ import { useStatus } from "../context/statusContext";
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
 //const CountUp = require('react-countup')
 
+import { Chart } from "react-google-charts";
 
 const timeHelper = require('../utils/time');
 
@@ -49,6 +50,38 @@ import en from '../utils/en.json';
 import { NetworkLockedRounded } from "@material-ui/icons";
 
 
+const data1 = [
+  ["Task", "Hours per Day"],
+  ["ICO SEED", 2*42/100],
+  ["ICO Presale 1", 3*42/100],
+  ["ICO Presale 2", 7*42/100],
+  ["ICO Public Sale", 10*42/100],  
+  ["Reserve ", 9*42/100],
+  ["Liquidity  ", 11*42/100],
+]
+const data2 = [
+  ["Task", "Hours per Day"],
+  ["Ecosystem ", 23],
+  ["Treasury ", 25],
+  ["ICO Sale", 22],
+  ["Team & Advisers", 14],  
+  ["Marketing", 5],
+  ["Liquidity  ", 11],
+]
+;
+const options1 = {
+  // title: "My Daily Activities",
+  legend: 'none',
+  // legend : { position : 'bottom' },
+  backgroundColor: 'transparent',
+};
+const options2 = {
+  // title: "My Daily Activities",
+  legend: 'none',
+  // legend : { position : 'bottom' },
+  backgroundColor: 'transparent',
+  is3D: true
+};
 
 const firebaseConfig = {
   apiKey: "AIzaSyACfUR1tmMLp0YRkVDBiRmMGJ5rdMuK_VY",
@@ -211,6 +244,18 @@ export default function Home() {
 
   const handleCardFlip = () => {
     setIsFlipped(!isFlipped);
+  };
+
+  const setFaqRightGeneral = (val) => {
+    if (val){
+      if (faqRight != val)
+        setFaqRight(val);
+      else
+        setFaqRight(0);
+    }
+    else{
+      setFaqRight(1);
+    }
   };
 
   useEffect(() => {
@@ -1405,10 +1450,9 @@ export default function Home() {
             id="">
 
 
-            <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
-            >
+            <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'>
 
-              <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96'>
+              <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96 isnotmobile isnotmobile-grid'>
                 <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
 
                 <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
@@ -1422,6 +1466,30 @@ export default function Home() {
                 <p className='m-auto text-3xl'>{translate("remaining")}</p>
                 <h3 className='my-auto whitespace-nowrap mx-4 text-purplee text-2xl'>{translate("matrix")}</h3>
                 <h3 className='m-auto text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
+
+              </div>
+
+              <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96 ismobile'>
+                <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl titlemobile"><span className="text-6xl md:text-9xl tracking-tightest titlemobile1">InfinityBee</span><span className="text-8xl tracking-wide whitespace-nowrap titlemobile2">Token {translate("presale")}</span></h1>
+
+              <div className="subtitlemobile">
+                <h3 className="my-auto whitespace-nowrap mx-4 text-bluee">{translate("currency")}</h3>
+                <h3 className='my-auto  whitespace-nowrap mx-4'>{translate("used")}</h3>
+                <h3 className='my-auto uppercase whitespace-nowrap mx-4'>{translate("world")}</h3>
+                <h3 className='my-auto whitespace-nowrap mx-4 text-purplee'>{translate("matrix")}</h3>
+                <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk'>{translate("decentralized")}</h3>
+              </div>
+
+              <br /><br />
+                <div className="flex flex-row w-full mx-auto md:flex-row subtitlemobile2">
+                  <div className="flex flex-col w-full md:w-1/2">
+                    <p className='m-auto text-3xl'>{translate("sold")} <br /> {sold ? formatter.format(sold ) : 0}</p>
+                    <p className='m-auto text-3xl'>{translate("remaining")} <br /> {remaining ? formatter.format(remaining / 10 ** 18) : 0}</p>
+                  </div>
+                  <div className="flex flex-col w-full md:w-1/2">
+                    <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
+                  </div>
+                </div>    
 
               </div>
 
@@ -1468,10 +1536,11 @@ export default function Home() {
             )}
 
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='adventurer' className='w-full my-10'>
-              <h2 className='text-center uppercase text-6xl my-5'>Adventurer {translate("levels")}</h2>
+              <h2 className='text-center uppercase text-6xl my-5 h2mobile'>Adventurer {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
-                  <div className={`flex flex-col mx-auto w-full card ${isFlipped ? 'flipped' : ''}`} onMouseEnter={handleCardFlip} onMouseLeave={handleCardFlip}>
+
+                  {/* <div className={`flex flex-col mx-auto w-full card ${isFlipped ? 'flipped' : ''}`} onMouseEnter={handleCardFlip} onMouseLeave={handleCardFlip}>
                     <div className='card-front'>
                       <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-full mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
@@ -1489,12 +1558,14 @@ export default function Home() {
                   </div>
                   <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                    <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                    <button onClick={() => { buyTokens(3, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
                   </div>
+                </div>
+
                 </div>
 
               </div>
@@ -1503,7 +1574,8 @@ export default function Home() {
               <h2 className='text-center uppercase text-6xl my-5'>Master {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
-                  <div className='flex flex-col w-full md:w-1/3'>
+
+                  {/* <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
                   </div>
@@ -1514,25 +1586,116 @@ export default function Home() {
                   <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
-                  </div>
+                  </div> */}
 
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(2, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>287,500 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(2, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
                 </div>
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>625,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>                
 
               </div>
-
+            </div>
             </div>
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='legend' className='w-full my-10'>
               <h2 className='text-center uppercase text-6xl my-5'>Legend {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
-                  <div className='flex flex-col w-full md:w-1/2'>
+
+                  {/* <div className='flex flex-col w-full md:w-1/2'>
                     <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/2'>
                     <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                     <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
-                  </div>
+                  </div> */}
+
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
+                <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div class="cecardfilp">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                      <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                      <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                      </div>
+                      <div class="flip-card-back">
+                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                      <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 0%</p>
+                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                      <p className='my-1'>0.008 USD</p>
+                      </div>
+                      <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                      </div>
+                    </div>
+                  </div>  
+                </div>
 
 
                 </div>
@@ -1543,16 +1706,15 @@ export default function Home() {
 
 
             </div>
-
             <div id='about' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>About IFB token</h2>
               <div>
-                <p className="ceTitle ceCenter">Cum se numește tokenul, pe ce Blockchain este creat și câte unități are ?</p>
+                <p className="ceTitle ceCenter ceq">Cum se numește tokenul, pe ce Blockchain este creat și câte unități are ?</p>
                 <p className="ceDescription ceCenter">Tokenul Ecosistemului nostru se numește InfinityBee (IFB). Este creat pe BNB Smart Chain (BSC), cu un număr total de 1.800.000.000 unități.</p>
 
                 <div className="flex flex-col w-full mx-auto md:flex-row ">
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
-                    <p className="ceTitle2 ceLeft">La ce se poate folosi Tokenul InfinityBee ( IFB) ?</p>
+                    <p className="ceTitle2 ceLeft ceq">La ce se poate folosi Tokenul InfinityBee ( IFB) ?</p>
                     <p className="ceDescription2 ceLeft ">
                       Tokenul InfinityBee (IFB) are multiple utilități : <br />
                       –  este un activ financiar (IFB) care se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
@@ -1568,21 +1730,21 @@ export default function Home() {
                   </div>
 
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
-                    <p className="ceTitle2 ceLeft">Cum și de unde se poate obține Tokenul InfinityBee ( IFB) ?</p>
+                    <p className="ceTitle2 ceLeft ceq">Cum și de unde se poate obține Tokenul InfinityBee ( IFB) ?</p>
                     <p className="ceDescription2 ceLeft">
                       Tokenul InfinityBee (IFB) înainte de Listare, se poate obține prin : <br />
-                      – participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Pre Sale 3 <br />
+                      – participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Public Sale <br />
                       – sistemul de crowdfunding BeeGENEROUS <sup>369</sup>,  în programele :  Matrix Bee3 & Matrix Bee4 și <br />
                       – programe de bounty și airdrop <br />
-                      După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
+                      După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) 
                     </p>
 
-                    <p className="ceTitle2 ceLeft">La ce valoare și când se poate cumpăra ?</p>
+                    <p className="ceTitle2 ceLeft ceq">La ce valoare și când se poate cumpăra ?</p>
                     <p className="ceDescription2 ceLeft">
                       Valoarea Tokenului InfinityBee va crește de la o rundă la alta după cum urmează : <br />
                       Pre Sale 1 (Q4 2023): valoarea IFB = 0.01 USDT <br />
                       Pre Sale 2 (Q1 2024): valoarea IFB = 0.015 USDT <br />
-                      Pre Sale 3 (Q3 2024): valoarea IFB = 0.02 USDT <br />
+                      Public Sale (Q3 2024): valoarea IFB = 0.02 USDT <br />
                     </p>
                   </div>
                 </div>
@@ -1599,13 +1761,13 @@ export default function Home() {
 
                 <p className="ceDescription ceCenter">
                   Pe această platformă se pot cumpăra tokeni IFB sub formă de pachete. <br />
-                  Membrii comunității au nevoie de tokeni InfinityBee pentru activarea nivelurilor 3, 6, 9 din BeeGENEROUS <sup>369</sup> și pentru programul BeeSAFE (planul Economy), iar ulterior vor fi folosiți și pentru viitoarele instrumente, din interiorul ecosistemului Be&Bee, pe care le vom dezvolta.
+                  Membrii comunității au nevoie de tokeni InfinityBee pentru activarea nivelurilor 3, 6, 9 din BeeGENEROUS <sup>369</sup> <br /> și pentru programul BeeSAFE (planul Economy), iar ulterior vor fi folosiți și pentru viitoarele instrumente, <br /> din interiorul ecosistemului Be&Bee, pe care le vom dezvolta.
                 </p>
 
                 <div className="flex flex-col w-full mx-auto md:flex-row ">
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
                     <p className="ceDescription2 ceLeft">
-                      Toate cele 3 runde de Private Sale din perioada ICO-ului se vor desfășura doar pe această platformă (www.infinitybee.io). <br /><br />
+                      Toate cele 3 runde de Pre Sale din perioada ICO-ului se vor desfășura doar pe această platformă (www.infinitybee.io). <br /><br />
 
                       În RUNDA 1 tokenul are valoarea de 0,01 $. <br />
                       Pentru această rundă sunt alocați tokeni în cuantum de 3% din numărul total de tokeni. <br /><br />
@@ -1619,7 +1781,7 @@ export default function Home() {
                   </div>
 
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
-                    <p className="ceTitle2 ceLeft">Ce oferte de pachete sunt disponibile ?</p><br />
+                    <p className="ceTitle2 ceLeft ceq">Ce oferte de pachete sunt disponibile ?</p>
                     <p className="ceDescription2 ceLeft">
                       În fiecare rundă de Pre Sale a ICO-ului se vor putea cumpăra pachete cu tokeni de 8 valori diferite : <br />
                       200 USDT (Mercury) – no Bonus, no Vesting, Releasing 100% <br />
@@ -1640,46 +1802,22 @@ export default function Home() {
             </div>
 
             <div id='tokenomics' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
-              <h2 className='ceHeader text-center uppercase text-6xl my-5'>Tokenomics</h2>
+              <h2 className='ceHeader text-center uppercase text-6xl my-5' style={{fontSize:'55px'}}>Tokenomics</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row ">
-                <div className="flex flex-col w-full md:w-1/2">
-                  <div className="title_default_light title_border text-center">
-                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
-                  </div>
-                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s">
-                    <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" />
-                  </div>
-                  <div className="divider small_divider"></div>
-                  <ul className="list_none list_chart text-center">
-                    <li>
-                      <span className="chart_bx color1"></span>
-                      <span>Addvisers</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color2"></span>
-                      <span>Marketing</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color3"></span>
-                      <span>Public Sale</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color4"></span>
-                      <span>Pre Sale</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color5"></span>
-                      <span>Projects</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="flex flex-col w-full md:w-1/2">
+              <div className="flex flex-col w-full md:w-1/2">
                   <div className="title_default_light title_border text-center">
                     <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Distribution</h4>
                   </div>
                   <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft" data-animation="fadeInLeft" data-animation-delay="0.2s">
-                    <img src="/images/distribution3.png" alt="distribution3" />
+                    {/* <img src="/images/distribution3.png" alt="distribution3" /> */}
+                    {    <Chart
+      chartType="PieChart"
+      data={data2}
+      options={options2}
+      width={"100%"}
+      height={"500px"}
+    />}
                   </div>
                   <div className="divider small_divider"></div>
                   <ul className="list_none list_chart text-center">
@@ -1705,48 +1843,89 @@ export default function Home() {
                     </li>
                   </ul>
                 </div>
+                <div className="flex flex-col w-full md:w-1/2">
+                  <div className="title_default_light title_border text-center">
+                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
+                  </div>
+                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s">
+                    {/* <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" /> */}
+                    {    <Chart
+      chartType="PieChart"
+      data={data1}
+      options={options1}
+      width={"100%"}
+      height={"300px"}
+    />}
+                  </div>
+                  <div className="divider small_divider"></div>
+                  <ul className="list_none list_chart text-center">
+                    <li>
+                      <span className="chart_bx color1"></span>
+                      <span>Addvisers</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color2"></span>
+                      <span>Marketing</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color3"></span>
+                      <span>Public Sale</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color4"></span>
+                      <span>Pre Sale</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color5"></span>
+                      <span>Projects</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
             <div id='roadmap' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>Roadmap</h2>
-              <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded' />
+              <div class="align-items-center" style={{position: 'relative'}}>
+              <img src="/images/beeactive.png" className="obj" />
+              <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded roadmap' />
+              </div>
             </div>
 
             <div id='faq' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row small_space">
-                <div className="ceFaqLeft flex flex-col w-full md:w-1/3">
+                <div className="ceFaqLeft ceFaqLeft2 flex flex-col w-full md:w-1/3">
                   <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
-                    <li onClick={() => { setFaqLeft("1") }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
+                    <li onClick={() => { setFaqLeft("1"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
                       <a className={`tab-link ${faqLeft == "1" ? "active" : ""} `} data-toggle="tab" href="#tab1x">General</a>
                     </li>
                     {/* <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.6s">
               <a className="tab-link" data-toggle="tab" href="#tab2">Termeni & Definitii </a>
             </li> */}
-                    <li onClick={() => { setFaqLeft("2"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                    <li onClick={() => { setFaqLeft("2"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
                       <a className={`tab-link ${faqLeft == "2" ? "active" : ""} `} data-toggle="tab" href="#tab3x">Ecosystem</a>
                     </li>
-                    <li onClick={() => { setFaqLeft("3"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                    <li onClick={() => { setFaqLeft("3"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
                       <a className={`tab-link ${faqLeft == "3" ? "active" : ""} `} data-toggle="tab" href="#tab4x">BeeGENEROUS <sup>369</sup></a>
                     </li>
-                    <li onClick={() => { setFaqLeft("4"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                    <li onClick={() => { setFaqLeft("4"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                       <a className={`tab-link ${faqLeft == "4" ? "active" : ""} `} data-toggle="tab" href="#tab5x">Bonuses & Revenues</a>
                     </li>
-                    <li onClick={() => { setFaqLeft("5"); setFaqRight("1"); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                    <li onClick={() => { setFaqLeft("5"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                       <a className={`tab-link ${faqLeft == "5" ? "active" : ""} `} data-toggle="tab" href="#tab6x">Legalitate & Securitate</a>
                     </li>
                   </ul>
                 </div>
-                <div className="ceFaqRight flex flex-col w-full md:w-2/3">
+                <div className="ceFaqRight ceFaqRight2 flex flex-col w-full md:w-2/3">
                   <div className="tab-content res_md_mt_30 res_sm_mt_20">
 
                     <div className={`tab-pane fade  ${faqLeft == "1" ? "show active" : ""} `} id="tab1" role="tabpanel">
                       <div id="accordion1" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingThree">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
                               aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru
                                 ?</span><ins></ins></a> </h6>
                           </div>
@@ -1754,9 +1933,9 @@ export default function Home() {
                             <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
                               aria-controls="collapseOne"><span>Ce este Be&Bee ?</span><ins></ins></a></h6>
                           </div>
                           <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
@@ -1764,9 +1943,9 @@ export default function Home() {
                               Acest ecosistem este format din mai multe instrumente și este construit pe 3 piloni principali :  Material, Spiritual și Educațional (informațional).</div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTwo">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
                               aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
                                 proiectului “Be&Bee Community” ?</span><ins></ins></a> </h6>
                           </div>
@@ -1785,9 +1964,9 @@ export default function Home() {
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "2" ? "show active" : ""} `} id="tab3" role="tabpanel">
                       <div id="accordion3" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingNine">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
                               aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span><ins></ins></a>
                             </h6>
                           </div>
@@ -1823,22 +2002,38 @@ export default function Home() {
                             </div>
                           </div>
                         </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                          <div className="card-header" id="headingTen">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                              aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span><ins></ins></a> </h6>
+                          </div>
+                          <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
+                            <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
+Runda 1: BeeGENEROUS<sup>369</sup>, InfinityBee, BeeSAFE, BeeCHANGE <br />
+Runda 2 : BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
+Runda 3 : BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
+Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
+
+Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
+</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "3" ? "show active" : ""} `} id="tab4" role="tabpanel">
                       <div id="accordion4" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
                               aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
                             <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingEleven">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
                               aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
                                 platformă ?</span><ins></ins></a> </h6>
                           </div>
@@ -1849,9 +2044,9 @@ export default function Home() {
                             </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="1s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
                           <div className="card-header" id="heading48">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
                               aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
                                 ?</span><ins></ins></a> </h6>
                           </div>
@@ -1867,9 +2062,9 @@ export default function Home() {
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "4" ? "show active" : ""} `} id="tab5" role="tabpanel">
                       <div id="accordion5" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingSeventeen">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
                               aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapseSeventeen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingSeventeen"
@@ -1885,18 +2080,18 @@ export default function Home() {
                     </div>
                     <div className={`tab-pane fade  ${faqLeft == "5" ? "show active" : ""} `} id="tab6" role="tabpanel">
                       <div id="accordion6" className="faq_content5">
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading61">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
                               aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapse61" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
                             <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading62">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
                               aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapse62" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
@@ -1907,9 +2102,9 @@ export default function Home() {
                             </div>
                           </div>
                         </div>
-                        <div className="card animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading63">
-                            <h6 className="mb-0"> <a onClick={() => { setFaqRight("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
                               aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapse63" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
@@ -1925,11 +2120,6 @@ export default function Home() {
 
 
 
-            </div>
-
-            <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='roadmap' className='w-full my-10 justify-center'>
-              <h2 className='text-center uppercase text-6xl my-5'>Roadmap test</h2>
-              <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded' />
             </div>
 
 

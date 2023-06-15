@@ -2,7 +2,7 @@
     margin-top: 20px;
 }
 .tab-link {
-    background-color: #4141af;
+    background: #4a49bf47 !important;;
 }
 
 .tab_s2 .tab-link {
@@ -11,7 +11,7 @@
     padding: 10px 20px;
 }
 .tab-link {
-    background-color: #071890;
+    background-color: #4141AF;
     border-radius: 5px;
     color: #fff;
 }
@@ -21,5 +21,64 @@
     text-transform: capitalize;
 }
 .tab-link.active {
-    background-color: #ff69c9;
+    background-image: linear-gradient(to right, #7448AA 0%,#E45C9E 100%,#7448AA) !important;
+}
+
+.faq_content5 .card-header a {
+    background: #4a49bf47 !important;
+    border-color: #fff;
+    color: #fff;
+    display: block;
+    padding: 15px 40px 15px 15px;
+    position: relative;
+}
+.faq_content5 .card-header a::before {
+    content: "Q.";
+    font-weight: 600;
+    margin-right: 5px;
+}
+.faq_content5 .card-header a::after {
+    color: #ffffff;
+    content: "\f10d";
+    font-family: "Ionicons";
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    right: 15px;
+    top: 14px;
+}
+.faq_content5 .collapse.show .card-body {
+    margin-bottom: -10px;
+    text-align: justify;
+}
+.faq_content5 .card-body {
+    background: #383888b8 !important;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 0 10px;
+}
+.faq_content5 .card-header a span::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 100%;
+    border-style: solid;
+    border-width: 10px 10px 0 0;
+    border-color: #4141af transparent transparent transparent;
+}
+.faq_content5 .card-header a span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 100%;
+    border-style: solid;
+    border-width: 0 10px 10px 0;
+    border-color: transparent #4141af transparent transparent;
+}
+
+.faq_content5 .cecard {
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    margin-bottom: 20px;
 }
