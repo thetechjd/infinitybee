@@ -88,6 +88,7 @@ export default function LoginModal(props) {
 
                                 />
                                 </div>
+                                <p className='text-red-500'>{props.loginFailed? props.loginFailed: null}</p>
 
                                 <div>
                                 <span>Step2</span>

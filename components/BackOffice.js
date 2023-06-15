@@ -337,9 +337,9 @@ export default function BackOffice({
         }
     }
 
-    /*useEffect(() => {
-        lastMonthDisable()
-    }, [activeRefCode])*/
+    useEffect(() => {
+        lastMonthDisable(activeRefCode)
+    }, [activeRefCode])
 
     const convertMonth = (month) => {
         switch (month) {
@@ -658,9 +658,9 @@ export default function BackOffice({
             case 1:
                 return parseInt(price + (price * .02)).toFixed(0)
             case 2:
-                return parseInt(price + (price * .03)).toFixed(0)
-            case 3:
                 return parseInt(price + (price * .01)).toFixed(0)
+            case 3:
+                return parseInt(price + (price * .03)).toFixed(0)
             case 4:
                 return parseInt(price + (price * .25)).toFixed(0)
             case 5:
@@ -681,9 +681,9 @@ export default function BackOffice({
             case 1:
                 return 'Venus'
             case 2:
-                return 'Earth'
-            case 3:
                 return 'Mars'
+            case 3:
+                return 'Earth'
             case 4:
                 return 'Jupiter'
             case 5:
@@ -843,14 +843,14 @@ export default function BackOffice({
                                 <>
                                     <p className='mr-2'>{thisMonth}</p>
 
-                                    <p>{activeRefCode ? (bonus) : 0} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
+                                    <p>{bonus} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
                                 </>
                             ) : (
                                 <>
                                     {console.log('This is the last month bonus: ' + bonus)}
                                     <p className='mr-2'>{lastMonth}</p>
 
-                                    <p>{activeRefCode ? (bonus) : 0} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
+                                    <p>{bonus} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
                                 </>
 
                             )}

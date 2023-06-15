@@ -178,6 +178,7 @@ export default function Home() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [showBackOffice, setShowBackOffice] = useState(false)
   const [tokenPrice, setTokenPrice] = useState(0)
+  const [loginFailed, setLoginFailed] = useState("");
 
 
 
@@ -214,12 +215,13 @@ export default function Home() {
 
   useEffect(() => {
     const logStatus = localStorage.getItem("loggedIn")
-    if (logStatus)
+    const userAddress = localStorage.getItem("address")
+    if (logStatus && userAddress)
       setLoggedIn(logStatus)
 
 
     console.log(localStorage.getItem("loggedIn"))
-    setAddress(localStorage.getItem("address"))
+    setAddress(userAddress)
 
 
   }, [])
@@ -425,17 +427,15 @@ export default function Home() {
 
 
   const signUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
+     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-
-
-
 
         // Signed in 
         const user = userCredential.user;
         console.log(user);
         sendEmailVerification(user);
         setUser(user);
+        setLoginFailed("")
         setUser({ emailVerified: false })
         showLoginModal(false)
         showVerificationWall(true)
@@ -490,10 +490,14 @@ export default function Home() {
 
 
       .catch((error) => {
-        console.log(error)
+        if (error.code === 'auth/email-already-in-use') {
+          setLoginFailed('User already exists. Did you forget your password?')
         // ..
-      });
-  }
+      };
+    })
+ 
+
+}
 
 
 
@@ -638,6 +642,11 @@ export default function Home() {
         const accounts = await provider.eth.getAccounts();
         const address = accounts[0];
         setAddress(address);
+
+        let chainIdNum = getNetwork();
+          if(chainIdNum !== '0xaa36a7'){
+            switchNetwork(web3ModalInstance);
+          }
         fetchReferralCode(address.toLowerCase());
         getTotalRefRevenue(address)
 
@@ -649,6 +658,28 @@ export default function Home() {
       console.error(error)
     }
   }
+
+  const getNetwork = async () => {
+    
+    const id = await window.ethereum.request({ method: 'eth_chainId' });
+     console.log(`The selected network is ${id}`)
+     return id
+   
+  
+ }
+
+ const switchNetwork = async (web3modal) => {
+  var chainId = 11155111
+ 
+  const provider = new Web3(web3modal)
+  await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: provider.utils.toHex(chainId) }], // chainId must be in hexadecimal numbers
+  });
+
+ 
+}
+
 
   const disconnect = () => {
     setAddress('')
@@ -846,9 +877,9 @@ export default function Home() {
             case 1:
               amount = usdt + (usdt * .02);
             case 2:
-              amount = usdt + (usdt * .03);
-            case 3:
               amount = usdt + (usdt * .01);
+            case 3:
+              amount = usdt + (usdt * .03);
             case 4:
               amount = usdt + (usdt * .25);
             case 5:
@@ -1028,9 +1059,9 @@ export default function Home() {
             case 1:
               amount = usdt + (usdt * .02);
             case 2:
-              amount = usdt + (usdt * .03);
-            case 3:
               amount = usdt + (usdt * .01);
+            case 3:
+              amount = usdt + (usdt * .03);
             case 4:
               amount = usdt + (usdt * .25);
             case 5:
@@ -1359,6 +1390,7 @@ export default function Home() {
               resetPassword={resetPassword}
               reset={reset}
               setReset={setReset}
+              loginFailed={loginFailed}
 
 
 
@@ -1457,7 +1489,7 @@ export default function Home() {
                   </div>
                   <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                    <button onClick={() => { buyTokens(3, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                    <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
@@ -1473,7 +1505,7 @@ export default function Home() {
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
                   <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                    <button onClick={() => { buyTokens(2, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                    <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
