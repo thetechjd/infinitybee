@@ -468,11 +468,11 @@ export default function BackOffice({
             setErrorMessage('Please connect wallet before attempting to register a new referral code!')
         } else {
 
-            let newCode = 7333174597;
+            let newCode;
             let newReferralCode;
 
 
-           /*await baseContract.methods.addReferralAddress(walletAddress).send({ from: walletAddress }).then(async () => {
+           await baseContract.methods.addReferralAddress(walletAddress).send({ from: walletAddress }).then(async () => {
 
                 newCode = await baseContract.methods.getRefByAddress(walletAddress).call()
 
@@ -480,7 +480,7 @@ export default function BackOffice({
 
             })
 
-                .then(async () => {*/
+                .then(async () => {
 
 
                     newReferralCode = {
@@ -494,7 +494,7 @@ export default function BackOffice({
 
 
 
-               // })
+                })
 
 
         }
