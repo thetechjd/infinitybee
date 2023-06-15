@@ -179,7 +179,7 @@ export default function BackOffice({
     const [remaining, setRemaining] = useState(0);
     const [refCode, setRefCode] = useState("");
     const [totalRefRevenue, setTotalRefRevenue] = useState(0);
-   
+
     const [copyMessage, setCopyMessage] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
     const [balance, setBalance] = useState(0)
@@ -246,9 +246,9 @@ export default function BackOffice({
           setAddress(storedAddress)
   
       }, [walletAddress])*/
-  
-  
-     
+
+
+
 
 
 
@@ -276,7 +276,7 @@ export default function BackOffice({
 
 
 
-   
+
 
     /* useEffect(() => {
          fetchReferrals(localStorage.getItem("address"));
@@ -284,7 +284,7 @@ export default function BackOffice({
 
 
     const getMonthTotal = (input) => {
-       
+
         console.log(referrals)
         console.log(input)
         let amount = 0;
@@ -302,7 +302,7 @@ export default function BackOffice({
                     console.log(y.referral)
                     amount += y.referral.bonus
                 }
-            setIsThisMonth(true)
+                setIsThisMonth(true)
             } else if (input === "lastMonth") {
 
                 if ((monthHelper(y.referral.date)) === (month - 1)) {
@@ -321,12 +321,12 @@ export default function BackOffice({
         console.log(amount)
         setBonus(amount)
 
-        
 
 
 
 
-        
+
+
     }
 
     const lastMonthDisable = (doc) => {
@@ -379,7 +379,7 @@ export default function BackOffice({
 
 
 
-   
+
 
     const getTotalRefRevenue = async (address) => {
         const totalRev = await baseContract.methods.getTotalRefRevenue(address).call();
@@ -468,6 +468,7 @@ export default function BackOffice({
         } else {
 
             let newCode;
+            let newReferralCode;
 
 
             await baseContract.methods.addReferralAddress(walletAddress).send({ from: walletAddress }).then(async () => {
@@ -480,20 +481,16 @@ export default function BackOffice({
 
                 .then(async () => {
 
-                    try {
-                        const docRef = await addDoc(collection(db, "users"), {
-                            user: {
-                                referralCode: newCode,
-                                address: walletAddress,
-                                createdAt: Date.now(),
-                                termStart: timeHelper.getLastMonth()
-                            }
-                        });
 
-                        console.log("Document written with ID: ", docRef.id);
-                    } catch (e) {
-                        console.error("Error adding document: ", e);
+                    newReferralCode = {
+                        referralCode: newCode
                     }
+
+
+                    updateUser(activeRefCode.id, newReferralCode);
+
+
+
 
 
                 })
@@ -649,29 +646,54 @@ export default function BackOffice({
         }
     }
 
+    const getRoundPrice = (round) => {
+        switch (round) {
+            case '0':
+                return 0.008
+            case '1':
+                return .01
+            case '2':
+                return .015
+            case '3':
+                return .02
+            default:
+                return 0.008
+        }
+    }
 
 
-    const getDiscount = (pack, price) => {
-        switch (pack) {
+
+    const getDiscount = (round, price) => {
+        const roundPrice = getRoundPrice(round);
+        const ifb = price / roundPrice;
+        return ifb;
+       /* switch (pack) {
             case 0:
-                return price
+                return ifb
             case 1:
-                return parseInt(price + (price * .02)).toFixed(0)
+                //return parseInt(ifb + (ifb * .02)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 2:
-                return parseInt(price + (price * .01)).toFixed(0)
+                //return parseInt(ifb + (ifb * .01)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 3:
-                return parseInt(price + (price * .03)).toFixed(0)
+                //return parseInt(ifb + (price * .03)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 4:
-                return parseInt(price + (price * .25)).toFixed(0)
+               //return parseInt(ifb + (price * .25)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 5:
-                return parseInt(price + (price * .15)).toFixed(0)
+                return parseInt(ifb+ (price * .15)).toFixed(0)
+                return parseInt(ifb+ (price * .15)).toFixed(0)
             case 6:
-                return parseInt(price + (price * .1)).toFixed(0)
+                return parseInt(ifb + (price * .1)).toFixed(0)
+                return parseInt(ifb + (price * .1)).toFixed(0)
             case 7:
-                return parseInt(price + (price * .07)).toFixed(0)
+                return parseInt(ifb + (price * .07)).toFixed(0)
+                return parseInt(ifb + (price * .07)).toFixed(0)
             default:
                 return price
-        }
+        }*/
     }
 
     const getPackage = (pack) => {
@@ -698,7 +720,7 @@ export default function BackOffice({
     }
 
     const toggleMonths = () => {
-        if(isThisMonth){
+        if (isThisMonth) {
             setIsThisMonth(false)
         }
         else {
@@ -804,7 +826,7 @@ export default function BackOffice({
 
                         <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
-                                {activeRefCode ? (
+                                {activeRefCode.referralCode ? (
                                     <div className='flex flex-row items-center '>
                                         <button onClick={() => { copyText(activeRefCode) }} className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                                             {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
@@ -818,7 +840,7 @@ export default function BackOffice({
                                     </div>
 
                                 ) : (
-                                    <div className='flex flex-row'>
+                                    <div className='flex flex-row items-center'>
                                         <button onClick={generateReferralCode} className="flex w-full whitespace-nowrap rounded-md ml-5 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-4">
 
 
@@ -969,9 +991,9 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{key + 1}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.price}</td>
+                                <td className='flex w-full justify-center text-center'>0.008 USDT</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
-                                <td className='flex w-full justify-center text-center'>{getDiscount(item.order.package, item.order.amount)}</td>
+                                <td className='flex w-full justify-center text-center'>{getDiscount(0, item.order.amount)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value}</td>
                             </tr>
 
