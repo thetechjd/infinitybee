@@ -1540,13 +1540,13 @@ export default function Home() {
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
                 <div className='flex flex-col w-full md:w-1/3 z-30 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>25,000 IFB Tokens <br /> Bonus 0%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1558,13 +1558,13 @@ export default function Home() {
                   </div>  
                 </div>
                 <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>62,500 IFB Tokens <br /> Bonus 2%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1577,13 +1577,13 @@ export default function Home() {
                 </div>
                 
                 <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>137,500 IFB Tokens <br /> Bonus 3%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1644,13 +1644,13 @@ export default function Home() {
                   </div> */}
 
                 <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>287,500 IFB Tokens <br /> Bonus 0%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1662,13 +1662,13 @@ export default function Home() {
                   </div>  
                 </div>
                 <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>625,000 IFB Tokens <br /> Bonus 0%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1680,13 +1680,13 @@ export default function Home() {
                   </div>  
                 </div>
                 <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 0%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1716,13 +1716,13 @@ export default function Home() {
                   </div> */}
 
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 0%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1734,13 +1734,13 @@ export default function Home() {
                   </div>  
                 </div>
                 <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
+                  <div className="cecardfilp">
+                    <div className="flip-card-inner">
+                      <div className="flip-card-front">
                       <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                       <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
                       </div>
-                      <div class="flip-card-back">
+                      <div className="flip-card-back">
                       <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                       <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 0%</p>
                       <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
@@ -1941,7 +1941,7 @@ export default function Home() {
 
             <div id='roadmap' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>Roadmap</h2>
-              <div class="align-items-center" style={{position: 'relative'}}>
+              <div className="align-items-center" style={{position: 'relative'}}>
               <img src="/images/beeactive.png" className="obj" />
               <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded roadmap' />
               </div>
