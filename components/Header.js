@@ -167,11 +167,11 @@ export default function Header(props) {
                   <li className="border-b text-white border-gray-400 my-2 uppercase">
                     <details href="">
                       <summary>{props.translate("about")}</summary>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#about">About IFB token</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#presale">Presale Rounds</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#tokenomics">Tokenomics</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#roadmap">Roadmap</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#faq">FAQ</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#about">About IFB token</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#presale">Presale Rounds</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#tokenomics">Tokenomics</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#roadmap">Roadmap</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#faq">FAQ</a></p>
                     </details>
                   </li>
                   <li className="border-b text-white border-gray-400 my-2 uppercase">
