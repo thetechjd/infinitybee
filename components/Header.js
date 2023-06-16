@@ -77,7 +77,7 @@ export default function Header(props) {
         <div className='flex-grow '>
           <div className='flex flex-row'>
             <Link className='w-1/5' href='/' passHref>
-              <a className='flex items-center'>
+              <a onClick={props.loggedIn ? props.toggleBackOffice: null} className='flex items-center'>
 
                 <img alt='' src='/images/beelogo.png' className='h-[40px]' />
                 <span className='px-2'>InfinityBee (IFB)</span>
@@ -309,8 +309,8 @@ text-white md:flex'>Login/Register</p></span>
                     }, 300)
                   }}
                   className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                  <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
-          text-white md:flex'>My Account</p></span>
+                  <span onClick={props.toggleBackOffice} className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+          text-white md:flex'>{props.showBackOffice ? "Main" : "My Account"}</p></span>
                 </div>
               
               {(office || omenu) && (

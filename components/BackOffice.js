@@ -189,6 +189,7 @@ export default function BackOffice({
     const [lastBonus, setLastBonus] = useState(0);
     const [lastMonthDisabled, setLastMonthDisabled] = useState(false)
     const [claimTime, setClaimTime] = useState(0)
+    const [totalAmount, setTotalAmount] = useState(0);
 
 
 
@@ -265,6 +266,7 @@ export default function BackOffice({
                 setBalance(balance)
                 getMonthTotal("thisMonth")
                 setIsThisMonth(true)
+                getTotalAmount()
             } catch (err) {
                 console.log(err)
             }
@@ -697,6 +699,15 @@ export default function BackOffice({
         }*/
     }
 
+    const getTotalAmount = () => {
+        let total = 0;
+        currentOrders.forEach(x => {
+            total += getDiscount(0, x.order.amount);
+        })
+        console.log('This is the total for orders:' + total)
+        setTotalAmount(total)
+    }
+
     const getPackage = (pack) => {
         switch (pack) {
             case 0:
@@ -919,7 +930,7 @@ export default function BackOffice({
 
                 <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-10 gap-x-48'>
 
-                    <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS: </p><p>{balance / 10 ** 18}</p></span>
+                    <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
                     <span></span>
                     <span>YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}

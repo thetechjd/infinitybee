@@ -52,23 +52,23 @@ import { NetworkLockedRounded } from "@material-ui/icons";
 
 const data1 = [
   ["Task", "Hours per Day"],
-  ["ICO SEED", 2*42/100],
-  ["ICO Presale 1", 3*42/100],
-  ["ICO Presale 2", 7*42/100],
-  ["ICO Public Sale", 10*42/100],  
-  ["Reserve ", 9*42/100],
-  ["Liquidity  ", 11*42/100],
+  ["ICO SEED", 2 * 42 / 100],
+  ["ICO Presale 1", 3 * 42 / 100],
+  ["ICO Presale 2", 7 * 42 / 100],
+  ["ICO Public Sale", 10 * 42 / 100],
+  ["Reserve ", 9 * 42 / 100],
+  ["Liquidity  ", 11 * 42 / 100],
 ]
 const data2 = [
   ["Task", "Hours per Day"],
   ["Ecosystem ", 23],
   ["Treasury ", 25],
   ["ICO Sale", 22],
-  ["Team & Advisers", 14],  
+  ["Team & Advisers", 14],
   ["Marketing", 5],
   ["Liquidity  ", 11],
 ]
-;
+  ;
 const options1 = {
   // title: "My Daily Activities",
   legend: 'none',
@@ -247,13 +247,13 @@ export default function Home() {
   };
 
   const setFaqRightGeneral = (val) => {
-    if (val){
+    if (val) {
       if (faqRight != val)
         setFaqRight(val);
       else
         setFaqRight(0);
     }
-    else{
+    else {
       setFaqRight(1);
     }
   };
@@ -472,77 +472,87 @@ export default function Home() {
 
 
   const signUp = () => {
-     createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
+    if (!walletAddress) {
+      setLoginFailed("No wallet address connected!")
+    } else {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
 
-        // Signed in 
-        const user = userCredential.user;
-        console.log(user);
-        sendEmailVerification(user);
-        setUser(user);
-        setLoginFailed("")
-        setUser({ emailVerified: false })
-        showLoginModal(false)
-        showVerificationWall(true)
 
-        try {
-          const docRef = await addDoc(collection(db, "users"), {
-            user: {
-              address: walletAddress,
-              createdAt: Date.now(),
-              termStart: timeHelper.getLastMonth()
-            }
-          });
 
-          //Get ref Code
-          let refValue;
 
-          if (refCode.length > 0) {
-            refValue = refCode;
-          } else {
-            refValue = 0;
-          }
-          console.log("This is the refValue: " + refValue)
 
+          // Signed in 
+          const user = userCredential.user;
+          console.log(user);
+          sendEmailVerification(user);
+          setUser(user);
+          setLoginFailed("")
+          setUser({ emailVerified: false })
+          showLoginModal(false)
+          showVerificationWall(true)
 
           try {
-            const referrer = await getReferrer(refCode)
+            const docRef = await addDoc(collection(db, "users"), {
+              user: {
+                address: walletAddress,
+                createdAt: Date.now(),
+                emailAddress: user.email
+              }
+            });
 
-            let current = referrer.data().user.signUps ? Number(referrer.data().user.signUps) : 0;
+            //Get ref Code
+            let refValue;
 
-            let updated = current + 1;
+            if (refCode.length > 0) {
+              refValue = refCode;
+            } else {
+              refValue = 0;
+            }
+            console.log("This is the refValue: " + refValue)
 
-            let refData = {
-              signUps: updated
+
+            try {
+              const referrer = await getReferrer(refCode)
+
+              let current = referrer.data().user.signUps ? Number(referrer.data().user.signUps) : 0;
+
+              let updated = current + 1;
+
+              let refData = {
+                signUps: updated
+              }
+
+              await updateUser(referrer.id, refData)
+
+            } catch (err) {
+              console.log(err)
             }
 
-            await updateUser(referrer.id, refData)
 
-          } catch (err) {
-            console.log(err)
+
+
+
+            console.log("Document written with ID: ", docRef.id);
+
+          } catch (e) {
+            console.error("Error adding document: ", e);
           }
 
+        })
 
 
 
+        .catch((error) => {
+          if (error.code === 'auth/email-already-in-use') {
+            setLoginFailed('User already exists. Did you forget your password?')
+            // ..
+          };
+        })
+    }
 
 
-          console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-          console.error("Error adding document: ", e);
-        }
-      })
-
-
-      .catch((error) => {
-        if (error.code === 'auth/email-already-in-use') {
-          setLoginFailed('User already exists. Did you forget your password?')
-        // ..
-      };
-    })
- 
-
-}
+  }
 
 
 
@@ -551,27 +561,44 @@ export default function Home() {
   const signIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+
         // Signed in 
         const user = userCredential.user;
-        setUser(user);
-        console.log(user);
-        setSuccess(true);
 
-        setLoggedIn(true)
-
-        localStorage.setItem("loggedIn", true)
-        console.log("You are logged in.");
-
-        if (walletAddress) {
-          localStorage.setItem("address", walletAddress);
-          showLoginModal(false)
+        if (!user.emailVerified) {
+          setLoginFailed("Email address has not been verified!")
+        } else if (walletAddress !== activeRefCode.data().user.address) {
+          setLoginFailed("Wallet address does not match the email address attached to this account!");
         }
+        
+        else {
+
+          console.log(user.emailVerified)
+          setUser(user);
+          console.log(user);
+
+
+
+          localStorage.setItem("loggedIn", true)
+          console.log("You are logged in.");
+
+          if (walletAddress) {
+            localStorage.setItem("address", walletAddress);
+            showLoginModal(false)
+            setSuccess(true);
+
+            setLoggedIn(true)
+          }
+        }
+
 
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+
       });
+
 
   }
 
@@ -689,9 +716,9 @@ export default function Home() {
         setAddress(address);
 
         let chainIdNum = getNetwork();
-          if(chainIdNum !== '0xaa36a7'){
-            switchNetwork(web3ModalInstance);
-          }
+        if (chainIdNum !== '0xaa36a7') {
+          switchNetwork(web3ModalInstance);
+        }
         fetchReferralCode(address.toLowerCase());
         getTotalRefRevenue(address)
 
@@ -705,25 +732,25 @@ export default function Home() {
   }
 
   const getNetwork = async () => {
-    
-    const id = await window.ethereum.request({ method: 'eth_chainId' });
-     console.log(`The selected network is ${id}`)
-     return id
-   
-  
- }
 
- const switchNetwork = async (web3modal) => {
-  var chainId = 11155111
- 
-  const provider = new Web3(web3modal)
-  await window.ethereum.request({
+    const id = await window.ethereum.request({ method: 'eth_chainId' });
+    console.log(`The selected network is ${id}`)
+    return id
+
+
+  }
+
+  const switchNetwork = async (web3modal) => {
+    var chainId = 11155111
+
+    const provider = new Web3(web3modal)
+    await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: provider.utils.toHex(chainId) }], // chainId must be in hexadecimal numbers
-  });
+    });
 
- 
-}
+
+  }
 
 
   const disconnect = () => {
@@ -903,7 +930,7 @@ export default function Home() {
 
       if ((user || loggedIn) && walletAddress) {
         //Buy token logic
-        setWarningMessage("Please approve payment...");
+        setWarningMessage("Please approve default amount...");
         await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
           setWarningMessage("Almost done! Please wait for confirmation...");
           await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
@@ -1404,6 +1431,7 @@ export default function Home() {
         showLoginModal={showLoginModal}
         loggedIn={loggedIn}
         toggleBackOffice={toggleBackOffice}
+        showBackOffice={showBackOffice}
 
 
       />
@@ -1459,7 +1487,7 @@ export default function Home() {
                 <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
                 <p className='m-auto text-3xl'>{translate("sold")}</p>
                 <h3 className='my-auto  whitespace-nowrap mx-4 text-2xl'>{translate("used")}</h3>
-                <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold ) : 0}</h3>
+                <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold) : 0}</h3>
                 <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk text-2xl'>{translate("decentralized")}</h3>
                 <div></div>
                 <h3 className='my-auto uppercase whitespace-nowrap mx-4 text-2xl'>{translate("world")}</h3>
@@ -1472,24 +1500,24 @@ export default function Home() {
               <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96 ismobile'>
                 <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl titlemobile"><span className="text-6xl md:text-9xl tracking-tightest titlemobile1">InfinityBee</span><span className="text-8xl tracking-wide whitespace-nowrap titlemobile2">Token {translate("presale")}</span></h1>
 
-              <div className="subtitlemobile">
-                <h3 className="my-auto whitespace-nowrap mx-4 text-bluee">{translate("currency")}</h3>
-                <h3 className='my-auto  whitespace-nowrap mx-4'>{translate("used")}</h3>
-                <h3 className='my-auto uppercase whitespace-nowrap mx-4'>{translate("world")}</h3>
-                <h3 className='my-auto whitespace-nowrap mx-4 text-purplee'>{translate("matrix")}</h3>
-                <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk'>{translate("decentralized")}</h3>
-              </div>
+                <div className="subtitlemobile">
+                  <h3 className="my-auto whitespace-nowrap mx-4 text-bluee">{translate("currency")}</h3>
+                  <h3 className='my-auto  whitespace-nowrap mx-4'>{translate("used")}</h3>
+                  <h3 className='my-auto uppercase whitespace-nowrap mx-4'>{translate("world")}</h3>
+                  <h3 className='my-auto whitespace-nowrap mx-4 text-purplee'>{translate("matrix")}</h3>
+                  <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk'>{translate("decentralized")}</h3>
+                </div>
 
-              <br /><br />
+                <br /><br />
                 <div className="flex flex-row w-full mx-auto md:flex-row subtitlemobile2">
                   <div className="flex flex-col w-full md:w-1/2">
-                    <p className='m-auto text-3xl'>{translate("sold")} <br /> {sold ? formatter.format(sold ) : 0}</p>
+                    <p className='m-auto text-3xl'>{translate("sold")} <br /> {sold ? formatter.format(sold) : 0}</p>
                     <p className='m-auto text-3xl'>{translate("remaining")} <br /> {remaining ? formatter.format(remaining / 10 ** 18) : 0}</p>
                   </div>
                   <div className="flex flex-col w-full md:w-1/2">
                     <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
                   </div>
-                </div>    
+                </div>
 
               </div>
 
@@ -1539,62 +1567,62 @@ export default function Home() {
               <h2 className='text-center uppercase text-6xl my-5 h2mobile'>Adventurer {translate("levels")}</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
-                <div className='flex flex-col w-full md:w-1/3 z-30 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>25,000 IFB Tokens <br /> Bonus 0%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
-                      </div>
-                    </div>
-                  </div>  
-                </div>
-                <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>62,500 IFB Tokens <br /> Bonus 2%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                  <div className='flex flex-col w-full md:w-1/3 z-30 flip-card'>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>25,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
+                        </div>
                       </div>
                     </div>
-                  </div>  
-                </div>
-                
-                <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>137,500 IFB Tokens <br /> Bonus 3%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                  </div>
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>62,500 IFB Tokens <br /> Bonus 2%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                        </div>
                       </div>
                     </div>
-                  </div>  
-                </div>
-{/*}
+                  </div>
+
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>137,500 IFB Tokens <br /> Bonus 3%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/*}
                    <div className={`flex flex-col mx-auto w-full card ${isFlipped ? 'flipped' : ''}`} onMouseEnter={handleCardFlip} onMouseLeave={handleCardFlip}>
                     <div className='card-front'>
                       <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
@@ -1628,7 +1656,7 @@ export default function Home() {
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='master' className='w-full my-10'>
               <h2 className='text-center uppercase text-6xl my-5'>Master {translate("levels")}</h2>
               <div className="w-full flex flex-col">
-            <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
+                <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
 
                   {/* <div className='flex flex-col w-full md:w-1/3'>
                     <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
@@ -1643,63 +1671,63 @@ export default function Home() {
                     <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
                   </div> */}
 
-                <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>287,500 IFB Tokens <br /> Bonus 0%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
-                      </div>
-                    </div>
-                  </div>  
-                </div>
-                <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>625,000 IFB Tokens <br /> Bonus 0%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>287,500 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                        </div>
                       </div>
                     </div>
-                  </div>  
-                </div>
-                <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 0%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                  </div>
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>625,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                        </div>
                       </div>
                     </div>
-                  </div>  
-                </div>                
+                  </div>
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
+                </div>
               </div>
-            </div>
             </div>
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='legend' className='w-full my-10'>
               <h2 className='text-center uppercase text-6xl my-5'>Legend {translate("levels")}</h2>
@@ -1716,41 +1744,41 @@ export default function Home() {
                   </div> */}
 
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 0%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
-                      </div>
-                    </div>
-                  </div>  
-                </div>
-                <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                  <div class="cecardfilp">
-                    <div class="flip-card-inner">
-                      <div class="flip-card-front">
-                      <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
-                      <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
-                      </div>
-                      <div class="flip-card-back">
-                      <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                      <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 0%</p>
-                      <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                      <p className='my-1'>0.008 USD</p>
-                      </div>
-                      <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                        </div>
                       </div>
                     </div>
-                  </div>  
-                </div>
+                  </div>
+                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                    <div class="cecardfilp">
+                      <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                          <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                        </div>
+                        <div class="flip-card-back">
+                          <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
+                            <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1'>0.008 USD</p>
+                          </div>
+                          <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
 
                 </div>
@@ -1791,7 +1819,7 @@ export default function Home() {
                       – participarea la una sau la toate cele 3 etape de Private Sale pe această platformă :  Pre Sale 1, Pre Sale 2, Public Sale <br />
                       – sistemul de crowdfunding BeeGENEROUS <sup>369</sup>,  în programele :  Matrix Bee3 & Matrix Bee4 și <br />
                       – programe de bounty și airdrop <br />
-                      După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX) 
+                      După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX)
                     </p>
 
                     <p className="ceTitle2 ceLeft ceq">La ce valoare și când se poate cumpăra ?</p>
@@ -1857,22 +1885,22 @@ export default function Home() {
             </div>
 
             <div id='tokenomics' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
-              <h2 className='ceHeader text-center uppercase text-6xl my-5' style={{fontSize:'55px'}}>Tokenomics</h2>
+              <h2 className='ceHeader text-center uppercase text-6xl my-5' style={{ fontSize: '55px' }}>Tokenomics</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row ">
-              <div className="flex flex-col w-full md:w-1/2">
+                <div className="flex flex-col w-full md:w-1/2">
                   <div className="title_default_light title_border text-center">
                     <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Distribution</h4>
                   </div>
                   <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft" data-animation="fadeInLeft" data-animation-delay="0.2s">
                     {/* <img src="/images/distribution3.png" alt="distribution3" /> */}
-                    {    <Chart
-      chartType="PieChart"
-      data={data2}
-      options={options2}
-      width={"100%"}
-      height={"500px"}
-    />}
+                    {<Chart
+                      chartType="PieChart"
+                      data={data2}
+                      options={options2}
+                      width={"100%"}
+                      height={"500px"}
+                    />}
                   </div>
                   <div className="divider small_divider"></div>
                   <ul className="list_none list_chart text-center">
@@ -1904,13 +1932,13 @@ export default function Home() {
                   </div>
                   <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s">
                     {/* <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" /> */}
-                    {    <Chart
-      chartType="PieChart"
-      data={data1}
-      options={options1}
-      width={"100%"}
-      height={"300px"}
-    />}
+                    {<Chart
+                      chartType="PieChart"
+                      data={data1}
+                      options={options1}
+                      width={"100%"}
+                      height={"300px"}
+                    />}
                   </div>
                   <div className="divider small_divider"></div>
                   <ul className="list_none list_chart text-center">
@@ -1941,9 +1969,9 @@ export default function Home() {
 
             <div id='roadmap' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>Roadmap</h2>
-              <div class="align-items-center" style={{position: 'relative'}}>
-              <img src="/images/beeactive.png" className="obj" />
-              <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded roadmap' />
+              <div class="align-items-center" style={{ position: 'relative' }}>
+                <img src="/images/beeactive.png" className="obj" />
+                <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded roadmap' />
               </div>
             </div>
 
@@ -2064,13 +2092,13 @@ export default function Home() {
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
                             <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
-Runda 1: BeeGENEROUS<sup>369</sup>, InfinityBee, BeeSAFE, BeeCHANGE <br />
-Runda 2 : BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
-Runda 3 : BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
-Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
+                              Runda 1: BeeGENEROUS<sup>369</sup>, InfinityBee, BeeSAFE, BeeCHANGE <br />
+                              Runda 2 : BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
+                              Runda 3 : BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
+                              Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
 
-Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
-</div>
+                              Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
+                            </div>
                           </div>
                         </div>
                       </div>
