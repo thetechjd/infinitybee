@@ -153,7 +153,14 @@ export default function BackOffice({
     orders,
     referrals,
     activeRefCode,
-    db
+    db,
+    getMonthTotal,
+    bonus,
+    isThisMonth,
+    thisMonth,
+    setThisMonth,
+    lastMonth,
+    setLastMonth
 }) {
 
 
@@ -184,8 +191,6 @@ export default function BackOffice({
     const [copyMessage, setCopyMessage] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
     const [balance, setBalance] = useState(0)
-    const [isThisMonth, setIsThisMonth] = useState(true)
-    const [bonus, setBonus] = useState(0)
     const [lastBonus, setLastBonus] = useState(0);
     const [lastMonthDisabled, setLastMonthDisabled] = useState(false)
     const [claimTime, setClaimTime] = useState(0)
@@ -193,9 +198,7 @@ export default function BackOffice({
 
 
 
-    const [thisMonth, setThisMonth] = useState("")
-    const [lastMonth, setLastMonth] = useState("")
-
+    
 
     //Pagination
     //const [orders, setOrders] = useState([])
@@ -264,7 +267,6 @@ export default function BackOffice({
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
                 setBalance(balance)
-                getMonthTotal("thisMonth")
                 setIsThisMonth(true)
                 getTotalAmount()
             } catch (err) {
@@ -286,51 +288,7 @@ export default function BackOffice({
      }, [walletAddress])*/
 
 
-    const getMonthTotal = (input) => {
-
-        console.log(referrals)
-        console.log(input)
-        let amount = 0;
-        setBonus(0)
-
-        let month = getMonth();
-        console.log(month)
-
-        console.log(referrals.length)
-
-        referrals.forEach((y) => {
-            if (input === "thisMonth") {
-
-                if (monthHelper(y.referral.date) === month) {
-                    console.log(y.referral)
-                    amount += y.referral.bonus
-                }
-                setIsThisMonth(true)
-            } else if (input === "lastMonth") {
-
-                if ((monthHelper(y.referral.date)) === (month - 1)) {
-                    console.log(y.referral)
-                    amount += y.referral.bonus
-                }
-
-                setIsThisMonth(false)
-
-            }
-
-        })
-
-        //console.log('This is this month amount' + thisMonthAmount)
-        //console.log('This is last month amount' + lastMonthAmount)
-        console.log(amount)
-        setBonus(amount)
-
-
-
-
-
-
-
-    }
+   
 
     const lastMonthDisable = (doc) => {
         console.log(doc)
@@ -984,26 +942,24 @@ export default function BackOffice({
 
 
 
-                <div className='flex w-full mt-3 bg-transparent'>
+                <div className='flex w-full mt-0 bg-transparent'>
                     {/* Render the current orders */}
                     <table className='flex flex-col w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
-                        <tr className='flex w-full gap-x-6 justify-center bg-slate950 mb-2'>
-                            <td className='flex w-full justify-center text-center'>No. Crt</td>
-
-
-                            <td className='flex w-full justify-center text-center'>Date of Purchase</td>
-                            <td className='flex w-full justify-center text-center'>Package Name</td>
-                            <td className='flex w-full justify-center text-center'>Price</td>
-                            <td className='flex w-full justify-center text-center'>Round / IFB value</td>
-                            <td className='flex w-full justify-center text-center'>InfinityBee amount</td>
-                            <td className='flex w-full justify-center text-center'>Total Value (USDT)</td>
+                        <tr className='flex w-full gap-x-6 justify-center bg-slate950 py-2 mb-2'>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>No. Crt</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Date of Purchase</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Package Name</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Price</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Round / IFB value</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
                         </tr>
                         {currentOrders.map((item, key) => (
                             <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
                                 <td className='flex w-full justify-center text-center'>{key + 1}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>0.008 USDT</td>
+                                <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(0, item.order.amount)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value}</td>

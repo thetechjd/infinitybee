@@ -20,7 +20,7 @@ import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted }
 
 import { Chart } from "react-google-charts";
 
-const timeHelper = require('../utils/time');
+const { dateHelper, getLastMonth, getMonth, monthHelper } = require('../utils/time');
 
 
 
@@ -212,6 +212,11 @@ export default function Home() {
   const [showBackOffice, setShowBackOffice] = useState(false)
   const [tokenPrice, setTokenPrice] = useState(0)
   const [loginFailed, setLoginFailed] = useState("");
+  const [bonus, setBonus] = useState(0)
+  const [thisMonth, setThisMonth] = useState("")
+  const [lastMonth, setLastMonth] = useState("")
+  const [isThisMonth, setIsThisMonth] = useState(true)
+
 
 
 
@@ -266,6 +271,7 @@ export default function Home() {
 
 
     console.log(localStorage.getItem("loggedIn"))
+    console.log(userAddress)
     setAddress(userAddress)
 
 
@@ -283,6 +289,10 @@ export default function Home() {
 
   useEffect(async () => {
     await fetchReferralCode(localStorage.getItem("address"))
+  }, [walletAddress])
+
+  useEffect(() => {
+    getMonthTotal("thisMonth")
   }, [walletAddress])
 
 
@@ -560,20 +570,60 @@ export default function Home() {
 
   }
 
+  const findEmail = async (email) => {
+    let match = false;
+    try {
+
+      const q = query(collection(db, "users"))
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        if ((doc.data().user.emailAddress).toLowerCase() === email.toLowerCase()) {
+          if (walletAddress === doc.data().user.address) {
+            match = true;
+          }
+        }
+
+
+      })
+
+    } catch (err) {
+      console.log(err)
+    }
+
+    return match;
+
+  }
+
 
 
 
 
   const signIn = () => {
+
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
+
+
+
+
 
         // Signed in 
         const user = userCredential.user;
 
+        const match = await findEmail(user.email)
+
         if (!user.emailVerified) {
+          setTimeout(() => {
+            setLoginFailed('')
+          }, 10000
+          )
           setLoginFailed("Email address has not been verified!")
-        } else if (walletAddress !== activeRefCode.data().user.address) {
+        } else if (!match) {
+          setTimeout(() => {
+            setLoginFailed('')
+          }, 10000
+          )
           setLoginFailed("Wallet address does not match the email address attached to this account!");
         }
 
@@ -602,7 +652,11 @@ export default function Home() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setLoginFailed("User email address not found.")
+        setTimeout(() => {
+          setLoginFailed('')
+        }, 8000
+        )
+        setLoginFailed("Password incorrect or user email address not found.")
 
       });
 
@@ -633,10 +687,10 @@ export default function Home() {
   }
 
   const resetPassword = () => {
-    setTimeout(() => {
+    /*setTimeout(() => {
       setLoginMessage('')
     }, 5000
-    )
+    )*/
 
     sendPasswordResetEmail(auth, email)
       .then(() => {
@@ -938,156 +992,168 @@ export default function Home() {
       if ((user || loggedIn) && walletAddress) {
         //Buy token logic
         setWarningMessage("Please approve default amount...");
-        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-          setWarningMessage("Almost done! Please wait for confirmation...");
-          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-        }).then(async () => {
-          setWarningMessage("Success!");
-          await getSold();
-          setWarningMessage("");
+        try {
+          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress })
+            .then(async () => {
+              setWarningMessage("Almost done! Please wait for confirmation...");
+              await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+            }).then(async () => {
+              setWarningMessage("Success!");
+              await getSold();
+              setWarningMessage("");
 
-        }).then((async () => {
+            }).then((async () => {
 
-          let round = await icoContract.methods.current_round().call();
+              let round = await icoContract.methods.current_round().call();
 
-          let amount;
+              let amount;
 
-          switch (pack) {
-            case 1:
-              amount = usdt + (usdt * .02);
-            case 2:
-              amount = usdt + (usdt * .01);
-            case 3:
-              amount = usdt + (usdt * .03);
-            case 4:
-              amount = usdt + (usdt * .25);
-            case 5:
-              amount = usdt + (usdt * .15);
-            case 6:
-              amount = usdt + (usdt * .1)
-            case 7:
-              amount = usdt + (usdt * .07)
-            default:
-              amount = usdt;
+              switch (pack) {
+                case 3:
+                  amount = usdt + (usdt * .03);
+                case 4:
+                  amount = usdt + (usdt * .25);
+                case 5:
+                  amount = usdt + (usdt * .15);
+                case 6:
+                  amount = usdt + (usdt * .1)
+                case 7:
+                  amount = usdt + (usdt * .07)
+                default:
+                  amount = usdt;
 
 
-          }
+              }
 
-          let newOrderData = {
-            order: {
-              date: Date.now(),
-              package: pack,
-              price: usdt,
-              round: round,
-              amount: amount,
-              value: usdt,
-            }
-          }
-
-          await newOrder(newOrderData).then(async () => {
-
-            if (refCode.length > 0) {
-              console.log(refCode)
-
-              try {
-                const referrer = await getReferrer(refCode)
-
-                console.log(referrer)
-
-                if (referrer.data().user.referralCode !== activeRefCode.data().user.referralCode) {
+              if (refCode.length > 0) {
+                amount = amount - (amount * .05);
+              }
 
 
+              let newOrderData = {
+                order: {
+                  date: Date.now(),
+                  package: pack,
+                  price: usdt,
+                  round: round,
+                  amount: amount,
+                  value: usdt,
+                }
+              }
+
+              await newOrder(newOrderData).then(async () => {
+
+                if (refCode.length > 0) {
+                  console.log(refCode)
+
+                  try {
+                    const referrer = await getReferrer(refCode)
+
+                    console.log(referrer)
+
+                    if (referrer.data().user.referralCode !== activeRefCode.data().user.referralCode) {
 
 
 
-                  //let term = referrer.data().user.termStart;
-
-                  //let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
-
-                  //let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
-
-                  let timesBought = referrer.data().user.timesBought ? Number(referrer.data().user.timesBought) : 0;
 
 
-                  timesBought += 1;
+                      //let term = referrer.data().user.termStart;
+
+                      //let lastMonth = referrer.data().user.lastMonth ? Number(referrer.data().user.lastMonth) : 0;
+
+                      //let thisMonth = referrer.data().user.thisMonth ? Number(referrer.data().user.thisMonth) : 0;
+
+                      let timesBought = referrer.data().user.timesBought ? Number(referrer.data().user.timesBought) : 0;
 
 
-                  let updatedUserData = {
-                    timesBought: timesBought
-                  }
+                      timesBought += 1;
 
-                  let newReferralData = {
-                    referral: {
-                      date: Date.now(),
-                      bonus: usdt * .05
+
+                      let updatedUserData = {
+                        timesBought: timesBought
+                      }
+
+                      let newReferralData = {
+                        referral: {
+                          date: Date.now(),
+                          bonus: usdt * .05
+                        }
+                      }
+
+
+
+
+                      /* if (timeNow > (term + (2592000 * 1000))) {
+       
+                         let nextTerm = timeHelper.getLastMonth();
+       
+                         lastMonth += thisMonth
+       
+                         thisMonth += usdt * .05
+       
+                         timesBought += 1;
+       
+       
+                         updatedUserData = {
+                           termStart: nextTerm,
+                           lastMonth: lastMonth,
+                           thisMonth: thisMonth,
+                           timesBought: timesBought
+                         }*/
+
+                      await updateUser(referrer.id, updatedUserData)
+
+                      await newReferral(referrer.id, newReferralData)
+                    } else {
+                      console.log("Can't refer yourself!")
                     }
-                  }
 
 
 
-
-                  /* if (timeNow > (term + (2592000 * 1000))) {
-   
-                     let nextTerm = timeHelper.getLastMonth();
-   
-                     lastMonth += thisMonth
-   
-                     thisMonth += usdt * .05
-   
-                     timesBought += 1;
-   
-   
-                     updatedUserData = {
-                       termStart: nextTerm,
-                       lastMonth: lastMonth,
-                       thisMonth: thisMonth,
-                       timesBought: timesBought
+                    /* } else {
+     
+                       thisMonth += usdt * .05
+                       timesBought += 1
+     
+     
+     
+                       updatedUserData = {
+                         thisMonth: thisMonth,
+                         timesBought: timesBought
+                       }
+     
+                       await updateUser(referrer.id, updatedUserData)
+     
+     
                      }*/
 
-                  await updateUser(referrer.id, updatedUserData)
 
-                  await newReferral(referrer.id, newReferralData)
-                } else {
-                  console.log("Can't refer yourself!")
+                  } catch (err) {
+                    console.log(err)
+                  }
+
+
+
                 }
 
 
 
-                /* } else {
- 
-                   thisMonth += usdt * .05
-                   timesBought += 1
- 
- 
- 
-                   updatedUserData = {
-                     thisMonth: thisMonth,
-                     timesBought: timesBought
-                   }
- 
-                   await updateUser(referrer.id, updatedUserData)
- 
- 
-                 }*/
 
 
-              } catch (err) {
-                console.log(err)
-              }
-
-
-
-            }
-
-
-
-          })
+              })
 
 
 
 
 
-        }))
+            }))
+        } catch (error) {
+          //if (error.code === 4001 && error.message === "MetaMask Tx Signature: User denied transaction signature.") {
+          console.log(error)
+          setWarningMessage("");
+          // }
+
+        }
       }
 
 
@@ -1123,154 +1189,165 @@ export default function Home() {
 
       if ((user || loggedIn) && walletAddress) {
         //Buy token logic
-        setWarningMessage("Please approve payment...");
+        setWarningMessage("Please approve default amount...");
 
-        await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress }).then(async () => {
-          setWarningMessage("Almost done! Please wait for confirmation...");
-          await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-        }).then(async () => {
-          setWarningMessage("Success!");
-          await getSold();
+        try {
+          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress })
+
+            .then(async () => {
+              setWarningMessage("Almost done! Please wait for confirmation...");
+              await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+            }).then(async () => {
+              setWarningMessage("Success!");
+              await getSold();
+              setWarningMessage("");
+
+            }).then(async () => {
+
+              let round = await icoContract.methods.current_round().call();
+
+              let amount;
+
+              switch (pack) {
+                case 3:
+                  amount = usdt + (usdt * .03);
+                case 4:
+                  amount = usdt + (usdt * .25);
+                case 5:
+                  amount = usdt + (usdt * .15);
+                case 6:
+                  amount = usdt + (usdt * .1)
+                case 7:
+                  amount = usdt + (usdt * .07)
+                default:
+                  amount = usdt;
+
+              }
+
+              if (refCode.length > 0) {
+                amount = amount - (amount * .05);
+              }
+
+              let newOrderData = {
+                order: {
+                  date: Date.now(),
+                  package: pack,
+                  price: usdt,
+                  round: round,
+                  amount: amount,
+                  value: usdt,
+                }
+              }
+
+              await newOrder(newOrderData).then(async () => {
+
+
+
+
+                if (refCode.length > 0) {
+                  console.log(refCode)
+
+                  try {
+                    const referrer = await getReferrer(refCode)
+
+                    if (referrer.data().user.referralCode !== activeRefCode.data().user.referralCode) {
+
+                      console.log(referrer)
+
+                      let timesBought = referrer.data().user.timesBought ? Number(referrer.data().user.timesBought) : 0;
+
+
+                      timesBought += 1;
+
+
+                      let updatedUserData = {
+                        timesBought: timesBought
+                      }
+
+                      let newReferralData = {
+                        referral: {
+                          date: Date.now(),
+                          bonus: usdt * .05
+                        }
+                      }
+
+
+                      await updateUser(referrer.id, updatedUserData)
+
+                      await newReferral(referrer.id, newReferralData)
+
+                    } else {
+                      console.log("Can't refer yourself!")
+                    }
+
+
+                  } catch (err) {
+                    console.log(err)
+                  }
+
+
+
+                }
+              })
+            })
+
+
+
+          /*
+                if(ref > 0){
+          
+                  const referrer = await getReferrer();
+          
+                  let timeNow = Date.now()
+          
+                  let term = referrer.data().user.termStart
+          
+                  let lastMonth = referrer.data().user.lastMonth;
+          
+                  let thisMonth = referrer.data().user.thisMonth;
+          
+                  let updatedUserData;
+          
+                  if(timeNow > (term + (2592000 * 1000))) {
+          
+                    let nextTerm = timeHelper.getLastMonth();
+          
+                    lastMonth += thisMonth
+          
+                    thisMonth += usdt * .05
+          
+          
+                    updatedUserData = {
+                      termStart: nextTerm,
+                      lastMonth: lastMonth,
+                      thisMonth: thisMonth,
+                    }
+          
+                    await updateUser(referrer.id, updatedUserData)
+          
+          
+          
+          
+                  } else {
+          
+                    thisMonth += usdt * .05
+          
+                    updatedUserData = {
+                      thisMonth: thisMonth
+                    }
+          
+                    await updateUser(referrer.id, updatedUserData)
+                  }
+                }*/
+
+        } catch (error) {
+          // if (error.code === 4001 && error.message === "MetaMask Tx Signature: User denied transaction signature.") {
+          console.log(error)
           setWarningMessage("");
+          // }
 
-        }).then(async () => {
+        }
 
-          let round = await icoContract.methods.current_round().call();
-
-          let amount;
-
-          switch (pack) {
-            case 1:
-              amount = usdt + (usdt * .02);
-            case 2:
-              amount = usdt + (usdt * .01);
-            case 3:
-              amount = usdt + (usdt * .03);
-            case 4:
-              amount = usdt + (usdt * .25);
-            case 5:
-              amount = usdt + (usdt * .15);
-            case 6:
-              amount = usdt + (usdt * .1)
-            case 7:
-              amount = usdt + (usdt * .07)
-            default:
-              amount = usdt;
-
-
-          }
-
-          let newOrderData = {
-            order: {
-              date: Date.now(),
-              package: pack,
-              price: usdt,
-              round: round,
-              amount: amount,
-              value: usdt,
-            }
-          }
-
-          await newOrder(newOrderData).then(async () => {
-
-
-
-
-            if (refCode.length > 0) {
-              console.log(refCode)
-
-              try {
-                const referrer = await getReferrer(refCode)
-
-                if(referrer.data().user.referralCode !== activeRefCode.data().user.referralCode ){
-
-                console.log(referrer)
-
-                let timesBought = referrer.data().user.timesBought ? Number(referrer.data().user.timesBought) : 0;
-
-
-                timesBought += 1;
-
-
-                let updatedUserData = {
-                  timesBought: timesBought
-                }
-
-                let newReferralData = {
-                  referral: {
-                    date: Date.now(),
-                    bonus: usdt * .05
-                  }
-                }
-
-
-                await updateUser(referrer.id, updatedUserData)
-
-                await newReferral(referrer.id, newReferralData)
-
-              } else {
-                console.log("Can't refer yourself!")
-              }
-
-
-              } catch (err) {
-                console.log(err)
-              }
-
-
-
-            }
-          })
-        })
-
-
-
-        /*
-              if(ref > 0){
-        
-                const referrer = await getReferrer();
-        
-                let timeNow = Date.now()
-        
-                let term = referrer.data().user.termStart
-        
-                let lastMonth = referrer.data().user.lastMonth;
-        
-                let thisMonth = referrer.data().user.thisMonth;
-        
-                let updatedUserData;
-        
-                if(timeNow > (term + (2592000 * 1000))) {
-        
-                  let nextTerm = timeHelper.getLastMonth();
-        
-                  lastMonth += thisMonth
-        
-                  thisMonth += usdt * .05
-        
-        
-                  updatedUserData = {
-                    termStart: nextTerm,
-                    lastMonth: lastMonth,
-                    thisMonth: thisMonth,
-                  }
-        
-                  await updateUser(referrer.id, updatedUserData)
-        
-        
-        
-        
-                } else {
-        
-                  thisMonth += usdt * .05
-        
-                  updatedUserData = {
-                    thisMonth: thisMonth
-                  }
-        
-                  await updateUser(referrer.id, updatedUserData)
-                }
-              }*/
 
 
 
@@ -1284,6 +1361,53 @@ export default function Home() {
       }
     }
     //}
+  }
+
+
+  const getMonthTotal = (input) => {
+
+    console.log(referrals)
+    console.log(input)
+    let amount = 0;
+    setBonus(0)
+
+    let month = getMonth();
+    console.log(month)
+
+    console.log(referrals.length)
+
+    referrals.forEach((y) => {
+      if (input === "thisMonth") {
+
+        if (monthHelper(y.referral.date) === month) {
+          console.log(y.referral)
+          amount += y.referral.bonus
+        }
+        setIsThisMonth(true)
+      } else if (input === "lastMonth") {
+
+        if ((monthHelper(y.referral.date)) === (month - 1)) {
+          console.log(y.referral)
+          amount += y.referral.bonus
+        }
+
+        setIsThisMonth(false)
+
+      }
+
+    })
+
+    //console.log('This is this month amount' + thisMonthAmount)
+    //console.log('This is last month amount' + lastMonthAmount)
+    console.log(amount)
+    setBonus(amount)
+
+
+
+
+
+
+
   }
 
   const newReferral = async (id, referral) => {
@@ -1547,12 +1671,12 @@ export default function Home() {
               </div>
             </div>
             {errorMessage && (
-              <div className='fixed flex w-full h-full m-auto items-center z-40'>
+              <div className='fixed flex w-full h-full m-auto justify-center items-center z-40'>
 
 
-                <div className='fixed flex flex-row bg-red-100 p-4 rounded border-4 justify-center mx-auto z-40 w-full'>
-                  <button onClick={() => { setErrorMessage(""); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
-                  <div onClick={() => { setErrorMessage(""); }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
+                <div className='relative flex flex-row bg-red-100 p-4 rounded border-4 justify-center mx-auto z-40 w-full'>
+                  <button onClick={() => { setErrorMessage(""); showModal(); }} className='absolute right-0 h-8 w-8 text-center justify-center p-1 mx-2 text-red-300 bg-red-500'>X</button>
+                  <div onClick={() => { setErrorMessage(""); showModal(); }} className='flex justify-center m-auto p-4 my-2 bg-red-100 text-center items-center tracking-wider'>
                     <p className='text-red-800'>{errorMessage}</p>
                   </div>
                 </div>
@@ -2464,6 +2588,13 @@ export default function Home() {
           referrals={referrals}
           activeRefCode={activeRefCode}
           db={db}
+          getMonthTotal={getMonthTotal}
+          isThisMonth={isThisMonth}
+          bonus={bonus}
+          thisMonth={thisMonth}
+          setThisMonth={setThisMonth}
+          lastMonth={lastMonth}
+          setLastMonth={setLastMonth}
 
         />
 

@@ -30,11 +30,11 @@ export default function LoginModal(props) {
             {/*<div className='absolute bg-black w-full bg-transparent z-0'>*/}
 
             <div className='absolute flex items-center w-full justify-center z-0'>
-                <div  className='ceModal relative bg-black bg-opacity-70 px-16 py-10 self-center mt-10 lg:w-2/5 lg:max-w-md rounded-md w-full'>
+                <div  className='ceModal relative bg-black bg-opacity-70 px-16 py-4 self-center mt-10 lg:w-2/5 lg:max-w-md rounded-md w-full'>
                     <div onClick={() => { props.showLoginModal(false); props.setReset(false) }} className='flex right justify-end cursor-pointer'>
                         <p className='text-white'>X</p>
                     </div>
-                    <h2 className='text-white text-4xl mb-8 font-semibold'>
+                    <h2 className='text-white text-2xl mb-0 font-semibold'>
                         {props.variant === 'login' ? 'Sign in' : 'Register'}
                     </h2>
                     <div className='ceRight'>
@@ -45,7 +45,7 @@ export default function LoginModal(props) {
                         {props.variant === 'register' ? 'Sign in' : 'Register for free Now'}
                         </b>
                     </div>
-                    <div className='flex flex-col gap-4'>
+                    <div className='flex flex-col gap-2'>
                         {props.variant === 'register' ? (
                             <>
 
@@ -67,7 +67,7 @@ export default function LoginModal(props) {
                                                 </button>
                                             </div>
                                              
-                                                <p className='text-red-500 text-center'>Connect your wallet to complete registration. <br /> Be Careful &nbsp; ! &nbsp; In the future, you will be able <br /> to log into this account only with this wallet. </p>
+                                               {/*} <p className='text-red-500 text-center'>Connect your wallet to complete registration. <br /> Be Careful &nbsp; ! &nbsp; In the future, you will be able <br /> to log into this account only with this wallet. </p>*/}
                                                 </>
                                             
 
@@ -201,7 +201,7 @@ export default function LoginModal(props) {
                         </>
 
                     ) : (
-                        <button onClick={props.variant === 'login' ? props.signIn : props.signUp} className='ceModalLogin bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
+                        <button onClick={props.variant === 'login' ? props.signIn : props.signUp} className='ceModalLogin bg-red-600 py-3 text-white rounded-md w-full mt-3 hover:bg-red-700 transition'>
 
                             {props.variant === 'login' ? 'Login' : 'Sign up'}
                         </button>
@@ -215,7 +215,7 @@ export default function LoginModal(props) {
                             {props.variant === 'register' ? 'Sign in' : 'Create an account'}
                         </span>
                     </p> */}
-                    <p className='text-neutral-500 mt-12'>
+                    <p className='text-neutral-500 mt-2'>
                         {!props.reset && (
                             <span onClick={props.setReset} className='text-white ml-1 hover:underline cursor-pointer'>
                                 Reset Password
