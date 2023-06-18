@@ -155,12 +155,15 @@ export default function BackOffice({
     activeRefCode,
     db,
     getMonthTotal,
-    bonus,
     isThisMonth,
     thisMonth,
     setThisMonth,
     lastMonth,
-    setLastMonth
+    setLastMonth,
+    bonus,
+    setBonus,
+    totalAmount,
+    setTotalAmount
 }) {
 
 
@@ -194,7 +197,8 @@ export default function BackOffice({
     const [lastBonus, setLastBonus] = useState(0);
     const [lastMonthDisabled, setLastMonthDisabled] = useState(false)
     const [claimTime, setClaimTime] = useState(0)
-    const [totalAmount, setTotalAmount] = useState(0);
+    
+    
 
 
 
@@ -239,6 +243,8 @@ export default function BackOffice({
         setLastMonth(convertMonth(monthHelper(Date.now()) - 1))
     }, [])
 
+   
+
 
 
     /* useEffect(() => {
@@ -266,9 +272,8 @@ export default function BackOffice({
                 const totalRev = await baseContract.methods.getTotalRefRevenue(walletAddress).call();
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
+                
                 setBalance(balance)
-                setIsThisMonth(true)
-                getTotalAmount()
             } catch (err) {
                 console.log(err)
             }

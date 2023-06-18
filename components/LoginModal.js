@@ -52,9 +52,9 @@ export default function LoginModal(props) {
                                 {!props.reset && (
                                     <>
                                         {props.walletAddress ? (
-                                            <div className='flex flex-col'>
+                                            <div onClick={props.disconnect} className='flex flex-col  cursor-pointer'>
                                                 <p>Wallet Address</p>
-                                                <p className='text-sm'>{props.walletAddress}</p>
+                                                <p className='text-sm hover:text-red-500'>{props.walletAddress}</p>
                                             </div>
 
 
@@ -132,9 +132,9 @@ export default function LoginModal(props) {
                                 {!props.reset && (
                                     <>
                                         {props.walletAddress ? (
-                                            <div className='flex flex-col'>
+                                            <div onClick={props.disconnect} className='flex flex-col cursor-pointer'>
                                                 <p>Wallet Address</p>
-                                                <p className='text-sm'>{props.walletAddress}</p>
+                                                <p className='text-sm hover:text-red-500'>{props.walletAddress}</p>
                                             </div>
 
 

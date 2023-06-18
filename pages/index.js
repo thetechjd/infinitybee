@@ -216,6 +216,7 @@ export default function Home() {
   const [thisMonth, setThisMonth] = useState("")
   const [lastMonth, setLastMonth] = useState("")
   const [isThisMonth, setIsThisMonth] = useState(true)
+  const [totalAmount, setTotalAmount] = useState(0)
 
 
 
@@ -280,7 +281,6 @@ export default function Home() {
   useEffect(async () => {
     await fetchOrders(localStorage.getItem("address"))
 
-
   }, [walletAddress])
 
   useEffect(async () => {
@@ -291,9 +291,7 @@ export default function Home() {
     await fetchReferralCode(localStorage.getItem("address"))
   }, [walletAddress])
 
-  useEffect(() => {
-    getMonthTotal("thisMonth")
-  }, [walletAddress])
+  
 
 
 
@@ -302,6 +300,7 @@ export default function Home() {
   const fetchOrders = async (address) => {
 
     let list = [];
+    let total = 0;
     try {
       const q = query(collection(db, "users"))
 
@@ -312,11 +311,13 @@ export default function Home() {
         if ((doc.data().user.address).toLowerCase() == (address).toLowerCase()) {
           doc.data().user.orders.forEach((x) => {
             list.push(x);
+            total += getDiscount(0, x.order.amount)
           })
         }
       })
       console.log(list)
       setOrders(list);
+      setTotalAmount(total)
     } catch (err) {
       console.log(err)
     }
@@ -379,6 +380,8 @@ export default function Home() {
         if ((doc.data().user.address).toLowerCase() == address.toLowerCase()) {
           setActiveRefCode(doc)
         }
+
+        getMonthTotal("thisMonth")
 
 
       })
@@ -816,6 +819,7 @@ export default function Home() {
 
   const disconnect = () => {
     setAddress('')
+    localStorage.setItem("address", "")
   }
 
 
@@ -1370,6 +1374,7 @@ export default function Home() {
     console.log(input)
     let amount = 0;
     setBonus(0)
+    
 
     let month = getMonth();
     console.log(month)
@@ -1403,12 +1408,41 @@ export default function Home() {
     setBonus(amount)
 
 
-
-
-
-
-
   }
+
+  const getTotalAmount = () => {
+    let total = 0;
+    currentOrders.forEach(x => {
+        total += getDiscount(0, x.order.amount);
+    })
+    console.log('This is the total for orders:' + total)
+    setTotalAmount(total)
+}
+
+const getDiscount = (round, price) => {
+  const roundPrice = getRoundPrice(round);
+  const ifb = price / roundPrice;
+  return ifb;
+}
+
+const getRoundPrice = (round) => {
+  switch (round) {
+      case '0':
+          return 0.008
+      case '1':
+          return .01
+      case '2':
+          return .015
+      case '3':
+          return .02
+      default:
+          return 0.008
+  }
+}
+
+
+
+
 
   const newReferral = async (id, referral) => {
 
@@ -1602,6 +1636,7 @@ export default function Home() {
               reset={reset}
               setReset={setReset}
               loginFailed={loginFailed}
+              disconnect={disconnect}
 
 
 
@@ -2590,11 +2625,15 @@ export default function Home() {
           db={db}
           getMonthTotal={getMonthTotal}
           isThisMonth={isThisMonth}
-          bonus={bonus}
           thisMonth={thisMonth}
           setThisMonth={setThisMonth}
           lastMonth={lastMonth}
           setLastMonth={setLastMonth}
+          bonus={bonus}
+          setBonus={setBonus}
+          totalAmount={totalAmount}
+          setTotalAmount={setTotalAmount}
+          
 
         />
 
