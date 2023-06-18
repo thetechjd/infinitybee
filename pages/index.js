@@ -1034,10 +1034,7 @@ export default function Home() {
 
               }
 
-              if (refCode.length > 0) {
-                amount = amount - (amount * .05);
-              }
-
+              
 
               let newOrderData = {
                 order: {
@@ -1233,10 +1230,7 @@ export default function Home() {
 
               }
 
-              if (refCode.length > 0) {
-                amount = amount - (amount * .05);
-              }
-
+             
               let newOrderData = {
                 order: {
                   date: Date.now(),
