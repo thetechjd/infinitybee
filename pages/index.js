@@ -284,14 +284,14 @@ export default function Home() {
   }, [walletAddress])
 
   useEffect(async () => {
-    await fetchReferrals(localStorage.getItem("address"))
+    await fetchReferrals(walletAddress)
   }, [walletAddress])
 
   useEffect(async () => {
     await fetchReferralCode(localStorage.getItem("address"))
   }, [walletAddress])
 
-  
+
 
 
 
@@ -301,6 +301,7 @@ export default function Home() {
 
     let list = [];
     let total = 0;
+    
     try {
       const q = query(collection(db, "users"))
 
@@ -311,7 +312,9 @@ export default function Home() {
         if ((doc.data().user.address).toLowerCase() == (address).toLowerCase()) {
           doc.data().user.orders.forEach((x) => {
             list.push(x);
-            total += getDiscount(0, x.order.amount)
+            
+              total += getDiscount(0, x.order.amount)
+            
           })
         }
       })
@@ -327,7 +330,7 @@ export default function Home() {
 
   const fetchReferrals = async (address) => {
     let list = [];
-
+    
     try {
       const q = query(collection(db, "users"))
 
@@ -344,6 +347,7 @@ export default function Home() {
 
       console.log(list)
       setReferrals(list)
+      
     } catch (err) {
       console.log(err)
     }
@@ -381,10 +385,11 @@ export default function Home() {
           setActiveRefCode(doc)
         }
 
-        getMonthTotal("thisMonth")
+        
 
 
       })
+     
     } catch (err) {
       console.log(err)
     }
@@ -492,9 +497,6 @@ export default function Home() {
         .then(async (userCredential) => {
 
 
-
-
-
           // Signed in 
           const user = userCredential.user;
           console.log(user);
@@ -523,13 +525,14 @@ export default function Home() {
               refValue = 0;
             }
             console.log("This is the refValue: " + refValue)
+            console.log('This is the raw value of the refCode' + refCode)
 
 
             try {
               const referrer = await getReferrer(refCode)
+              
 
-              if (referrer.data().user.referralCode !== activeRefCode.data().user.referralCode) {
-
+             
                 let current = referrer.data().user.signUps ? Number(referrer.data().user.signUps) : 0;
 
                 let updated = current + 1;
@@ -537,12 +540,14 @@ export default function Home() {
                 let refData = {
                   signUps: updated
                 }
-
                 await updateUser(referrer.id, refData)
-              }
-              else {
-                console.log("Can't refer yourself!")
-              }
+              
+            
+             
+
+            
+               
+              
 
             } catch (err) {
               console.log(err)
@@ -927,25 +932,25 @@ export default function Home() {
 
     let reference;
 
-    try {
+        try {
 
-      console.log('Querying...')
-
-
-
-      const q = query(collection(db, "users"));
-
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-
-        if (doc.data().user.referralCode === code) {
-          reference = doc;
-        }
+            console.log('Querying...')
 
 
-      })
 
-      return reference;
+            const q = query(collection(db, "users"));
+
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+
+                if (doc.data().user.referralCode === code) {
+                    reference = doc;
+                }
+
+
+            })
+
+            return reference;
     } catch (err) {
       console.log(err)
     }
@@ -1376,6 +1381,7 @@ export default function Home() {
     setBonus(0)
     
 
+
     let month = getMonth();
     console.log(month)
 
@@ -1413,32 +1419,32 @@ export default function Home() {
   const getTotalAmount = () => {
     let total = 0;
     currentOrders.forEach(x => {
-        total += getDiscount(0, x.order.amount);
+      total += getDiscount(0, x.order.amount);
     })
     console.log('This is the total for orders:' + total)
     setTotalAmount(total)
-}
-
-const getDiscount = (round, price) => {
-  const roundPrice = getRoundPrice(round);
-  const ifb = price / roundPrice;
-  return ifb;
-}
-
-const getRoundPrice = (round) => {
-  switch (round) {
-      case '0':
-          return 0.008
-      case '1':
-          return .01
-      case '2':
-          return .015
-      case '3':
-          return .02
-      default:
-          return 0.008
   }
-}
+
+  const getDiscount = (round, price) => {
+    const roundPrice = getRoundPrice(round);
+    const ifb = price / roundPrice;
+    return ifb;
+  }
+
+  const getRoundPrice = (round) => {
+    switch (round) {
+      case '0':
+        return 0.008
+      case '1':
+        return .01
+      case '2':
+        return .015
+      case '3':
+        return .02
+      default:
+        return 0.008
+    }
+  }
 
 
 
@@ -1552,6 +1558,7 @@ const getRoundPrice = (round) => {
       setShowBackOffice(false)
     } else {
       setShowBackOffice(true)
+      getMonthTotal("thisMonth")
       await fetchOrders(walletAddress)
 
     }
@@ -2633,7 +2640,7 @@ const getRoundPrice = (round) => {
           setBonus={setBonus}
           totalAmount={totalAmount}
           setTotalAmount={setTotalAmount}
-          
+
 
         />
 
