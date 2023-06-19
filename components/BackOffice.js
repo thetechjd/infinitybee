@@ -954,7 +954,7 @@ export default function BackOffice({
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>No. Crt</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Date of Purchase</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Package Name</td>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Price</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Price (USDT)</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Round / IFB value</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
