@@ -15,6 +15,8 @@ import LoginModal from '../components/LoginModal';
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Cancel from '@material-ui/icons/Cancel';
 import { useStatus } from "../context/statusContext";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { connectWallet, getCurrentWalletConnected, getNFTPrice, getTotalMinted } from "../utils/interact.js";
 //const CountUp = require('react-countup')
 
@@ -50,16 +52,14 @@ import en from '../utils/en.json';
 import { NetworkLockedRounded } from "@material-ui/icons";
 
 
-const data1 = [
-  ["Task", "Hours per Day"],
-  ["ICO SEED", 2 * 42 / 100],
-  ["ICO Presale 1", 3 * 42 / 100],
-  ["ICO Presale 2", 7 * 42 / 100],
-  ["ICO Public Sale", 10 * 42 / 100],
-  ["Reserve ", 9 * 42 / 100],
-  ["Liquidity  ", 11 * 42 / 100],
-]
 const data2 = [
+  ["Task", "Hours per Day"],
+  ["ICO SEED", 9.1],
+  ["ICO Presale 1", 13.6],
+  ["ICO Presale 2", 31.8],
+  ["ICO Public Sale", 42.5]
+]
+const data1 = [
   ["Task", "Hours per Day"],
   ["Ecosystem ", 23],
   ["Treasury ", 25],
@@ -74,12 +74,16 @@ const options1 = {
   legend: 'none',
   // legend : { position : 'bottom' },
   backgroundColor: 'transparent',
+  width: 450, height: 450,
+  colors: ['#0090FF', '#FE8FB0', '#EFE43C', '#B388FE', '#00F677', '#FFA74D'],
+  is3D: true
 };
 const options2 = {
   // title: "My Daily Activities",
   legend: 'none',
   // legend : { position : 'bottom' },
   backgroundColor: 'transparent',
+  colors: ['#FE8FB0', '#00F677', '#EFE43C', '#0090FF'],
   is3D: true
 };
 
@@ -1752,12 +1756,12 @@ export default function Home() {
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
                   <div className='flex flex-col w-full md:w-1/3 z-30 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>25,000 IFB Tokens  <br /> Bonus 0%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -1769,12 +1773,12 @@ export default function Home() {
                     <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/mars.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>62,500 IFB Tokens <br /> Bonus 0%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -1787,12 +1791,12 @@ export default function Home() {
                   </div>
 
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/venus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>137,500 IFB Tokens <br /> Bonus 0%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -1853,12 +1857,12 @@ export default function Home() {
                   </div> */}
 
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/earth.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>287,500 IFB Tokens <br /> Bonus 3%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -1870,12 +1874,12 @@ export default function Home() {
                     <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/neptune.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>625,000 IFB Tokens <br /> Bonus 5%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -1887,12 +1891,12 @@ export default function Home() {
                     <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/uranus.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 7%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -1922,12 +1926,12 @@ export default function Home() {
                   </div> */}
 
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/saturn.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 9%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -1939,12 +1943,12 @@ export default function Home() {
                     <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
-                    <div class="cecardfilp">
-                      <div class="flip-card-inner">
-                        <div class="flip-card-front">
+                    <div className="cecardfilp">
+                      <div className="flip-card-inner">
+                        <div className="flip-card-front">
                           <img src='/images/jupiter.png' className='flex h-[200px] my-3 mx-auto justify-center' />
                         </div>
-                        <div class="flip-card-back">
+                        <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 12%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
@@ -2067,77 +2071,73 @@ export default function Home() {
               <div className="flex flex-col w-full mx-auto md:flex-row ">
                 <div className="flex flex-col w-full md:w-1/2">
                   <div className="title_default_light title_border text-center">
-                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Distribution</h4>
+                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token distribution</h4>
                   </div>
-                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft" data-animation="fadeInLeft" data-animation-delay="0.2s">
+                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft ceChart" data-animation="fadeInLeft" data-animation-delay="0.2s">
                     {/* <img src="/images/distribution3.png" alt="distribution3" /> */}
                     {<Chart
                       chartType="PieChart"
-                      data={data2}
-                      options={options2}
-                      width={"100%"}
-                      height={"500px"}
+                      data={data1}
+                      options={options1}
                     />}
                   </div>
                   <div className="divider small_divider"></div>
                   <ul className="list_none list_chart text-center">
                     <li>
                       <span className="chart_bx color1"></span>
+                      <span>Ecosystem</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color2"></span>
+                      <span>Treasury</span>
+                    </li>
+                    <li>
+                      <span className="chart_bx color3"></span>
                       <span>ICO Sale</span>
                     </li>
                     <li>
                       <span className="chart_bx color4"></span>
-                      <span>Build Out</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color2"></span>
-                      <span>Team &amp; Advisers</span>
+                      <span>Team & Advisers</span>
                     </li>
                     <li>
                       <span className="chart_bx color5"></span>
-                      <span>Private Investors</span>
+                      <span>Marketing</span>
                     </li>
                     <li>
-                      <span className="chart_bx color3"></span>
-                      <span>Bounty</span>
+                      <span className="chart_bx color6"></span>
+                      <span>Liquidity</span>
                     </li>
                   </ul>
                 </div>
                 <div className="flex flex-col w-full md:w-1/2">
                   <div className="title_default_light title_border text-center">
-                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token Sale Proceeds</h4>
+                    <h4 className="animation animated fadeInUp" data-animation="fadeInUp" data-animation-delay="0.2s">Token ICO Sale</h4>
                   </div>
-                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInRight" data-animation="fadeInRight" data-animation-delay="0.2s">
-                    {/* <img src="/images/sale-proceeds3.png" alt="sale-proceeds3" /> */}
+                  <div className="flex justify-center lg_pt_20 res_sm_pt_0 text-center animation animated fadeInLeft ceChart" data-animation="fadeInLeft" data-animation-delay="0.2s">
+                    {/* <img src="/images/distribution3.png" alt="distribution3" /> */}
                     {<Chart
                       chartType="PieChart"
-                      data={data1}
-                      options={options1}
-                      width={"100%"}
-                      height={"300px"}
+                      data={data2}
+                      options={options2}
                     />}
                   </div>
                   <div className="divider small_divider"></div>
                   <ul className="list_none list_chart text-center">
                     <li>
-                      <span className="chart_bx color1"></span>
-                      <span>Addvisers</span>
+                      <span className="chart_bx color11"></span>
+                      <span>ICO SEED</span>
                     </li>
                     <li>
-                      <span className="chart_bx color2"></span>
-                      <span>Marketing</span>
+                      <span className="chart_bx color12"></span>
+                      <span>ICO Presale 1</span>
                     </li>
                     <li>
-                      <span className="chart_bx color3"></span>
-                      <span>Public Sale</span>
+                      <span className="chart_bx color13"></span>
+                      <span>ICO Presale 2</span>
                     </li>
                     <li>
-                      <span className="chart_bx color4"></span>
-                      <span>PreSale</span>
-                    </li>
-                    <li>
-                      <span className="chart_bx color5"></span>
-                      <span>Projects</span>
+                      <span className="chart_bx color14"></span>
+                      <span>ICO Public Sale</span>
                     </li>
                   </ul>
                 </div>
@@ -2146,7 +2146,7 @@ export default function Home() {
 
             <div id='roadmap' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>Roadmap</h2>
-              <div class="align-items-center" style={{ position: 'relative' }}>
+              <div className="align-items-center" style={{ position: 'relative' }}>
                 <img src="/images/beeactive.png" className="obj" />
                 <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded roadmap' />
               </div>
@@ -2186,7 +2186,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingThree">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
-                              aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span><ins></ins></a> </h6>
+                              aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                              </a> </h6>
                           </div>
                           <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
                             <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
@@ -2195,7 +2199,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
-                              aria-controls="collapseOne"><span>Ce este Be&Bee ?</span><ins></ins></a></h6>
+                              aria-controls="collapseOne"><span>Ce este Be&Bee ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                              </a></h6>
                           </div>
                           <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
                             <div className="card-body"> Be&Bee este un ecosistem prietenos în care noi idei și proiecte prind viață, astfel crescând valoarea comunității, ceea ce va duce la revolutionarea sistemelor de Crowdfunding, a Rețelelor de socializare și e-Commerce. <br />
@@ -2206,7 +2214,11 @@ export default function Home() {
                           <div className="card-header" id="headingTwo">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
                               aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
-                                proiectului “Be&Bee Community” ?</span><ins></ins></a> </h6>
+                                proiectului “Be&Bee Community” ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                                </a> </h6>
                           </div>
                           <div id="collapseTwo" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="headingTwo" data-parent="#accordion1">
                             <div className="card-body"> Această Comunitate este un mediu unde oamenii folosesc tehnologia pentru: <br />
@@ -2226,7 +2238,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingNine">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
-                              aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span><ins></ins></a>
+                              aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                              </a>
                             </h6>
                           </div>
                           <div id="collapseNine" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingNine" data-parent="#accordion3">
@@ -2264,7 +2280,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
-                              aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span><ins></ins></a> </h6>
+                              aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                              </a> </h6>
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
                             <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
@@ -2284,7 +2304,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
-                              aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
+                              aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                              </a> </h6>
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
                             <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
@@ -2294,7 +2318,11 @@ export default function Home() {
                           <div className="card-header" id="headingEleven">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
                               aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
-                                platformă ?</span><ins></ins></a> </h6>
+                                platformă ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                                </a> </h6>
                           </div>
                           <div id="collapseEleven" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingEleven" data-parent="#accordion4">
                             <div className="card-body"> Taxa de înscriere se poate plăti cu una din cele 5 cripto-monede : USDT, USDC, BUSD, BNB și EGLD <br />
@@ -2307,7 +2335,11 @@ export default function Home() {
                           <div className="card-header" id="heading48">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
                               aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
-                                ?</span><ins></ins></a> </h6>
+                                ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                                </a> </h6>
                           </div>
                           <div id="collapse48" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading48" data-parent="#accordion4">
                             <div className="card-body"> a. nevoi personale <br />
@@ -2324,7 +2356,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingSeventeen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
-                              aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span><ins></ins></a> </h6>
+                              aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                              </a> </h6>
                           </div>
                           <div id="collapseSeventeen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingSeventeen"
                             data-parent="#accordion5">
@@ -2342,7 +2378,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading61">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
-                              aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span><ins></ins></a> </h6>
+                              aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                              </a> </h6>
                           </div>
                           <div id="collapse61" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
                             <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
@@ -2351,7 +2391,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading62">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
-                              aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span><ins></ins></a> </h6>
+                              aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                              </a> </h6>
                           </div>
                           <div id="collapse62" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
                             <div className="card-body"> Înainte de a cumpăra un pachet cu tokeni InfinityBee, este necesar să îți creezi un cont pe această platformă de ICO. <br />
@@ -2364,7 +2408,11 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading63">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
-                              aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
+                              aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                              </a> </h6>
                           </div>
                           <div id="collapse63" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
                             <div className="card-body"> Platforma folosește KYC (Know Your Customer) & AML (Anti Money Laundering)  – 2 elemente de identificare și verificare a membrilor, necesare unui proiect crypto să fie legal și credibil.</div>
@@ -2396,7 +2444,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                         <div className="card-header" id="headingThree">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
-                            aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span><ins></ins></a> </h6>
+                            aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
                           <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
@@ -2405,7 +2457,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                         <div className="card-header">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
-                            aria-controls="collapseOne"><span>Ce este Be&Bee ?</span><ins></ins></a></h6>
+                            aria-controls="collapseOne"><span>Ce este Be&Bee ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                            </a></h6>
                         </div>
                         <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
                           <div className="card-body"> Be&Bee este un ecosistem prietenos în care noi idei și proiecte prind viață, astfel crescând valoarea comunității, ceea ce va duce la revolutionarea sistemelor de Crowdfunding, a Rețelelor de socializare și e-Commerce. <br />
@@ -2416,7 +2472,11 @@ export default function Home() {
                         <div className="card-header" id="headingTwo">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
                             aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
-                              proiectului “Be&Bee Community” ?</span><ins></ins></a> </h6>
+                              proiectului “Be&Bee Community” ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                              </a> </h6>
                         </div>
                         <div id="collapseTwo" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="headingTwo" data-parent="#accordion1">
                           <div className="card-body"> Această Comunitate este un mediu unde oamenii folosesc tehnologia pentru: <br />
@@ -2442,7 +2502,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                         <div className="card-header" id="headingNine">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("4") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
-                            aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span><ins></ins></a>
+                            aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "4" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "4" ? "show" : "hide"} `} />
+                            </a>
                           </h6>
                         </div>
                         <div id="collapseNine" className={`collapse ${faqRight == "4" ? "show" : ""} `} aria-labelledby="headingNine" data-parent="#accordion3">
@@ -2480,7 +2544,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                         <div className="card-header" id="headingTen">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("5") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
-                            aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span><ins></ins></a> </h6>
+                            aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "5" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "5" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapseTen" className={`collapse ${faqRight == "5" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
                           <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
@@ -2506,7 +2574,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                         <div className="card-header" id="headingTen">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("6") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
-                            aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
+                            aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "6" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "6" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapseTen" className={`collapse ${faqRight == "6" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
                           <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
@@ -2516,7 +2588,11 @@ export default function Home() {
                         <div className="card-header" id="headingEleven">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("7") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
                             aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
-                              platformă ?</span><ins></ins></a> </h6>
+                              platformă ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "7" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "7" ? "show" : "hide"} `} />
+                              </a> </h6>
                         </div>
                         <div id="collapseEleven" className={`collapse ${faqRight == "7" ? "show" : ""} `} aria-labelledby="headingEleven" data-parent="#accordion4">
                           <div className="card-body"> Taxa de înscriere se poate plăti cu una din cele 5 cripto-monede : USDT, USDC, BUSD, BNB și EGLD <br />
@@ -2528,7 +2604,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
                         <div className="card-header" id="heading48">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("8") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
-                            aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate ?</span><ins></ins></a> </h6>
+                            aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "8" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "8" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapse48" className={`collapse ${faqRight == "8" ? "show" : ""} `} aria-labelledby="heading48" data-parent="#accordion4">
                           <div className="card-body"> a. nevoi personale <br />
@@ -2551,7 +2631,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                         <div className="card-header" id="headingSeventeen">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("9") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
-                            aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span><ins></ins></a> </h6>
+                            aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "9" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "9" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapseSeventeen" className={`collapse ${faqRight == "9" ? "show" : ""} `} aria-labelledby="headingSeventeen"
                           data-parent="#accordion5">
@@ -2575,7 +2659,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                         <div className="card-header" id="heading61">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("10") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
-                            aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span><ins></ins></a> </h6>
+                            aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "10" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "10" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapse61" className={`collapse ${faqRight == "10" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
                           <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
@@ -2584,7 +2672,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                         <div className="card-header" id="heading62">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("11") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
-                            aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span><ins></ins></a> </h6>
+                            aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "11" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "11" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapse62" className={`collapse ${faqRight == "11" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
                           <div className="card-body"> Înainte de a cumpăra un pachet cu tokeni InfinityBee, este necesar să îți creezi un cont pe această platformă de ICO. <br />
@@ -2597,7 +2689,11 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                         <div className="card-header" id="heading63">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("12") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
-                            aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span><ins></ins></a> </h6>
+                            aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span>
+                            <ins></ins>
+                            <ArrowDropDownIcon className={`ceArrow ${faqRight != "12" ? "show" : "hide"} `} />
+                              <ArrowDropUpIcon className={`ceArrow ${faqRight == "12" ? "show" : "hide"} `} />
+                            </a> </h6>
                         </div>
                         <div id="collapse63" className={`collapse ${faqRight == "12" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
                           <div className="card-body"> Platforma folosește KYC (Know Your Customer) & AML (Anti Money Laundering)  – 2 elemente de identificare și verificare a membrilor, necesare unui proiect crypto să fie legal și credibil.</div>

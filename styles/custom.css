@@ -180,7 +180,7 @@
 }
 
 .list_chart {
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 .list_chart li {
@@ -207,44 +207,36 @@
 }
 
 .color1 {
-	background-color: #f69040;
+	background-color: #0090FF;
 }
 .color2 {
-	background-color: #78c596;
+	background-color: #FE8FB0;
 }
 .color3 {
-	background-color: #f17776;
+	background-color: #EFE43C;
 }
 .color4 {
-	background-color: #0eadc9;
+	background-color: #B388FE;
 }
 .color5 {
-	background-color: #4241b8;
+	background-color: #00F677;
 }
 .color6 {
-	background-color: #4449cc;
-}
-.color7 {
-	background-color: #00e1f4;
-}
-.color8 {
-	background-color: #d26187;
-}
-.color9 {
-	background-color: #d4b630;
-}
-.color10 {
-	background-color: #0052ce;
+	background-color: #FFA74D;
 }
 .color11 {
-	background-color: #5b5da8;
+	background-color: #FE8FB0;
 }
 .color12 {
-	background-color: #9a46cc;
+	background-color: #00F677;
 }
 .color13 {
-	background-color: #d3b62f;
+	background-color: #EFE43C;
 }
+.color14 {
+	background-color: #0090FF;
+}
+
 
 .cecard {
     background-color: transparent;
@@ -285,4 +277,20 @@ section {
 
 .cePriceCard {
     font-size: 18px;
+}
+
+.ceArrow {
+    right: 10px;
+    position: absolute;
+}
+.ceArrow.show {
+    display: inline-flex;
+}
+.ceArrow.hide {
+    display: none;
+}
+
+.ceChart>div>div>div {
+    /* display: inline-block; */
+    margin-top: 0px;
 }

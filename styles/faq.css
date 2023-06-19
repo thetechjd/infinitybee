@@ -20,9 +20,13 @@
     padding: 8px 16px;
     text-transform: capitalize;
 }
-.tab-link.active {
+.tab-link.active, .tab-link.active:hover {
     background-image: linear-gradient(to right, #7448AA 0%,#E45C9E 100%,#7448AA) !important;
 }
+.tab-link:hover {
+    background: #090737ab !important;
+}
+
 
 .faq_content5 .card-header a {
     background: #4a49bf47 !important;
@@ -32,7 +36,7 @@
     padding: 15px 40px 15px 15px;
     position: relative;
 }
-.faq_content5 .card-header a::before {
+/* .faq_content5 .card-header a::before {
     content: "Q.";
     font-weight: 600;
     margin-right: 5px;
@@ -46,7 +50,7 @@
     position: absolute;
     right: 15px;
     top: 14px;
-}
+} */
 .faq_content5 .collapse.show .card-body {
     margin-bottom: -10px;
     text-align: justify;
