@@ -1749,9 +1749,9 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>25,000 IFB Tokens <br /> Bonus 0%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>25,000 IFB Tokens  <br /> Bonus 0%</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1767,8 +1767,8 @@ export default function Home() {
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>62,500 IFB Tokens <br /> Bonus 2%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1785,8 +1785,8 @@ export default function Home() {
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>137,500 IFB Tokens <br /> Bonus 3%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1851,8 +1851,8 @@ export default function Home() {
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>287,500 IFB Tokens <br /> Bonus 0%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1868,8 +1868,8 @@ export default function Home() {
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>625,000 IFB Tokens <br /> Bonus 0%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1885,8 +1885,8 @@ export default function Home() {
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 0%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1920,8 +1920,8 @@ export default function Home() {
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 0%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1937,8 +1937,8 @@ export default function Home() {
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
                             <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 0%</p>
-                            <p className='my-1'>TGE 10% <br /> Vesting 18 Months</p>
-                            <p className='my-1'>0.008 USD</p>
+                            <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
+                            <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
@@ -1989,7 +1989,7 @@ export default function Home() {
                       După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX)
                     </p>
 
-                    <p className="ceTitle2 ceLeft ceq">La ce valoare și când se poate cumpăra tokenul?</p>
+                    <p className="ceTitle2 ceLeft ceq">La ce valoare și când se poate cumpăra tokenul ?</p>
                     <p className="ceDescription2 ceLeft ceDescriptionLast">
                       Valoarea Tokenului InfinityBee va crește de la o rundă la alta după cum urmează : <br />
                       Private Sale 1 (Q4 2023) :   valoarea IFB = 0.01 USDT <br />
@@ -2017,15 +2017,15 @@ export default function Home() {
                 <div className="flex flex-col w-full mx-auto md:flex-row ">
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
                     <p className="ceDescription2 ceLeft">
-                      Toate cele 3 runde de Pre Sale din perioada ICO-ului se vor desfășura doar pe această platformă (www.infinitybee.io). <br /><br />
+                      Toate cele 3 runde de PreSale din perioada ICO-ului se vor desfășura doar pe această platformă (<b>www.infinitybee.io</b>). <br /><br />
 
-                      În RUNDA 1 tokenul are valoarea de 0,01 $. <br />
+                      În RUNDA 1 (Private Sale 1) tokenul are valoarea de 0,01 $ <br />
                       Pentru această rundă sunt alocați tokeni în cuantum de 3% din numărul total de tokeni. <br /><br />
 
-                      În RUNDA 2 tokenul are valoarea de 0,015 $.<br />
+                      În RUNDA 2  (Private Sale 2) tokenul are valoarea de 0,015 $<br />
                       Pentru această rundă sunt alocați tokeni în cuantum de 7% din numărul total de tokeni.<br /><br />
 
-                      În RUNDA 3 tokenul are valoarea de 0,02 $.<br />
+                      În RUNDA 3 (Public Sale) tokenul are valoarea de 0,02 $<br />
                       Pentru această rundă sunt alocați tokeni în cuantum de 10% din numărul total de tokeni.<br />
                     </p>
                   </div>
@@ -2033,15 +2033,15 @@ export default function Home() {
                   <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
                     <p className="ceTitle2 ceLeft ceq">Ce oferte de pachete sunt disponibile ?</p>
                     <p className="ceDescription2 ceLeft ceDescriptionLast">
-                      În fiecare rundă de Pre Sale a ICO-ului se vor putea cumpăra pachete cu tokeni de 8 valori diferite : <br />
-                      200 USDT (Mercury) – no Bonus, no Vesting, Releasing 100% <br />
-                      500 USDT (Mars) – no Bonus, no Vesting, Releasing 100% <br />
-                      1.100 USDT (Venus) – no Bonus, no Vesting, Releasing 100% <br />
-                      2.300 USDT (Earth) – 3% Bonus, Vesting 18 months, Releasing 10% <br />
-                      5.000 USDT (Neptune) – 5% Bonus, Vesting 18 months, Releasing 10% <br />
-                      11.000 USDT (Uranus) – 7% Bonus, Vesting 18 months, Releasing 10% <br />
-                      23.000 USDT (Saturn) – 9% Bonus, Vesting 18 months, Releasing 10% <br />
-                      48.000 USDT (Jupiter) – 12% Bonus, Vesting 18 months, Releasing 10% <br />
+                      În fiecare rundă de PreSale a ICO-ului se vor putea cumpăra pachete cu tokeni de 8 valori diferite : <br /><br />
+                      200 USDT (Mercury) – no Bonus, no Vesting, Release 100% <br />
+                      500 USDT (Mars) – no Bonus, no Vesting, Release 100% <br />
+                      1.100 USDT (Venus) – no Bonus, no Vesting, Release 100% <br />
+                      2.300 USDT (Earth) – 3% Bonus, Vesting 18 months, Release 10% <br />
+                      5.000 USDT (Neptune) – 5% Bonus, Vesting 18 months, Release  10% <br />
+                      11.000 USDT (Uranus) – 7% Bonus, Vesting 18 months, Release 10% <br />
+                      23.000 USDT (Saturn) – 9% Bonus, Vesting 18 months, Release 10% <br />
+                      48.000 USDT (Jupiter) – 12% Bonus, Vesting 18 months, Release 10% <br />
                     </p>
                   </div>
                 </div>
@@ -2123,7 +2123,7 @@ export default function Home() {
                     </li>
                     <li>
                       <span className="chart_bx color4"></span>
-                      <span>Pre Sale</span>
+                      <span>PreSale</span>
                     </li>
                     <li>
                       <span className="chart_bx color5"></span>
@@ -2176,8 +2176,7 @@ export default function Home() {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingThree">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
-                              aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru
-                                ?</span><ins></ins></a> </h6>
+                              aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span><ins></ins></a> </h6>
                           </div>
                           <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
                             <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
@@ -2259,9 +2258,9 @@ export default function Home() {
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
                             <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
-                              Runda 1: BeeGENEROUS<sup>369</sup>, InfinityBee, BeeSAFE, BeeCHANGE <br />
-                              Runda 2 : BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
-                              Runda 3 : BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
+                              Runda 1 :  InfinityBee, BeeGENEROUS<sup>369</sup>, BeeSAFE, BeeCHANGE <br />
+                              Runda 2 :  BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
+                              Runda 3 :  BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
                               Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
 
                               Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
@@ -2387,8 +2386,7 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                         <div className="card-header" id="headingThree">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
-                            aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru
-                              ?</span><ins></ins></a> </h6>
+                            aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span><ins></ins></a> </h6>
                         </div>
                         <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
                           <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
@@ -2520,8 +2518,7 @@ export default function Home() {
                       <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
                         <div className="card-header" id="heading48">
                           <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("8") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
-                            aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
-                              ?</span><ins></ins></a> </h6>
+                            aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate ?</span><ins></ins></a> </h6>
                         </div>
                         <div id="collapse48" className={`collapse ${faqRight == "8" ? "show" : ""} `} aria-labelledby="heading48" data-parent="#accordion4">
                           <div className="card-body"> a. nevoi personale <br />
