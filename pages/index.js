@@ -1776,7 +1776,7 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>62,500 IFB Tokens <br /> Bonus 2%</p>
+                            <p className='my-1'>62,500 IFB Tokens <br /> Bonus 0%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1794,7 +1794,7 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>137,500 IFB Tokens <br /> Bonus 3%</p>
+                            <p className='my-1'>137,500 IFB Tokens <br /> Bonus 0%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1860,7 +1860,7 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>287,500 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>287,500 IFB Tokens <br /> Bonus 3%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1877,7 +1877,7 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>625,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>625,000 IFB Tokens <br /> Bonus 5%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1894,7 +1894,7 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 7%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1929,7 +1929,7 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 9%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1946,7 +1946,7 @@ export default function Home() {
                         </div>
                         <div class="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 12%</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
