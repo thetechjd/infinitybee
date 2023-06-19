@@ -31,7 +31,7 @@ export default function LoginModal(props) {
 
             <div className='absolute flex items-center w-full justify-center z-0'>
                 <div  className='ceModal relative bg-black bg-opacity-70 px-16 py-4 self-center mt-10 lg:w-2/5 lg:max-w-md rounded-md w-full'>
-                    <div onClick={() => { props.showLoginModal(false); props.setReset(false) }} className='flex right justify-end cursor-pointer'>
+                    <div onClick={() => { props.showLoginModal(false); props.toggleReset() }} className='flex right justify-end cursor-pointer'>
                         <p className='text-white'>X</p>
                     </div>
                     <h2 className='text-white text-2xl mb-0 font-semibold'>
@@ -41,9 +41,15 @@ export default function LoginModal(props) {
 
                         {props.variant === 'register' ? 'Already have an account?' : 'Don\'t have and account yet?'}
                         <br />
+                       {props.reset ? (
+                         <b onClick={()=>{props.toggleVariant; props.toggleReset()}} className='text-white ml-1 hover:underline cursor-pointer'>
+                         {props.variant === 'register' ? 'Sign in' : 'Register for free Now'}
+                         </b>
+                       ):(
                         <b onClick={props.toggleVariant} className='text-white ml-1 hover:underline cursor-pointer'>
                         {props.variant === 'register' ? 'Sign in' : 'Register for free Now'}
                         </b>
+                       )}
                     </div>
                     <div className='flex flex-col gap-2'>
                         {props.variant === 'register' ? (
@@ -196,7 +202,7 @@ export default function LoginModal(props) {
                             </button>
 
                             {props.loginMessage && (
-                                <p className='text-red-500'>{props.loginMessage}</p>
+                                <p className='text-red-500 text-center'>{props.loginMessage}</p>
                             )}
                         </>
 

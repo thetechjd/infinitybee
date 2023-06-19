@@ -708,6 +708,7 @@ export default function Home() {
       .catch((error) => {
         // An error occurred while sending the password reset email
         console.log(error)
+        setLoginMessage('We could not find an account associated with this email address.')
       });
   }
 
@@ -1547,6 +1548,14 @@ export default function Home() {
 
   }
 
+  const toggleReset = () => {
+    if (reset) {
+      setReset(false)
+    } else {
+      setReset(true)
+    }
+  }
+
   const toggleBackOffice = async () => {
     if (showBackOffice) {
       setShowBackOffice(false)
@@ -1636,6 +1645,7 @@ export default function Home() {
               resetPassword={resetPassword}
               reset={reset}
               setReset={setReset}
+              toggleReset={toggleReset}
               loginFailed={loginFailed}
               disconnect={disconnect}
 
