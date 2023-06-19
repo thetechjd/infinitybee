@@ -83,6 +83,7 @@ const options2 = {
   legend: 'none',
   // legend : { position : 'bottom' },
   backgroundColor: 'transparent',
+  width: 450, height: 450,
   colors: ['#FE8FB0', '#00F677', '#EFE43C', '#0090FF'],
   is3D: true
 };
