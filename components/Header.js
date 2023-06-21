@@ -80,7 +80,7 @@ export default function Header(props) {
               <a onClick={props.showBackOffice ? props.toggleBackOffice : null} className='flex items-center'>
 
                 <img alt='' src='/images/beelogo.png' className='h-[40px]' />
-                <span className='px-2'>InfinityBee (IFB)</span>
+                <span className='px-2 text-x1 ceLogo'>InfinityBee (IFB)</span>
               </a>
             </Link>
             <div>
@@ -95,7 +95,7 @@ export default function Header(props) {
                   }, 300)
                 }}
                 className='sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+                <span className='w-full flex flex-row ceLang'><p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.lang}</p> <img src={`/images/${props.lang}_icon.png`} className='w-[20px]' /></span>
               </div>
               {(languages || lmenu) && (
@@ -110,7 +110,7 @@ export default function Header(props) {
               )}
             </div>
 
-              <a href='' className='flex px-3 text-xl tracking-widest items-center pt-0.5 isnotmobile'>White Paper</a>
+              <a href='' className='flex px-3 tracking-widest items-center pt-0.5 isnotmobile whitepaper'>White Paper</a>
             </div>
           </div>
 
@@ -196,7 +196,7 @@ export default function Header(props) {
             </div>
           </section>
 
-          <ul className="DESKTOP-MENU hidden lg:h-full space-x-5 lg:flex mr-20">
+          <ul className="DESKTOP-MENU hidden lg:h-full space-x-5 lg:flex mr-7">
 
 
 
@@ -209,7 +209,7 @@ export default function Header(props) {
                     }
                   }, 300)
                 }}
-                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
                 <p className='relative rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("packages")}</p>
               </div>
@@ -236,7 +236,7 @@ export default function Header(props) {
                     }
                   }, 300)
                 }}
-                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
                 <p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("about")}</p>
               </div>
@@ -263,8 +263,8 @@ export default function Header(props) {
                     }
                   }, 300)
                 }}
-                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
+                <span className='w-full flex flex-row ceLang'><p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.lang}</p> <img src={`/images/${props.lang}_icon.png`} className='w-[20px]' /></span>
               </div>
               {(languages || lmenu) && (
@@ -289,7 +289,7 @@ export default function Header(props) {
                 
 
                 <div onClick={props.showLoginModal}
-                  className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                  className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
                   <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
 text-white md:flex'>Login/Register</p></span>
                 </div>

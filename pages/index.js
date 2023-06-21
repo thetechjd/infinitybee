@@ -57,7 +57,8 @@ const data2 = [
   ["ICO SEED", 9.1],
   ["ICO Presale 1", 13.6],
   ["ICO Presale 2", 31.8],
-  ["ICO Public Sale", 42.5]
+  ["ICO Public Sale", 42.5],
+  ["de completat", 3]
 ]
 const data1 = [
   ["Task", "Hours per Day"],
@@ -84,7 +85,7 @@ const options2 = {
   // legend : { position : 'bottom' },
   backgroundColor: 'transparent',
   width: 450, height: 450,
-  colors: ['#FE8FB0', '#00F677', '#EFE43C', '#0090FF'],
+  colors: ['#FE8FB0', '#00F677', '#EFE43C', '#0090FF', '#fff'],
   is3D: true
 };
 
@@ -2157,7 +2158,7 @@ export default function Home() {
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row small_space">
-                <div className="ceFaqLeft ceFaqLeft2 flex flex-col w-full md:w-1/3">
+                <div className="ceFaqLeft ceFaqLeft2 ceFaqCustom flex flex-col w-full md:w-1/3">
                   <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
                     <li onClick={() => { setFaqLeft("1"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
                       <a className={`tab-link ${faqLeft == "1" ? "active" : ""} `} data-toggle="tab" href="#tab1x">General</a>

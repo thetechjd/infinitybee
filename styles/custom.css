@@ -83,13 +83,6 @@
 .ceFaqRight {
 }
 
-.ceFaqLeft2 {
-    padding: 50px;
-}
-.ceFaqRight2 {
-    padding: 50px;
-}
-
 .card-body::before {
     content: "A.";
     font-weight: 600;
@@ -181,6 +174,7 @@
 
 .list_chart {
     /* margin-top: 20px; */
+    margin-top: -70px;
 }
 
 .list_chart li {
@@ -276,7 +270,7 @@ section {
 }
 
 .cePriceCard {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .ceArrow {
@@ -290,7 +284,30 @@ section {
     display: none;
 }
 
+.ceChart {
+    margin-top: -50px;
+}
+
 .ceChart>div>div>div {
     /* display: inline-block; */
     margin-top: 0px;
+}
+
+.whitepaper {
+    padding-top: 5px;
+}
+nav li p {
+    padding-top: 5px;
+}
+
+.ceLang p{
+    margin-right: 5px;
+}
+
+header {
+    background: #15123f !important;
+}
+
+.ceLogo {
+    font-size: 23px;
 }
