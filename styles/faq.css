@@ -87,13 +87,15 @@
     margin-bottom: 20px;
 }
 
-.ceFaqCustom {
-    padding-left: 0px;
-}
-
 .ceFaqLeft2 {
     padding: 25px;
 }
 .ceFaqRight2 {
     padding: 25px;
+}
+.ceFaqLeftCustom {
+    padding-left: 0px !important;
+}
+.ceFaqRightCustom {
+    padding-right: 0px !important;
 }
