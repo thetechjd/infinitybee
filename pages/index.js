@@ -2621,6 +2621,7 @@ export default function Home() {
           walletAddress={walletAddress}
           orders={orders}
           referrals={referrals}
+          fetchReferralCode={fetchReferralCode}
           activeRefCode={activeRefCode}
           db={db}
           getMonthTotal={getMonthTotal}

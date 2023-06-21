@@ -152,6 +152,7 @@ export default function BackOffice({
     walletAddress,
     orders,
     referrals,
+    fetchReferralCode,
     activeRefCode,
     db,
     getMonthTotal,
@@ -459,6 +460,8 @@ export default function BackOffice({
 
 
 
+                }).then(async ()=> {
+                    await fetchReferralCode(walletAddress)
                 })
 
 
@@ -801,7 +804,7 @@ export default function BackOffice({
 
                         <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
-                                {activeRefCode.data().user.referralCode ? (
+                                {activeRefCode.data().user.referralCode !== undefined ? (
                                     <div className='flex flex-row items-center '>
                                         <button onClick={() => { copyText(activeRefCode) }} className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                                             {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
