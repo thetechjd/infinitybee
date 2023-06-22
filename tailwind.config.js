@@ -8,10 +8,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      screens: {
-        'md': '1000px',
-        'xs': '540px'
-      },
+      
       fontFamily: {
         "josefin": ["Josefin Sans", ...defaultTheme.fontFamily.mono],
         "inter": ["Inter", ...defaultTheme.fontFamily.mono],

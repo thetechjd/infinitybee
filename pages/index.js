@@ -1971,7 +1971,58 @@ export default function Home() {
 
 
             </div>
-            <div id='about' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center sectionabout'>
+            {lang === 'EN' ? (
+              <div id='about' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center sectionabout'>
+              <h2 className='ceHeader text-center uppercase text-6xl my-5'>About IFB token</h2>
+              <div>
+                <p className="ceTitle ceCenter ceq">What is the name of the token, on what Blockchain is it created, and how many units does it have?</p>
+                <p className="ceDescription ceCenter">Our Ecosystem token is called InfinityBee(IFB). It is created on the BNB Smart Chain, with a total number of 1,800,000,000 units.</p>
+
+                <div className="flex flex-col w-full mx-auto md:flex-row ">
+                  <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+                    <p className="ceTitle2 ceLeft ceq">What can InfinityBee Token (IFB) be used for?</p>
+                    <p className="ceDescription2 ceLeft ">
+                      The InfinityBee (IFB) has multiple utilities: <br />
+                      ◈ it is a financial asset that can be traded on various cryptocurrency exchanges (DEX/CEX) <br />
+                      ◈ it's a deflationary tool thanks to Be&Bee strategies: Buyback and Burn <br />
+                      ◈ it constitutes a material value that can be used for humanitarian actions (donations and funding for various projects) on the BeeNice platform and in the BeeGENEROUS<sup>369</sup> Crowdfunding System <br />
+                      ◈ it is necessary for activating the levels 3 , 6 , 9 in BeeGENEROUS <sup>369</sup> <br />
+                      ◈ it is used in BeeSAFE (Economy plan); periodical investments in IFB<br />
+                      ◈ it is the unit of exchange used in BeeSHOP for buying/selling products/services <br />
+                      ◈ with the IFB token you can buy NFTs from future ByBee collections <br />
+                      ◈ it is the financial tool used inside the NFT Lab for selling/buying goods (digital art) 
+                      ◈ it is used for certain operations and actions in BeeLand (Metaverse) and BeeGame (gaming platform)<br />
+                    </p>
+                  </div>
+
+                  <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+                    <p className="ceTitle2 ceLeft ceq">How and from where can I get The InfinityBee Token (IFB)?</p>
+                    <p className="ceDescription2 ceLeft">
+                      The token, before Listing, can only be obtained by: <br />
+                      ◈ participating in one or all of the three stages of Pre Sale: Private Sale 1, Private Sale 2, Public Sale <br />
+                      Private Sale 1, Private Sale 2, Public Sale <br />
+                      ◈ crowdfunding system BeeGENEROUS <sup>369</sup>,  in: Matrix Bee3 & Matrix Bee4 and <br />
+                      ◈ bounty and airdrop campaigns <br />
+                      After listing it will be traded on various exchange platforms (DEX / CEX)
+                    </p>
+
+                    <p className="ceTitle2 ceLeft ceq">At what value and when can the token be bought?</p>
+                    <p className="ceDescription2 ceLeft ceDescriptionLast">
+                      The value of the InfinityBee Token will increase from one round to another as follows: <br />
+                      Private Sale 1 (Q4 2023) :  IFB value = 0.01 USDT <br />
+                      Private Sale 2 (Q1 2024) :  IFB value = 0.015 USDT <br />
+                      Public Sale (Q3 2024) :  IFB value = 0.02 USDT <br />
+                    </p>
+                  </div>
+                </div>
+
+
+              </div>
+
+            </div>
+            ):(
+
+              <div id='about' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center sectionabout'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>About IFB token</h2>
               <div>
                 <p className="ceTitle ceCenter ceq">Cum se numește tokenul, pe ce Blockchain este creat și câte unități are ?</p>
@@ -2019,6 +2070,56 @@ export default function Home() {
               </div>
 
             </div>
+            )}
+          
+          {lang === 'EN' ? (
+            <div id='presale' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center sectionpresale'>
+            <h2 className='ceHeader text-center uppercase text-6xl my-5'>PreSale Rounds</h2>
+            <div>
+              <p className="ceDescription ceCenter">This ICO platform is an important tool within the Be&Bee Ecosystem and is called<b>BeeCHANGE</b>.</p>
+
+              <p className="ceDescription ceCenter">
+                On this platform everybody can buy IFB tokens in the form of packages.<br />
+                Members of our Community need InfinityBee tokens to activate levels 3, 6, 9 din BeeGENEROUS <sup>369</sup> <br /> and for the BeeSAFE program (Economy plan), and later on they will be used for future tools which we will develop for the Be&Bee Ecosystem.
+              </p>
+
+              <div className="flex flex-col w-full mx-auto md:flex-row ">
+                <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+                  <p className="ceDescription2 ceLeft">
+                    All 3 rounds of PreSale during the ICO period will be held only on this platform (<b>www.infinitybee.io</b>) <br /><br />
+
+                    In ROUND 1 (Private Sale 1) the value of the token is $0.01. <br />
+                    For this round there are allocated 3% of the total number of ttokens. <br /><br />
+
+                    In ROUND 2  (Private Sale 2) the value of the token is $0.015<br />
+                    For this round there are allocated 7% of the total number of tokens.<br /><br />
+
+                    In ROUND 3 (Public Sale) the value of the token is $0.02<br />
+                    For this round there are allocated 10% of the total number of tokens.<br />
+                  </p>
+                </div>
+
+                <div className="ceFaqLeft flex flex-col w-full md:w-1/2">
+                  <p className="ceTitle2 ceLeft ceq">What package deals are available?</p>
+                  <p className="ceDescription2 ceLeft ceDescriptionLast">
+                    In each PreSale round of the ICO it will be possible to buy token packages with 8 different values: <br /><br />
+                    200 USDT (Mercury) – no Bonus, no Vesting, Release 100% <br />
+                    500 USDT (Mars) – no Bonus, no Vesting, Release 100% <br />
+                    1.100 USDT (Venus) – no Bonus, no Vesting, Release 100% <br />
+                    2.300 USDT (Earth) – 3% Bonus, Vesting 18 months, Release 10% <br />
+                    5.000 USDT (Neptune) – 5% Bonus, Vesting 18 months, Release  10% <br />
+                    11.000 USDT (Uranus) – 7% Bonus, Vesting 18 months, Release 10% <br />
+                    23.000 USDT (Saturn) – 9% Bonus, Vesting 18 months, Release 10% <br />
+                    48.000 USDT (Jupiter) – 12% Bonus, Vesting 18 months, Release 10% <br />
+                  </p>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+          ):(
 
             <div id='presale' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center sectionpresale'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>PreSale Rounds</h2>
@@ -2066,6 +2167,9 @@ export default function Home() {
               </div>
 
             </div>
+          )}
+
+            
 
             <div id='tokenomics' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5' style={{ fontSize: '55px' }}>Tokenomics</h2>

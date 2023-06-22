@@ -101,11 +101,11 @@ export default function Header(props) {
               {(languages || lmenu) && (
                 <div onMouseEnter={() => { showLmenu(true) }} onMouseLeave={() => { showLanguages(false); showLmenu(false) }} className='absolute my-2'>
                   <div onClick={() => { props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>English</p> : <p>Romanian</p>}</div>
-                  <div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
+                 {/*<div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
                   <div onClick={() => { props.lang === 'FR' ? props.setLang('EN') : props.setLang('FR') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'FR' ? <p>English</p> : <p>French</p>}</div>
                   <div onClick={() => { props.lang === 'DE' ? props.setLang('EN') : props.setLang('DE') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'DE' ? <p>English</p> : <p>German</p>}</div>
                   <div onClick={() => { props.lang === 'IT' ? props.setLang('EN') : props.setLang('IT') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'IT' ? <p>English</p> : <p>Italian</p>}</div>
-                  <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>
+              <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>*/}
                 </div>
               )}
             </div>
@@ -270,11 +270,11 @@ export default function Header(props) {
               {(languages || lmenu) && (
                 <div onMouseEnter={() => { showLmenu(true) }} onMouseLeave={() => { showLanguages(false); showLmenu(false) }} className='absolute my-2'>
                   <div onClick={() => { props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>English</p> : <p>Romanian</p>}</div>
-                  <div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
+                 {/*} <div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
                   <div onClick={() => { props.lang === 'FR' ? props.setLang('EN') : props.setLang('FR') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'FR' ? <p>English</p> : <p>French</p>}</div>
                   <div onClick={() => { props.lang === 'DE' ? props.setLang('EN') : props.setLang('DE') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'DE' ? <p>English</p> : <p>German</p>}</div>
                   <div onClick={() => { props.lang === 'IT' ? props.setLang('EN') : props.setLang('IT') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'IT' ? <p>English</p> : <p>Italian</p>}</div>
-                  <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>
+              <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>*/}
                 </div>
               )}
             </li>
