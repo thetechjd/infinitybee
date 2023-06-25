@@ -152,7 +152,19 @@ export default function BackOffice({
     walletAddress,
     orders,
     referrals,
-    activeRefCode
+    fetchReferralCode,
+    activeRefCode,
+    db,
+    getMonthTotal,
+    isThisMonth,
+    thisMonth,
+    setThisMonth,
+    lastMonth,
+    setLastMonth,
+    bonus,
+    setBonus,
+    totalAmount,
+    setTotalAmount
 }) {
 
 
@@ -179,21 +191,19 @@ export default function BackOffice({
     const [remaining, setRemaining] = useState(0);
     const [refCode, setRefCode] = useState("");
     const [totalRefRevenue, setTotalRefRevenue] = useState(0);
-   
+
     const [copyMessage, setCopyMessage] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
     const [balance, setBalance] = useState(0)
-    const [isThisMonth, setIsThisMonth] = useState(true)
-    const [bonus, setBonus] = useState(0)
     const [lastBonus, setLastBonus] = useState(0);
     const [lastMonthDisabled, setLastMonthDisabled] = useState(false)
     const [claimTime, setClaimTime] = useState(0)
+    
+    
 
 
 
-    const [thisMonth, setThisMonth] = useState("")
-    const [lastMonth, setLastMonth] = useState("")
-
+    
 
     //Pagination
     //const [orders, setOrders] = useState([])
@@ -234,6 +244,8 @@ export default function BackOffice({
         setLastMonth(convertMonth(monthHelper(Date.now()) - 1))
     }, [])
 
+   
+
 
 
     /* useEffect(() => {
@@ -246,9 +258,9 @@ export default function BackOffice({
           setAddress(storedAddress)
   
       }, [walletAddress])*/
-  
-  
-     
+
+
+
 
 
 
@@ -261,9 +273,8 @@ export default function BackOffice({
                 const totalRev = await baseContract.methods.getTotalRefRevenue(walletAddress).call();
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
+                
                 setBalance(balance)
-                getMonthTotal("thisMonth")
-                setIsThisMonth(true)
             } catch (err) {
                 console.log(err)
             }
@@ -276,58 +287,14 @@ export default function BackOffice({
 
 
 
-   
+
 
     /* useEffect(() => {
          fetchReferrals(localStorage.getItem("address"));
      }, [walletAddress])*/
 
 
-    const getMonthTotal = (input) => {
-       
-        console.log(referrals)
-        console.log(input)
-        let amount = 0;
-        setBonus(0)
-
-        let month = getMonth();
-        console.log(month)
-
-        console.log(referrals.length)
-
-        referrals.forEach((y) => {
-            if (input === "thisMonth") {
-
-                if (monthHelper(y.referral.date) === month) {
-                    console.log(y.referral)
-                    amount += y.referral.bonus
-                }
-            setIsThisMonth(true)
-            } else if (input === "lastMonth") {
-
-                if ((monthHelper(y.referral.date)) === (month - 1)) {
-                    console.log(y.referral)
-                    amount += y.referral.bonus
-                }
-
-                setIsThisMonth(false)
-
-            }
-
-        })
-
-        //console.log('This is this month amount' + thisMonthAmount)
-        //console.log('This is last month amount' + lastMonthAmount)
-        console.log(amount)
-        setBonus(amount)
-
-        
-
-
-
-
-        
-    }
+   
 
     const lastMonthDisable = (doc) => {
         console.log(doc)
@@ -337,9 +304,9 @@ export default function BackOffice({
         }
     }
 
-    /*useEffect(() => {
-        lastMonthDisable()
-    }, [activeRefCode])*/
+    useEffect(() => {
+        lastMonthDisable(activeRefCode)
+    }, [activeRefCode])
 
     const convertMonth = (month) => {
         switch (month) {
@@ -379,7 +346,7 @@ export default function BackOffice({
 
 
 
-   
+
 
     const getTotalRefRevenue = async (address) => {
         const totalRev = await baseContract.methods.getTotalRefRevenue(address).call();
@@ -468,9 +435,10 @@ export default function BackOffice({
         } else {
 
             let newCode;
+            let newReferralCode;
 
 
-            await baseContract.methods.addReferralAddress(walletAddress).send({ from: walletAddress }).then(async () => {
+           await baseContract.methods.addReferralAddress(walletAddress).send({ from: walletAddress }).then(async () => {
 
                 newCode = await baseContract.methods.getRefByAddress(walletAddress).call()
 
@@ -480,22 +448,20 @@ export default function BackOffice({
 
                 .then(async () => {
 
-                    try {
-                        const docRef = await addDoc(collection(db, "users"), {
-                            user: {
-                                referralCode: newCode,
-                                address: walletAddress,
-                                createdAt: Date.now(),
-                                termStart: timeHelper.getLastMonth()
-                            }
-                        });
 
-                        console.log("Document written with ID: ", docRef.id);
-                    } catch (e) {
-                        console.error("Error adding document: ", e);
+                    newReferralCode = {
+                        referralCode: String(newCode)
                     }
 
 
+                    updateUser(activeRefCode.id, newReferralCode);
+
+
+
+
+
+                }).then(async ()=> {
+                    await fetchReferralCode(walletAddress)
                 })
 
 
@@ -649,29 +615,63 @@ export default function BackOffice({
         }
     }
 
+    const getRoundPrice = (round) => {
+        switch (round) {
+            case '0':
+                return 0.008
+            case '1':
+                return .01
+            case '2':
+                return .015
+            case '3':
+                return .02
+            default:
+                return 0.008
+        }
+    }
 
 
-    const getDiscount = (pack, price) => {
-        switch (pack) {
+
+    const getDiscount = (round, price) => {
+        const roundPrice = getRoundPrice(round);
+        const ifb = price / roundPrice;
+        return ifb;
+       /* switch (pack) {
             case 0:
-                return price
+                return ifb
             case 1:
-                return parseInt(price + (price * .02)).toFixed(0)
+                //return parseInt(ifb + (ifb * .02)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 2:
-                return parseInt(price + (price * .03)).toFixed(0)
+                //return parseInt(ifb + (ifb * .01)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 3:
-                return parseInt(price + (price * .01)).toFixed(0)
+                //return parseInt(ifb + (price * .03)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 4:
-                return parseInt(price + (price * .25)).toFixed(0)
+               //return parseInt(ifb + (price * .25)).toFixed(0)
+                return parseInt(ifb).toFixed(0)
             case 5:
-                return parseInt(price + (price * .15)).toFixed(0)
+                return parseInt(ifb+ (price * .15)).toFixed(0)
+                return parseInt(ifb+ (price * .15)).toFixed(0)
             case 6:
-                return parseInt(price + (price * .1)).toFixed(0)
+                return parseInt(ifb + (price * .1)).toFixed(0)
+                return parseInt(ifb + (price * .1)).toFixed(0)
             case 7:
-                return parseInt(price + (price * .07)).toFixed(0)
+                return parseInt(ifb + (price * .07)).toFixed(0)
+                return parseInt(ifb + (price * .07)).toFixed(0)
             default:
                 return price
-        }
+        }*/
+    }
+
+    const getTotalAmount = () => {
+        let total = 0;
+        currentOrders.forEach(x => {
+            total += getDiscount(0, x.order.amount);
+        })
+        console.log('This is the total for orders:' + total)
+        setTotalAmount(total)
     }
 
     const getPackage = (pack) => {
@@ -681,9 +681,9 @@ export default function BackOffice({
             case 1:
                 return 'Venus'
             case 2:
-                return 'Earth'
-            case 3:
                 return 'Mars'
+            case 3:
+                return 'Earth'
             case 4:
                 return 'Jupiter'
             case 5:
@@ -698,7 +698,7 @@ export default function BackOffice({
     }
 
     const toggleMonths = () => {
-        if(isThisMonth){
+        if (isThisMonth) {
             setIsThisMonth(false)
         }
         else {
@@ -804,7 +804,7 @@ export default function BackOffice({
 
                         <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
-                                {activeRefCode ? (
+                                {activeRefCode.data().user.referralCode !== undefined ? (
                                     <div className='flex flex-row items-center '>
                                         <button onClick={() => { copyText(activeRefCode) }} className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                                             {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
@@ -818,7 +818,7 @@ export default function BackOffice({
                                     </div>
 
                                 ) : (
-                                    <div className='flex flex-row'>
+                                    <div className='flex flex-row items-center'>
                                         <button onClick={generateReferralCode} className="flex w-full whitespace-nowrap rounded-md ml-5 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-4">
 
 
@@ -843,14 +843,14 @@ export default function BackOffice({
                                 <>
                                     <p className='mr-2'>{thisMonth}</p>
 
-                                    <p>{activeRefCode ? (bonus) : 0} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
+                                    <p>{bonus} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
                                 </>
                             ) : (
                                 <>
                                     {console.log('This is the last month bonus: ' + bonus)}
                                     <p className='mr-2'>{lastMonth}</p>
 
-                                    <p>{activeRefCode ? (bonus) : 0} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
+                                    <p>{bonus} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
                                 </>
 
                             )}
@@ -896,7 +896,7 @@ export default function BackOffice({
 
                 <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-10 gap-x-48'>
 
-                    <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS: </p><p>{balance / 10 ** 18}</p></span>
+                    <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
                     <span></span>
                     <span>YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}
@@ -950,19 +950,17 @@ export default function BackOffice({
 
 
 
-                <div className='flex w-full mt-3 bg-transparent'>
+                <div className='flex w-full mt-0 bg-transparent'>
                     {/* Render the current orders */}
                     <table className='flex flex-col w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
-                        <tr className='flex w-full gap-x-6 justify-center bg-slate950 mb-2'>
-                            <td className='flex w-full justify-center text-center'>No. Crt</td>
-
-
-                            <td className='flex w-full justify-center text-center'>Date of Purchase</td>
-                            <td className='flex w-full justify-center text-center'>Package Name</td>
-                            <td className='flex w-full justify-center text-center'>Price</td>
-                            <td className='flex w-full justify-center text-center'>Round / IFB value</td>
-                            <td className='flex w-full justify-center text-center'>InfinityBee amount</td>
-                            <td className='flex w-full justify-center text-center'>Total Value (USDT)</td>
+                        <tr className='flex w-full gap-x-6 justify-center bg-slate950 py-2 mb-2'>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>No. Crt</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Date of Purchase</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Package Name</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Price (USDT)</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Round / IFB value</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
                         </tr>
                         {currentOrders.map((item, key) => (
                             <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
@@ -971,7 +969,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
-                                <td className='flex w-full justify-center text-center'>{getDiscount(item.order.package, item.order.amount)}</td>
+                                <td className='flex w-full justify-center text-center'>{getDiscount(0, item.order.amount)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value}</td>
                             </tr>
 

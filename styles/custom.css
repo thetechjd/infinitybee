@@ -54,7 +54,7 @@
 
 .ceBtnPrice {
     background-image: linear-gradient(to right, #7448AA 0%,#E45C9E 100%,#7448AA);
-    width: 100%;
+    width: 280px;
 }
 
 .ceInfo {
@@ -81,13 +81,6 @@
 .ceFaqLeft {
 }
 .ceFaqRight {
-}
-
-.ceFaqLeft2 {
-    padding: 50px;
-}
-.ceFaqRight2 {
-    padding: 50px;
 }
 
 .card-body::before {
@@ -180,7 +173,8 @@
 }
 
 .list_chart {
-    margin-top: 20px;
+    /* margin-top: 20px; */
+    margin-top: -70px;
 }
 
 .list_chart li {
@@ -207,44 +201,36 @@
 }
 
 .color1 {
-	background-color: #f69040;
+	background-color: #0090FF;
 }
 .color2 {
-	background-color: #78c596;
+	background-color: #FE8FB0;
 }
 .color3 {
-	background-color: #f17776;
+	background-color: #EFE43C;
 }
 .color4 {
-	background-color: #0eadc9;
+	background-color: #B388FE;
 }
 .color5 {
-	background-color: #4241b8;
+	background-color: #00F677;
 }
 .color6 {
-	background-color: #4449cc;
-}
-.color7 {
-	background-color: #00e1f4;
-}
-.color8 {
-	background-color: #d26187;
-}
-.color9 {
-	background-color: #d4b630;
-}
-.color10 {
-	background-color: #0052ce;
+	background-color: #FFA74D;
 }
 .color11 {
-	background-color: #5b5da8;
+	background-color: #FE8FB0;
 }
 .color12 {
-	background-color: #9a46cc;
+	background-color: #00F677;
 }
 .color13 {
-	background-color: #d3b62f;
+	background-color: #EFE43C;
 }
+.color14 {
+	background-color: #0090FF;
+}
+
 
 .cecard {
     background-color: transparent;
@@ -263,6 +249,7 @@
 }
 
 .listtxt {
+    font-size: 17px;
 }
 .listtxt>div {
   display: flex;
@@ -274,9 +261,53 @@
 section {
     padding-left: 3rem;
     padding-right: 3rem;
+    overflow-y: hidden;
 }
 
 .ceq {
     color: #00bbf9;
     padding: 0px;
+}
+
+.cePriceCard {
+    font-size: 16px;
+}
+
+.ceArrow {
+    right: 10px;
+    position: absolute;
+}
+.ceArrow.show {
+    display: inline-flex;
+}
+.ceArrow.hide {
+    display: none;
+}
+
+.ceChart {
+    margin-top: -50px;
+}
+
+.ceChart>div>div>div {
+    /* display: inline-block; */
+    margin-top: 0px;
+}
+
+.whitepaper {
+    padding-top: 5px;
+}
+nav li p {
+    padding-top: 5px;
+}
+
+.ceLang p{
+    margin-right: 5px;
+}
+
+header {
+    background: #15123f !important;
+}
+
+.ceLogo {
+    font-size: 23px;
 }

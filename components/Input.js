@@ -35,7 +35,7 @@ const Input = ({
         block
         rounded-md
         px-6
-        pt-6
+        pt-5
         pb-1
         w-full
         text-md

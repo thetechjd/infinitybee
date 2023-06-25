@@ -77,10 +77,10 @@ export default function Header(props) {
         <div className='flex-grow '>
           <div className='flex flex-row'>
             <Link className='w-1/5' href='/' passHref>
-              <a className='flex items-center'>
+              <a onClick={props.showBackOffice ? props.toggleBackOffice : null} className='flex items-center'>
 
                 <img alt='' src='/images/beelogo.png' className='h-[40px]' />
-                <span className='px-2'>InfinityBee (IFB)</span>
+                <span className='px-2 text-x1 ceLogo'>InfinityBee (IFB)</span>
               </a>
             </Link>
             <div>
@@ -95,22 +95,22 @@ export default function Header(props) {
                   }, 300)
                 }}
                 className='sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+                <span className='w-full flex flex-row ceLang'><p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.lang}</p> <img src={`/images/${props.lang}_icon.png`} className='w-[20px]' /></span>
               </div>
               {(languages || lmenu) && (
                 <div onMouseEnter={() => { showLmenu(true) }} onMouseLeave={() => { showLanguages(false); showLmenu(false) }} className='absolute my-2'>
                   <div onClick={() => { props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>English</p> : <p>Romanian</p>}</div>
-                  <div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
+                 {/*<div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
                   <div onClick={() => { props.lang === 'FR' ? props.setLang('EN') : props.setLang('FR') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'FR' ? <p>English</p> : <p>French</p>}</div>
                   <div onClick={() => { props.lang === 'DE' ? props.setLang('EN') : props.setLang('DE') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'DE' ? <p>English</p> : <p>German</p>}</div>
                   <div onClick={() => { props.lang === 'IT' ? props.setLang('EN') : props.setLang('IT') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'IT' ? <p>English</p> : <p>Italian</p>}</div>
-                  <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>
+              <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>*/}
                 </div>
               )}
             </div>
 
-              <a href='' className='flex px-3 text-xl tracking-widest items-center pt-0.5 isnotmobile'>White Paper</a>
+              <a href='' className='flex px-3 tracking-widest items-center pt-0.5 isnotmobile whitepaper'>White Paper</a>
             </div>
           </div>
 
@@ -167,11 +167,11 @@ export default function Header(props) {
                   <li className="border-b text-white border-gray-400 my-2 uppercase">
                     <details href="">
                       <summary>{props.translate("about")}</summary>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#about">About IFB token</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#presale">Presale Rounds</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#tokenomics">Tokenomics</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#roadmap">Roadmap</a></p>
-                      <p onClick={() => props.setIsNavOpen(false)} className='flex w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#faq">FAQ</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#about">About IFB token</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#presale">Presale Rounds</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#tokenomics">Tokenomics</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#roadmap">Roadmap</a></p>
+                      <p onClick={() => props.setIsNavOpen(false)} className='flex_ w-full justify-between bg-opacity-60 text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'><a href="#faq">FAQ</a></p>
                     </details>
                   </li>
                   <li className="border-b text-white border-gray-400 my-2 uppercase">
@@ -196,7 +196,7 @@ export default function Header(props) {
             </div>
           </section>
 
-          <ul className="DESKTOP-MENU hidden lg:h-full space-x-5 lg:flex mr-20">
+          <ul className="DESKTOP-MENU hidden lg:h-full space-x-5 lg:flex mr-7">
 
 
 
@@ -209,7 +209,7 @@ export default function Header(props) {
                     }
                   }, 300)
                 }}
-                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
                 <p className='relative rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("packages")}</p>
               </div>
@@ -236,7 +236,7 @@ export default function Header(props) {
                     }
                   }, 300)
                 }}
-                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
                 <p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.translate("about")}</p>
               </div>
@@ -263,18 +263,18 @@ export default function Header(props) {
                     }
                   }, 300)
                 }}
-                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+                className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
+                <span className='w-full flex flex-row ceLang'><p className='rounded uppercase text-xs font-black
           text-white md:flex'>{props.lang}</p> <img src={`/images/${props.lang}_icon.png`} className='w-[20px]' /></span>
               </div>
               {(languages || lmenu) && (
                 <div onMouseEnter={() => { showLmenu(true) }} onMouseLeave={() => { showLanguages(false); showLmenu(false) }} className='absolute my-2'>
                   <div onClick={() => { props.lang === 'RO' ? props.setLang('EN') : props.setLang('RO') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'RO' ? <p>English</p> : <p>Romanian</p>}</div>
-                  <div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
+                 {/*} <div onClick={() => { props.lang === 'ES' ? props.setLang('EN') : props.setLang('ES') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'ES' ? <p>English</p> : <p>Spanish</p>}</div>
                   <div onClick={() => { props.lang === 'FR' ? props.setLang('EN') : props.setLang('FR') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'FR' ? <p>English</p> : <p>French</p>}</div>
                   <div onClick={() => { props.lang === 'DE' ? props.setLang('EN') : props.setLang('DE') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'DE' ? <p>English</p> : <p>German</p>}</div>
                   <div onClick={() => { props.lang === 'IT' ? props.setLang('EN') : props.setLang('IT') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'IT' ? <p>English</p> : <p>Italian</p>}</div>
-                  <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>
+              <div onClick={() => { props.lang === 'CN' ? props.setLang('EN') : props.setLang('CN') }} className='flex w-full justify-between bg-lavender bg-opacity-60 bg-lavender text-sm hover:bg-blue-300 my-1 px-4 py-2 whitespace-nowrap'>{props.lang === 'CN' ? <p>English</p> : <p>Chinese</p>}</div>*/}
                 </div>
               )}
             </li>
@@ -289,7 +289,7 @@ export default function Header(props) {
                 
 
                 <div onClick={props.showLoginModal}
-                  className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
+                  className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
                   <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
 text-white md:flex'>Login/Register</p></span>
                 </div>
@@ -309,8 +309,8 @@ text-white md:flex'>Login/Register</p></span>
                     }, 300)
                   }}
                   className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-10 flex justify-center flex-row cursor-pointer '>
-                  <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
-          text-white md:flex'>My Account</p></span>
+                  <span onClick={props.toggleBackOffice} className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
+          text-white md:flex'>{props.showBackOffice ? "Main" : "My Account"}</p></span>
                 </div>
               
               {(office || omenu) && (

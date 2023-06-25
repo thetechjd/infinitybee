@@ -17,8 +17,8 @@
         display: block;
     }
     section {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
     .titlemobile {
         display: flex;
@@ -27,16 +27,16 @@
         margin: 0px;
     }
     .titlemobile1 {
-        font-size: 70px;
+        font-size: 86px;
         text-transform: none;
     }
     .titlemobile2 {
-        font-size: 50px;
+        font-size: 59px;
         text-transform: none;
     }
     .subtitlemobile {
         font-family: 'Roboto';
-        font-size: 14px;
+        font-size: 17px;
         margin-top: 20px;
         text-align: center;
     }
@@ -47,7 +47,7 @@
         font-size: 30px;
     }
     .h2mobile {
-        font-size: 50px;
+        font-size: 60px;
     }
     .roadmap{
         height: auto;
@@ -64,5 +64,37 @@
     }
     .ceDescription {
         padding: 0px;
+    }
+    .flip-card-parent {
+        margin-top: 25px;
+    }
+    .flip-card-parent:first-child {
+        margin-top: 0px;
+    }
+
+    .ceTitle2, .ceDescription2 {
+        text-align: center;
+    }
+    .sectionabout .ceDescription2 {
+        margin-bottom: 50px;
+    }
+
+    .sectionpresale .ceDescription2 {
+        margin-bottom: 50px;
+    }
+
+    .ceDescriptionLast {
+        margin-bottom: 0px !important;
+    }
+
+    .faqmobile .nav.nav-pills {
+        margin-bottom: 10px;
+        margin-top: 60px;
+    }
+    .faqmobile .nav.nav-pills:first-child {
+        margin-top: 0px;
+    }
+    details {
+        text-align: center;
     }
   }
