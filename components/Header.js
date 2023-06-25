@@ -154,13 +154,21 @@ export default function Header(props) {
               </div>
               <div className=''>
                 <ul className="flex flex-col items-center justify-between min-h-[250px]">
+                 {props.loggedIn ? (
+                  <li onClick={()=> {props.setIsNavOpen(false); props.toggleBackOffice() }} className="border-b text-white border-gray-400 my-2 uppercase">
+                  <p>Back Office</p>
+                </li>
+                 ): (
+                  <li onClick={()=> {props.setIsNavOpen(false); props.showLoginModal(true)}} className="border-b text-white border-gray-400 my-2 uppercase">
+                  <p> {props.translate("login")}</p>
+                </li>
+                 )} 
+                
 
                 <li onClick={() => props.setIsNavOpen(false)} className="border-b text-white border-gray-400 my-2 uppercase">
                     <a href="#adventurer">{props.translate("home")}</a>
                   </li>
-                  <li onClick={() => { props.setIsNavOpen(false); props.showLoginModal(true) }} className="border-b text-white border-gray-400 my-2 uppercase">
-                    <p>Login/Register</p>
-                  </li>
+                 
                   <li onClick={() => props.setIsNavOpen(false)} className="border-b text-white border-gray-400 my-2 uppercase">
                     <a href="#adventurer">{props.translate("packages")}</a>
                   </li>
@@ -177,6 +185,7 @@ export default function Header(props) {
                   <li className="border-b text-white border-gray-400 my-2 uppercase">
                     <a href="">{props.translate("whitepaper")}</a>
                   </li>
+                 
                   {/* <li className="border-b text-white border-gray-400 my-2 uppercase">
                     <details href="">
                       <summary>{props.lang}</summary>
@@ -288,7 +297,7 @@ export default function Header(props) {
              
                 
 
-                <div onClick={props.showLoginModal}
+                <div onClick={()=> {props.showLoginModal(true)}}
                   className='hidden sm:flex w-full bg-opacity-0 text-white opacity-80 items-center relative h-9 tracking-widest pt-0.5 first::pt-0 uppercase text-lg padding-huge bg-blue-300 duration-200 px-3 flex justify-center flex-row cursor-pointer '>
                   <span className='w-full flex flex-row'><p className='rounded uppercase text-xs font-black
 text-white md:flex'>Login/Register</p></span>
