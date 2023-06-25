@@ -165,7 +165,7 @@ export default function Header(props) {
                  )} 
                 
 
-                <li onClick={() => props.setIsNavOpen(false)} className="border-b text-white border-gray-400 my-2 uppercase">
+                <li onClick={() => {props.setIsNavOpen(false); props.toggleBackOffice()}} className="border-b text-white border-gray-400 my-2 uppercase">
                     <a href="#adventurer">{props.translate("home")}</a>
                   </li>
                  

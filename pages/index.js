@@ -1671,7 +1671,7 @@ export default function Home() {
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'>
 
               <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96 isnotmobile isnotmobile-grid'>
-                <h1 className="mx-4 uppercase tracking-tighter text-5xl md:text-8xl"><span className="text-6xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
+                <h1 className="mx-8 md:mx-4 uppercase tracking-tighter text-4xl md:text-8xl"><span className="text-5xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
 
                 <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
                 <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
