@@ -603,7 +603,7 @@ export default function BackOffice({
     const getRound = (round) => {
         switch (round) {
             case '0':
-                return `Round 1 / 0.008`
+                return `F&F / 0.008`
             case '1':
                 return `Round 2 / 0.01`
             case '2':
@@ -793,7 +793,7 @@ export default function BackOffice({
 
 
 
-            <section style={{ zIndex: loginModal ? "-10" : "0", opacity: verificationWall ? "0%" : "100%" }} className="relative flex flex-wrap w-full min-h-[800px] justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden"
+            <section style={{ zIndex: loginModal ? "-10" : "0", opacity: verificationWall ? "0%" : "100%" }} className="ceSection relative flex flex-wrap w-full min-h-[800px] justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden"
                 id="">
 
 
@@ -802,7 +802,10 @@ export default function BackOffice({
 
                     <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-4 gap-x-28'>
 
-                        <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
+                        <span className='flex items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
+                        <span className='flex items-center'><p>Your wallet address: {walletAddress}</p></span>
+                        <span className='flex flex-row w-full justify-end items-center'>
+                            <p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
                                 {activeRefCode.data().user.referralCode !== undefined ? (
                                     <div className='flex flex-row items-center '>
@@ -897,7 +900,14 @@ export default function BackOffice({
                 <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-10 gap-x-48'>
 
                     <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
-                    <span></span>
+                    <span className="ceClaim flex">
+                        <button onClick={() => { copyText(activeRefCode) }} className="flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
+                        Claim 600 IFB tokens
+                        </button>
+                        <p><span>20</span> days</p>
+                        <p><span>19</span> hours</p>
+                        <p><span>18</span> minutes</p>
+                    </span>
                     <span>YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}
                     <div className='flex w-11/12 justify-end'>
@@ -921,7 +931,7 @@ export default function BackOffice({
                                 value={currentPage}
                                 onChange={handlePageInputChange}
                             />
-                            <p className='p-1'>of {totalPages ? totalPages : 1}</p>
+                            <p style={{width: '50px', textAlign: 'center'}}> of {totalPages ? totalPages : 1} </p>
                         </span>
 
                         {/* Render 'Forward' button */}
@@ -953,7 +963,7 @@ export default function BackOffice({
                 <div className='flex w-full mt-0 bg-transparent'>
                     {/* Render the current orders */}
                     <table className='flex flex-col w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
-                        <tr className='flex w-full gap-x-6 justify-center bg-slate950 py-2 mb-2'>
+                        <tr className='ceTr flex w-full gap-x-6 justify-center bg-slate950 py-2 mb-2'>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>No. Crt</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Date of Purchase</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Package Name</td>
@@ -963,7 +973,7 @@ export default function BackOffice({
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
                         </tr>
                         {currentOrders.map((item, key) => (
-                            <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
+                            <tr className='ceTr flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
                                 <td className='flex w-full justify-center text-center'>{key + 1}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
