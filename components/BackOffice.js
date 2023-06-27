@@ -603,7 +603,7 @@ export default function BackOffice({
     const getRound = (round) => {
         switch (round) {
             case '0':
-                return `Round 1 / 0.008`
+                return `F&F / 0.008`
             case '1':
                 return `Round 2 / 0.01`
             case '2':
@@ -793,7 +793,7 @@ export default function BackOffice({
 
 
 
-            <section style={{ zIndex: loginModal ? "-10" : "0", opacity: verificationWall ? "0%" : "100%" }} className="relative flex flex-wrap w-full min-h-[800px] justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden"
+            <section style={{ zIndex: loginModal ? "-10" : "0", opacity: verificationWall ? "0%" : "100%" }} className="ceSection relative flex flex-wrap w-full min-h-[800px] justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden"
                 id="">
 
 
@@ -896,9 +896,9 @@ export default function BackOffice({
 
                 <div className='flex flex-col w-10/12 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48'>
 
-                    <span className='flex w-full md:whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
+                    <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
                     <span></span>
-                    <span className='flex justify-center md:justify-start'>YOUR PACKAGE(s) PURCHASED</span>
+                    <span>YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}
                     <div className='flex w-11/12 justify-end'>
                         {/* Render 'First' button */}
@@ -921,7 +921,7 @@ export default function BackOffice({
                                 value={currentPage}
                                 onChange={handlePageInputChange}
                             />
-                            <p className='p-1'>of {totalPages ? totalPages : 1}</p>
+                            <p style={{width: '50px', textAlign: 'center'}}> of {totalPages ? totalPages : 1} </p>
                         </span>
 
                         {/* Render 'Forward' button */}
@@ -952,18 +952,18 @@ export default function BackOffice({
 
                 <div className='flex w-full mt-0 bg-transparent'>
                     {/* Render the current orders */}
-                    <table className='flex flex-col text-xs md:text-base w-full md:w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
-                        <tr className='flex w-full gap-x-2 md:gap-x-6 justify-center bg-slate950 py-2 mb-2'>
-                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>No. Crt</td>
-                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Date of Purchase</td>
-                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Package Name</td>
-                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Price (USDT)</td>
-                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Round / IFB value</td>
-                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
-                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
+                    <table className='flex flex-col w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
+                        <tr className='flex w-full gap-x-6 justify-center bg-slate950 py-2 mb-2'>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>No. Crt</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Date of Purchase</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Package Name</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Price (USDT)</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Round / IFB value</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
                         </tr>
                         {currentOrders.map((item, key) => (
-                            <tr className='flex w-full text-xs md:text-base gap-x-2 md:gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
+                            <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
                                 <td className='flex w-full justify-center text-center'>{key + 1}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>

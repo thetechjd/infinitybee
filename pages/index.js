@@ -484,6 +484,7 @@ export default function Home() {
 
   const showLoginModal = (bool) => {
     setLoginModal(bool);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
 
@@ -1664,7 +1665,7 @@ export default function Home() {
 
 
 
-          <section style={{ zIndex: loginModal ? "-10" : "0", opacity: verificationWall ? "0%" : "100%" }} className="relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden"
+          <section style={{ zIndex: loginModal ? "-10" : "0", opacity: verificationWall ? "0%" : "100%" }} className="ceSection relative flex flex-wrap w-full justify-center md:items-start md:justify-start bg-royalblue mx-auto py-12 mt-10 overflow-x-hidden"
             id="">
 
 
@@ -1765,7 +1766,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>25,000 IFB Tokens  <br /> Bonus 0%</p>
+                            <p className='my-1'>25,000 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1782,7 +1783,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>62,500 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>62,500 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1800,7 +1801,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>137,500 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>137,500 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1866,7 +1867,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>287,500 IFB Tokens <br /> Bonus 3%</p>
+                            <p className='my-1'>287,500 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1883,7 +1884,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>625,000 IFB Tokens <br /> Bonus 5%</p>
+                            <p className='my-1'>625,000 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1900,7 +1901,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 7%</p>
+                            <p className='my-1'>1,375,000 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1935,7 +1936,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 9%</p>
+                            <p className='my-1'>2,875,000 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -1952,7 +1953,7 @@ export default function Home() {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 12%</p>
+                            <p className='my-1'>6,000,000 IFB Tokens</p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
@@ -2356,26 +2357,26 @@ export default function Home() {
                               <div className="listtxt">
                                 <div>
                                   <span>1 &nbsp; BeeGENEROUS <sup>369</sup></span>
-                                  <span>5 &nbsp; BeeNiCE</span>
-                                  <span>9 &nbsp; MyGift</span>
-                                  <span>13 &nbsp; BeeEDU</span>
-                                </div>
-                                <div>
                                   <span>2 &nbsp; InfinityBee (IFB)</span>
-                                  <span>6 &nbsp; NFT Lab </span>
-                                  <span>10 &nbsp; BeeSHOP</span>
-                                  <span>14 &nbsp; BeeLiFE</span>
-                                </div>
-                                <div>
                                   <span>3 &nbsp; BeeSAFE</span>
-                                  <span>7 &nbsp; ByBee</span>
-                                  <span>11 &nbsp; BeeZumZOOM</span>
-                                  <span>15 &nbsp; BeeGAME</span>
+                                  <span>4 &nbsp; BeeCHANGE</span>
                                 </div>
                                 <div>
-                                  <span>4 &nbsp; BeeCHANGE</span>
+                                  <span>5 &nbsp; BeeNiCE</span>
+                                  <span>6 &nbsp; NFT Lab </span>
+                                  <span>7 &nbsp; ByBee</span>
                                   <span>8 &nbsp; BeeCREATIVE</span>
+                                </div>
+                                <div>
+                                  <span>9 &nbsp; MyGift</span>
+                                  <span>10 &nbsp; BeeSHOP</span>
+                                  <span>11 &nbsp; BeeZumZOOM</span>
                                   <span>12 &nbsp; NFTCom</span>
+                                </div>
+                                <div>
+                                  <span>13 &nbsp; BeeEDU</span>
+                                  <span>14 &nbsp; BeeLiFE</span>
+                                  <span>15 &nbsp; BeeGAME</span>
                                   <span>16 &nbsp; BeeLAND</span>
                                 </div>
 

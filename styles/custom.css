@@ -250,12 +250,15 @@
 
 .listtxt {
     font-size: 17px;
+    display: flex;
+    justify-content: space-between;
 }
 .listtxt>div {
   display: flex;
+  flex-flow: column;
 }
 .listtxt span {
-  width: 25%;
+  /* width: 25%; */
 }
 
 section {
@@ -304,8 +307,25 @@ nav li p {
     margin-right: 5px;
 }
 
-header {
-    background: #15123f !important;
+header, .ceTr {
+    background: #0C094B !important;
+}
+
+.ceSection {
+    background: #0f0b61 !important;
+}
+
+.ceClaim {
+    align-items: center;
+}
+
+.ceClaim button {
+    margin-right: 15px;
+}
+
+.ceClaim p span {
+    color:green;
+    font-size: 30px;
 }
 
 .ceLogo {

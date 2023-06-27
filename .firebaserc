@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "becombee-20700": {
+      "hosting": {
+        "ifbtest": [
+          "ifbtest"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "becombee-20700": "becombee-20700"
+  }
+}
