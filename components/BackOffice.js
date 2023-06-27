@@ -800,9 +800,9 @@ export default function BackOffice({
                 <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
                 >
 
-                    <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-4 gap-x-28'>
+                    <div className='flex w-10/12 mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28'>
 
-                        <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
+                        <span className='flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
                                 {activeRefCode.data().user.referralCode !== undefined ? (
                                     <div className='flex flex-row items-center '>
@@ -833,11 +833,11 @@ export default function BackOffice({
                                 )}
 
                             </span></span>
-                        <span className='flex items-center'><p>Your Income</p></span>
-                        <span className='flex flex-row w-full justify-end items-center'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
-                        <span className='flex flex-row w-full items-center'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6}</p></span>
-                        <span className='flex flex-row w-full whitespace-nowrap justify-end items-center'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
-                        <span className='flex flex-row w-full items-center'>
+                        <span className='flex justify-center md:justify-start items-center'><p>Your Income</p></span>
+                        <span className='flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
+                        <span className='flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
+                        <span className='flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
+                        <span className='flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
 
                             {isThisMonth ? (
                                 <>
@@ -894,11 +894,11 @@ export default function BackOffice({
                 )}
 
 
-                <div className='flex w-10/12 mx-auto  mt-10 grid grid-cols-2  gap-y-10 gap-x-48'>
+                <div className='flex flex-col w-10/12 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48'>
 
-                    <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
+                    <span className='flex w-full md:whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
                     <span></span>
-                    <span>YOUR PACKAGE(s) PURCHASED</span>
+                    <span className='flex justify-center md:justify-start'>YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}
                     <div className='flex w-11/12 justify-end'>
                         {/* Render 'First' button */}
@@ -952,18 +952,18 @@ export default function BackOffice({
 
                 <div className='flex w-full mt-0 bg-transparent'>
                     {/* Render the current orders */}
-                    <table className='flex flex-col w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
-                        <tr className='flex w-full gap-x-6 justify-center bg-slate950 py-2 mb-2'>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>No. Crt</td>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Date of Purchase</td>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Package Name</td>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Price (USDT)</td>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Round / IFB value</td>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
-                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
+                    <table className='flex flex-col text-xs md:text-base w-full md:w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
+                        <tr className='flex w-full gap-x-2 md:gap-x-6 justify-center bg-slate950 py-2 mb-2'>
+                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>No. Crt</td>
+                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Date of Purchase</td>
+                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Package Name</td>
+                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Price (USDT)</td>
+                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Round / IFB value</td>
+                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
+                            <td className='flex w-full  md:whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
                         </tr>
                         {currentOrders.map((item, key) => (
-                            <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
+                            <tr className='flex w-full text-xs md:text-base gap-x-2 md:gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
                                 <td className='flex w-full justify-center text-center'>{key + 1}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>

@@ -60,6 +60,7 @@ export default function LoginModal(props) {
                                         {props.walletAddress ? (
                                             <div onClick={props.disconnect} className='flex flex-col  cursor-pointer'>
                                                 <p>Wallet Address</p>
+                                                <p className='flex md:hidden text-sm hover:text-red-500'>{String(props.walletAddress).substring(0,6)}{"...."}{String(props.walletAddress).substring(38)}</p>
                                                 <p className='hidden md:flex text-sm hover:text-red-500'>{props.walletAddress}</p>
                                             </div>
 
@@ -140,7 +141,8 @@ export default function LoginModal(props) {
                                         {props.walletAddress ? (
                                             <div onClick={props.disconnect} className='flex flex-col cursor-pointer'>
                                                 <p>Wallet Address</p>
-                                                <p className='text-sm hover:text-red-500'>{props.walletAddress}</p>
+                                                <p className='flex md:hidden text-sm hover:text-red-500'>{String(props.walletAddress).substring(0,6)}{"...."}{String(props.walletAddress).substring(38)}</p>
+                                                <p className='hidden md:flex text-sm hover:text-red-500'>{props.walletAddress}</p>
                                             </div>
 
 

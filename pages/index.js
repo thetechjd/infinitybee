@@ -1761,7 +1761,7 @@ export default function Home() {
                     <div className="cecardfilp">
                       <div className="flip-card-inner">
                         <div className="flip-card-front">
-                          <img src='/images/mercury.png' className='flex h-[200px] my-3 mx-auto justify-center' />
+                          <img src='/images/mercury.png' className='flex h-[200px] mdmy-3 mx-auto justify-center' />
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
@@ -1792,7 +1792,7 @@ export default function Home() {
                     <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
                   </div>
 
-                  <div className='flex flex-col w-full md:w-1/3 flip-card'>
+                  <div className='flex flex-col w-full md:w-1/3 content-between flip-card'>
                     <div className="cecardfilp">
                       <div className="flip-card-inner">
                         <div className="flip-card-front">
