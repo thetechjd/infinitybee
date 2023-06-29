@@ -833,11 +833,37 @@ export default function BackOffice({
                                 )}
 
                             </span></span>
-                        <span className='flex justify-center md:justify-start items-center'><p>Your Income</p></span>
-                        <span className='flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
-                        <span className='flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
-                        <span className='flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
-                        <span className='flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
+
+                        <span className='md:hidden flex justify-center md:justify-start items-center'><p>Your Income</p></span>
+                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
+                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
+
+                            {isThisMonth ? (
+                                <>
+                                    <p className='mr-2'>{thisMonth}</p>
+
+                                    <p>{bonus} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
+                                </>
+                            ) : (
+                                <>
+                                    {console.log('This is the last month bonus: ' + bonus)}
+                                    <p className='mr-2'>{lastMonth}</p>
+
+                                    <p>{bonus} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
+                                </>
+
+                            )}
+                        </span> 
+                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
+                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
+
+
+                            
+                        <span className='hidden md:flex justify-center md:justify-start items-center'><p>Your Income</p></span>
+                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
+                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
+                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
+                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
 
                             {isThisMonth ? (
                                 <>
@@ -855,6 +881,7 @@ export default function BackOffice({
 
                             )}
                         </span>
+                        
 
 
 
@@ -896,7 +923,7 @@ export default function BackOffice({
 
                 <div className='flex flex-col w-10/12 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48'>
 
-                    <span className='flex flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
+                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
                     <span></span>
                     <span>YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}
