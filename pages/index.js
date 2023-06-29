@@ -280,6 +280,7 @@ export default function Home() {
     console.log(localStorage.getItem("loggedIn"))
     console.log(userAddress)
     setAddress(userAddress)
+    setBonus(0);
 
 
   }, [])
@@ -353,9 +354,12 @@ export default function Home() {
 
       console.log(list)
       setReferrals(list)
+      setBonus(getMonthTotal("thisMonth", list));
       
     } catch (err) {
       console.log(err)
+      setReferrals([])
+      setBonus(getMonthTotal("thisMonth", []))
     }
   }
 
@@ -1375,21 +1379,23 @@ export default function Home() {
   }
 
 
-  const getMonthTotal = (input) => {
+  const getMonthTotal = (input, list) => {
 
-    console.log(referrals)
+    console.log(list)
     console.log(input)
     let amount = 0;
-    setBonus(0)
+    setBonus(0);
+    
     
 
 
     let month = getMonth();
     console.log(month)
 
-    console.log(referrals.length)
+    console.log(list.length)
 
-    referrals.forEach((y) => {
+    try{
+    list.forEach((y) => {
       if (input === "thisMonth") {
 
         if (monthHelper(y.referral.date) === month) {
@@ -1413,7 +1419,10 @@ export default function Home() {
     //console.log('This is this month amount' + thisMonthAmount)
     //console.log('This is last month amount' + lastMonthAmount)
     console.log(amount)
-    setBonus(amount)
+    return amount
+  } catch(err){
+    return 0
+  }
 
 
   }
@@ -1568,8 +1577,9 @@ export default function Home() {
       setShowBackOffice(false)
     } else {
       setShowBackOffice(true)
-      getMonthTotal("thisMonth")
       await fetchOrders(walletAddress)
+      await fetchReferralCode(walletAddress)
+      await fetchReferrals(walletAddress)
 
     }
   }

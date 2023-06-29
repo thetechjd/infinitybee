@@ -273,7 +273,6 @@ export default function BackOffice({
                 const totalRev = await baseContract.methods.getTotalRefRevenue(walletAddress).call();
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
-                
                 setBalance(balance)
             } catch (err) {
                 console.log(err)
