@@ -321,7 +321,8 @@ export default function Home() {
           doc.data().user.orders.forEach((x) => {
             list.push(x);
             
-            total += parseFloat(getDiscount(x.order.round, x.order.amount, x.order.package));
+            total += parseFloat(getDiscount(x.order.round, x.order.amount, x.order.package))
+            console.log('ttt',x.order.round,x.order.package,getDiscount(x.order.round, x.order.amount, x.order.package),total)
             
           })
         }
@@ -1454,7 +1455,7 @@ export default function Home() {
     bonus[7] = 5;
 
     if (round == '0'){
-        return parseFloat(ifb).toFixed(0);
+        return parseInt(ifb).toFixed(0);
     }
     else{
         let result = 0;
@@ -1468,25 +1469,23 @@ export default function Home() {
             //     return parseInt(ifb + (ifb * .01)).toFixed(0)
             //     return parseInt(ifb).toFixed(0)
             case 3:
-              result = parseInt(ifb + ((ifb * bonus[3]) / 100)).toFixed(0)
+              return parseInt(ifb + ((ifb * bonus[3]) / 100)).toFixed(0)
                 //return parseInt(ifb).toFixed(0)
             case 4:
-              result = parseInt(ifb + ((ifb * bonus[4]) / 100)).toFixed(0)
+              return parseInt(ifb + ((ifb * bonus[4]) / 100)).toFixed(0)
                 //return parseInt(ifb).toFixed(0)
             case 5:
                 return parseInt(ifb + ((ifb * bonus[5]) / 100)).toFixed(0)
                 //return parseInt(ifb+ (price * .15)).toFixed(0)
             case 6:
-              result = parseInt(ifb + ((ifb * bonus[6]) / 100)).toFixed(0)
+              return parseInt(ifb + ((ifb * bonus[6]) / 100)).toFixed(0)
                 //return parseInt(ifb + (price * .1)).toFixed(0)
             case 7:
-              result = parseInt(ifb + ((ifb * bonus[7]) / 100)).toFixed(0)
+              return parseInt(ifb + ((ifb * bonus[7]) / 100)).toFixed(0)
                 //return parseInt(ifb + (price * .07)).toFixed(0)
             default:
-              result = ifb
+              return ifb
         }
-
-        return parseFloat(result).toFixed(0);
     }
 }
 
