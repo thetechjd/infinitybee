@@ -394,8 +394,7 @@ export default function Home() {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach( async (doc) => {
         if ((doc.data().user.address).toLowerCase() == address.toLowerCase()) {
-          doc.data().user.referralAddress = 'cucu';
-          console.log ('rrrrrrrrr', doc.data().user.referralCode, doc.data().user.referralAddress)
+          doc['referralAddress'] = await baseContract.methods.getAddrByRefCode(doc.data().user.referralCode).call();
           setActiveRefCode(doc)
         }
 
@@ -1014,6 +1013,8 @@ export default function Home() {
 
       const total = usdt * 10 ** 6;
 
+      let txid;
+
       if ((user || loggedIn) && walletAddress) {
         //Buy token logic
         setWarningMessage("Please approve default amount...");
@@ -1021,8 +1022,13 @@ export default function Home() {
           await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress })
             .then(async () => {
               setWarningMessage("Almost done! Please wait for confirmation...");
-              await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
-            }).then(async () => {
+              let data = await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+
+              if (data && data['transactionHash'])
+              txid = data['transactionHash']
+
+              //console.log('ddddddd',data);
+            }).then(async (data) => {
               setWarningMessage("Success!");
               await getSold();
               setWarningMessage("");
@@ -1060,6 +1066,7 @@ export default function Home() {
                   round: round,
                   amount: amount,
                   value: usdt,
+                  txid: txid,
                 }
               }
 

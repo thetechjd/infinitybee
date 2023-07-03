@@ -1,5 +1,6 @@
 {
     "icoAddress": "0x0214a4478F063B4FF5A561cc870bB781Fd8f6780",
     "beeAddress": "0xe74344f0d0f10846160d7928cb40ab16e56c4cb8",
-    "fiatAddress": "0xDF73dF0DA354f2F01661edC2131868BF145713b6"
+    "fiatAddress": "0xDF73dF0DA354f2F01661edC2131868BF145713b6",
+    "pathexplorer": "https://sepolia.etherscan.io/tx/"
 }

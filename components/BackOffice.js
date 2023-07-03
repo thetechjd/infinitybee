@@ -104,6 +104,7 @@ const beeABI = require("../pages/bee-abi.json");
 const contractAddress = require("../config/icoconfig.json").icoAddress;
 const fiatAddress = require("../config/icoconfig.json").fiatAddress;
 const beeAddress = require("../config/icoconfig.json").beeAddress;
+const pathexplorer = require("../config/icoconfig.json").pathexplorer;
 
 
 
@@ -679,6 +680,13 @@ export default function BackOffice({
         }
     }
 
+    const getTxIDShort = (txid) => {
+        if (!txid)
+        return '---';
+
+        return txid.substr(0, 5) + "..." + txid.substr(txid.length -5, txid.length)
+    }
+
     const getTotalAmount = () => {
         let total = 0;
         currentOrders.forEach(x => {
@@ -817,7 +825,7 @@ export default function BackOffice({
                     <div className='flex w-10/12 mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28'>
 
                         <span className='flex items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
-                        <span className='flex items-center'><p>Your sponsor email address: {activeRefCode.data().user.referralAddress}</p></span>
+                        <span className='flex items-center'><p>Your sponsor email address: {activeRefCode.referralAddress}</p></span>
                         <span className='flex items-center'><p>Your wallet address: {walletAddress}</p></span>
                         <span></span>
                         <span className='flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
@@ -944,7 +952,7 @@ export default function BackOffice({
                     <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
                     <span className="ceClaim flex">
                         <button onClick={() => { copyText(activeRefCode) }} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
-                        Claim 600 IFB tokens
+                        Claim --- IFB tokens
                         </button>
                         <p><span>20</span> days</p>
                         <p><span>19</span> hours</p>
@@ -1024,7 +1032,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.txid}</td>
+                                <td className='flex w-full justify-center text-center'><a href={`${pathexplorer+item.order.txid}`} target="_blank">{getTxIDShort(item.order.txid)}</a></td>
                             </tr>
 
                         ))}
