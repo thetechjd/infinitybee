@@ -323,6 +323,13 @@ header, .ceTr {
     margin-right: 15px;
 }
 
+.ceClaim p {
+    display: flex;
+    flex-flow: column;
+    margin: 15px;
+    font-size: 15px;
+}
+
 .ceClaim p span {
     color:green;
     font-size: 30px;
@@ -330,4 +337,12 @@ header, .ceTr {
 
 .ceLogo {
     font-size: 23px;
+}
+
+.ceCursor {
+    cursor: pointer;
+}
+
+.ceBold {
+    font-weight: bold;
 }

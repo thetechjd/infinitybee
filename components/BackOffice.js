@@ -460,7 +460,7 @@ export default function BackOffice({
 
 
                 }).then(async ()=> {
-                    await fetchReferralCode(walletAddress)
+                    await fetchReferralCode(walletAddress);
                 })
 
 
@@ -604,11 +604,11 @@ export default function BackOffice({
             case '0':
                 return `F&F / 0.008`
             case '1':
-                return `Round 2 / 0.01`
+                return `Private Sale 1 / 0.01`
             case '2':
-                return `Round 3 / 0.015`
+                return `Private Sale 2 / 0.015`
             case '3':
-                return `Round 4 / 0.02`
+                return `Public Sale / 0.02`
             default:
                 return `Unknown`
         }
@@ -801,15 +801,19 @@ export default function BackOffice({
 
                     <div className='flex w-10/12 mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28'>
 
+                        <span className='flex items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
+                        <span className='flex items-center'><p>Your sponsor email address: ---</p></span>
+                        <span className='flex items-center'><p>Your wallet address: {walletAddress}</p></span>
+                        <span></span>
                         <span className='flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
                                 {activeRefCode.data().user.referralCode !== undefined ? (
                                     <div className='flex flex-row items-center '>
-                                        <button onClick={() => { copyText(activeRefCode) }} className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
+                                        <span className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center py-2 px-1">
                                             {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
 
-                                        </button>
-                                        <div onClick={() => { copyText(activeRefCode) }}>
+                                        </span>
+                                        <div onClick={() => { copyText(activeRefCode) }} className="ceCursor">
                                             <FileCopyOutlined />
                                         </div>
 
@@ -824,16 +828,16 @@ export default function BackOffice({
                                             Generate Referral Code
 
                                         </button>
-                                        <div onClick={generateReferralCode}>
+                                        {/* <div onClick={generateReferralCode}>
                                             <FileCopyOutlined />
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                 )}
 
                             </span></span>
 
-                        <span className='md:hidden flex justify-center md:justify-start items-center'><p>Your Income</p></span>
+                        <span className='md:hidden flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
                         <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
                         <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
 
@@ -858,7 +862,7 @@ export default function BackOffice({
 
 
                             
-                        <span className='hidden md:flex justify-center md:justify-start items-center'><p>Your Income</p></span>
+                        <span className='hidden md:flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
                         <span className='hidden md:flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
                         <span className='hidden md:flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
                         <span className='hidden md:flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
@@ -920,13 +924,20 @@ export default function BackOffice({
                 )}
 
 
-                <div className='flex flex-col w-10/12 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48'>
+                <div className='flex flex-col w-full p-2 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48'>
 
-                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
-                    <span></span>
-                    <span>YOUR PACKAGE(s) PURCHASED</span>
+                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
+                    <span className="ceClaim flex">
+                        <button onClick={() => { copyText(activeRefCode) }} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
+                        Claim 600 IFB tokens
+                        </button>
+                        <p><span>20</span> days</p>
+                        <p><span>19</span> hours</p>
+                        <p><span>18</span> minutes</p>
+                    </span>
+                    <span className="ceBold">YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}
-                    <div className='flex w-11/12 justify-end'>
+                    <div className='flex w-full justify-end'>
                         {/* Render 'First' button */}
                         <button className='bg-blue-400 mx-1 rounded p-1 hover:bg-green-300 cursor-pointer' onClick={goToFirstPage} disabled={currentPage === 1}>
                             <FirstPage />
@@ -978,7 +989,7 @@ export default function BackOffice({
 
                 <div className='flex w-full mt-0 bg-transparent'>
                     {/* Render the current orders */}
-                    <table className='flex flex-col w-10/12 justify-center text-center p-1 mx-auto bg-transparent'>
+                    <table className='flex flex-col w-full justify-center text-center p-1 mx-autox bg-transparent'>
                         <tr className='flex w-full gap-x-6 justify-center bg-slate950 py-2 mb-2'>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>No. Crt</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Date of Purchase</td>
@@ -987,6 +998,7 @@ export default function BackOffice({
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Round / IFB value</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>InfinityBee amount</td>
                             <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>Total Value (USDT)</td>
+                            <td className='flex w-full text-sm whitespace-nowrap justify-center text-center'>TxID</td>
                         </tr>
                         {currentOrders.map((item, key) => (
                             <tr className='flex w-full gap-x-6 whitespace-nowrap mx-auto text-center p-1 bg-slate950 justify-center mb-2'>
@@ -997,6 +1009,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(0, item.order.amount)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value}</td>
+                                <td className='flex w-full justify-center text-center'>{item.order.txid}</td>
                             </tr>
 
                         ))}

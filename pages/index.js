@@ -57,7 +57,7 @@ const data2 = [
   ["ICO SEED", 9.1],
   ["ICO Presale 1", 13.6],
   ["ICO Presale 2", 31.8],
-  ["ICO Public Sale", 42.5],
+  ["ICO Public Sale", 45.5],
   ["de completat", 3]
 ]
 const data1 = [
