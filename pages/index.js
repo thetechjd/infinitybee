@@ -320,7 +320,7 @@ export default function Home() {
           doc.data().user.orders.forEach((x) => {
             list.push(x);
             
-              total += getDiscount(0, x.order.amount)
+              total += getDiscount(x.order.round, x.order.amount)
             
           })
         }
