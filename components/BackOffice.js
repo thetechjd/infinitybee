@@ -1007,7 +1007,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
-                                <td className='flex w-full justify-center text-center'>{getDiscount(0, item.order.amount)}</td>
+                                <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.txid}</td>
                             </tr>
