@@ -308,6 +308,7 @@ export default function Home() {
 
     let list = [];
     let total = 0;
+    let value = 0;
     
     try {
       const q = query(collection(db, "users"))
@@ -320,7 +321,7 @@ export default function Home() {
           doc.data().user.orders.forEach((x) => {
             list.push(x);
             
-              total += getDiscount(x.order.round, x.order.amount)
+            total += parseFloat(getDiscount(x.order.round, x.order.amount, x.order.package));
             
           })
         }
@@ -390,8 +391,10 @@ export default function Home() {
       const q = query(collection(db, "users"))
 
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach( async (doc) => {
         if ((doc.data().user.address).toLowerCase() == address.toLowerCase()) {
+          doc.data().user.referralAddress = 'cucu';
+          console.log ('rrrrrrrrr', doc.data().user.referralCode, doc.data().user.referralAddress)
           setActiveRefCode(doc)
         }
 
@@ -400,7 +403,7 @@ export default function Home() {
 
       })
      
-    } catch (err) {
+    } catch (err) { 
       console.log(err)
     }
 
@@ -1430,17 +1433,62 @@ export default function Home() {
   const getTotalAmount = () => {
     let total = 0;
     currentOrders.forEach(x => {
-      total += getDiscount(0, x.order.amount);
+      total += getDiscount(x.order.round, x.order.amount, x.order.package);
     })
     console.log('This is the total for orders:' + total)
     setTotalAmount(total)
   }
 
-  const getDiscount = (round, price) => {
+  const getDiscount = (round, price, pack) => {
     const roundPrice = getRoundPrice(round);
-    const ifb = price / roundPrice;
-    return ifb;
-  }
+    const ifb = price / roundPrice
+ 
+    let bonus = [];
+    bonus[0] = 0;
+    bonus[1] = 0;
+    bonus[2] = 0;
+    bonus[3] = 3;
+    bonus[4] = 12;
+    bonus[5] = 9;
+    bonus[6] = 7;
+    bonus[7] = 5;
+
+    if (round == '0'){
+        return parseFloat(ifb).toFixed(0);
+    }
+    else{
+        let result = 0;
+        switch (pack) {
+            // case 0:
+            //     return ifb
+            // case 1:
+            //     return parseInt(ifb + (ifb * .02)).toFixed(0)
+            //     return parseInt(ifb).toFixed(0)
+            // case 2:
+            //     return parseInt(ifb + (ifb * .01)).toFixed(0)
+            //     return parseInt(ifb).toFixed(0)
+            case 3:
+              result = parseInt(ifb + ((ifb * bonus[3]) / 100)).toFixed(0)
+                //return parseInt(ifb).toFixed(0)
+            case 4:
+              result = parseInt(ifb + ((ifb * bonus[4]) / 100)).toFixed(0)
+                //return parseInt(ifb).toFixed(0)
+            case 5:
+                return parseInt(ifb + ((ifb * bonus[5]) / 100)).toFixed(0)
+                //return parseInt(ifb+ (price * .15)).toFixed(0)
+            case 6:
+              result = parseInt(ifb + ((ifb * bonus[6]) / 100)).toFixed(0)
+                //return parseInt(ifb + (price * .1)).toFixed(0)
+            case 7:
+              result = parseInt(ifb + ((ifb * bonus[7]) / 100)).toFixed(0)
+                //return parseInt(ifb + (price * .07)).toFixed(0)
+            default:
+              result = ifb
+        }
+
+        return parseFloat(result).toFixed(0);
+    }
+}
 
   const getRoundPrice = (round) => {
     switch (round) {

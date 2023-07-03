@@ -602,7 +602,7 @@ export default function BackOffice({
     const getRound = (round) => {
         switch (round) {
             case '0':
-                return `F&F / 0.008`
+                return `Friends & Family / 0.008`
             case '1':
                 return `Private Sale 1 / 0.01`
             case '2':
@@ -631,43 +631,58 @@ export default function BackOffice({
 
 
 
-    const getDiscount = (round, price) => {
+    const getDiscount = (round, price, pack) => {
         const roundPrice = getRoundPrice(round);
         const ifb = price / roundPrice;
-        return ifb;
-       /* switch (pack) {
-            case 0:
-                return ifb
-            case 1:
-                //return parseInt(ifb + (ifb * .02)).toFixed(0)
-                return parseInt(ifb).toFixed(0)
-            case 2:
-                //return parseInt(ifb + (ifb * .01)).toFixed(0)
-                return parseInt(ifb).toFixed(0)
-            case 3:
-                //return parseInt(ifb + (price * .03)).toFixed(0)
-                return parseInt(ifb).toFixed(0)
-            case 4:
-               //return parseInt(ifb + (price * .25)).toFixed(0)
-                return parseInt(ifb).toFixed(0)
-            case 5:
-                return parseInt(ifb+ (price * .15)).toFixed(0)
-                return parseInt(ifb+ (price * .15)).toFixed(0)
-            case 6:
-                return parseInt(ifb + (price * .1)).toFixed(0)
-                return parseInt(ifb + (price * .1)).toFixed(0)
-            case 7:
-                return parseInt(ifb + (price * .07)).toFixed(0)
-                return parseInt(ifb + (price * .07)).toFixed(0)
-            default:
-                return price
-        }*/
+
+        let bonus = [];
+        bonus[0] = 0;
+        bonus[1] = 0;
+        bonus[2] = 0;
+        bonus[3] = 3;
+        bonus[4] = 12;
+        bonus[5] = 9;
+        bonus[6] = 7;
+        bonus[7] = 5;
+
+        if (round == '0'){
+            return ifb;
+        }
+        else{
+            switch (pack) {
+                // case 0:
+                //     return ifb
+                // case 1:
+                //     return parseInt(ifb + (ifb * .02)).toFixed(0)
+                //     return parseInt(ifb).toFixed(0)
+                // case 2:
+                //     return parseInt(ifb + (ifb * .01)).toFixed(0)
+                //     return parseInt(ifb).toFixed(0)
+                case 3:
+                    return parseInt(ifb + ((ifb * bonus[3]) / 100)).toFixed(0)
+                    //return parseInt(ifb).toFixed(0)
+                case 4:
+                   return parseInt(ifb + ((ifb * bonus[4]) / 100)).toFixed(0)
+                    //return parseInt(ifb).toFixed(0)
+                case 5:
+                    return parseInt(ifb + ((ifb * bonus[5]) / 100)).toFixed(0)
+                    //return parseInt(ifb+ (price * .15)).toFixed(0)
+                case 6:
+                    return parseInt(ifb + ((ifb * bonus[6]) / 100)).toFixed(0)
+                    //return parseInt(ifb + (price * .1)).toFixed(0)
+                case 7:
+                    return parseInt(ifb + ((ifb * bonus[7]) / 100)).toFixed(0)
+                    //return parseInt(ifb + (price * .07)).toFixed(0)
+                default:
+                    return ifb
+            }
+        }
     }
 
     const getTotalAmount = () => {
         let total = 0;
         currentOrders.forEach(x => {
-            total += getDiscount(0, x.order.amount);
+            total += getDiscount(x.order.round, x.order.amount, x.order.package);
         })
         console.log('This is the total for orders:' + total)
         setTotalAmount(total)
@@ -802,7 +817,7 @@ export default function BackOffice({
                     <div className='flex w-10/12 mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28'>
 
                         <span className='flex items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
-                        <span className='flex items-center'><p>Your sponsor email address: ---</p></span>
+                        <span className='flex items-center'><p>Your sponsor email address: {activeRefCode.data().user.referralAddress}</p></span>
                         <span className='flex items-center'><p>Your wallet address: {walletAddress}</p></span>
                         <span></span>
                         <span className='flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
@@ -1007,7 +1022,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
-                                <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount)}</td>
+                                <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.txid}</td>
                             </tr>
