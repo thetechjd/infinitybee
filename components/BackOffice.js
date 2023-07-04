@@ -320,11 +320,11 @@ export default function BackOffice({
      })
      
      useEffect(() => {
-        //  const interval = setInterval(() => {
+         const interval = setInterval(() => {
      
-        //    setClaimTime(claimTime => claimTime - 1);
-        //  }, 1000);
-        //  return () => clearInterval(interval);
+           setClaimTime(claimTime => claimTime - 1);
+         }, 1000);
+         return () => clearInterval(interval);
      
        }, [])
 
@@ -804,9 +804,9 @@ export default function BackOffice({
         var m = Math.floor(seconds % 3600 / 60);
         var s = Math.floor(seconds % 60);
     
-        var dDisplay = d > 0 ? d + ":" : "";
-        var hDisplay = h > 0 ? (h < 10 ? "0" + h + ":" : h + ":") : "";
-        var mDisplay = m > 0 ? (m < 10 ? "0" + m + ":" : m + ":") : "";
+        var dDisplay = d > 0 ? d : "";
+        var hDisplay = h > 0 ? (h < 10 ? "0" + h + ":" : h ) : "";
+        var mDisplay = m > 0 ? (m < 10 ? "0" + m + ":" : m ) : "";
         var sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : "";
     
         
