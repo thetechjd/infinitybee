@@ -831,7 +831,8 @@ export default function BackOffice({
                         <span></span>
                         <span className='ceBackLeft flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
-                                {activeRefCode.data().user.referralCode !== undefined ? (
+                                {/* {activeRefCode.data().user.referralCode !== undefined ? ( */}
+                                {(activeRefCode && activeRefCode.data().user.referralCode !== undefined) ? (
                                     <div className='flex flex-row items-center '>
                                         <span className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center py-2 px-1">
                                             {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
