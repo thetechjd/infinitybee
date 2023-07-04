@@ -392,6 +392,7 @@ export default function Home() {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach( async (doc) => {
         if ((doc.data().user.address).toLowerCase() == address.toLowerCase()) {
+          console.log('aaaaa',doc.data().user.referralCode)
           if (doc.data().user.referralCode)
           doc['referralAddress'] = await baseContract.methods.getAddrByRefCode(doc.data().user.referralCode).call();
           setActiveRefCode(doc)

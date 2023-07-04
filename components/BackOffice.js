@@ -303,7 +303,6 @@ export default function BackOffice({
             setCanClaim(false) 
         const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
         if(Date.now() > nextClaim * 1000){
-            console.log('nnn',Date.now(), nextClaim * 1000);
             setCanClaim(true)     
         }
         else{
@@ -887,94 +886,96 @@ export default function BackOffice({
                 <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
                 >
 
+{(activeRefCode)? (
                     <div className='flex w-full mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28x'>
 
-                        <span className='ceBackLeft flex justify-end items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
-                        <span className='ceBackRight flex justify-start items-center'><p>Your sponsor email address: {activeRefCode.referralAddress}</p></span>
-                        <span className='ceBackLeft flex justify-end items-center'><p>Your wallet address: {walletAddress}</p></span>
-                        <span></span>
-                        <span className='ceBackLeft flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
-                            <span>
-                                {/* {activeRefCode.data().user.referralCode !== undefined ? ( */}
-                                {(activeRefCode && activeRefCode.data().user.referralCode !== undefined) ? (
-                                    <div className='flex flex-row items-center '>
-                                        <span className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center py-2 px-1">
-                                            {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
+                    <span className='ceBackLeft flex justify-end items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
+                    <span className='ceBackRight flex justify-start items-center'><p>Your sponsor email address: {activeRefCode.referralAddress}</p></span>
+                    <span className='ceBackLeft flex justify-end items-center'><p>Your wallet address: {walletAddress}</p></span>
+                    <span></span>
+                    <span className='ceBackLeft flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
+                        <span>
+                            {/* {activeRefCode.data().user.referralCode !== undefined ? ( */}
+                            {(activeRefCode && activeRefCode.data().user.referralCode !== undefined) ? (
+                                <div className='flex flex-row items-center '>
+                                    <span className="flex w-full whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center py-2 px-1">
+                                        {copyMessage ? copyMessage : <p className='text-sm tracking-tighter'>{`https://infinitybee.vercel.app?ref=${activeRefCode.data().user.referralCode}`}</p>}
 
-                                        </span>
-                                        <div onClick={() => { copyText(activeRefCode) }} className="ceCursor">
-                                            <FileCopyOutlined />
-                                        </div>
-
-
+                                    </span>
+                                    <div onClick={() => { copyText(activeRefCode) }} className="ceCursor">
+                                        <FileCopyOutlined />
                                     </div>
 
-                                ) : (
-                                    <div className='flex flex-row items-center'>
-                                        <button onClick={generateReferralCode} className="flex w-full whitespace-nowrap rounded-md ml-5 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-4">
 
+                                </div>
 
-                                            Generate Referral Code
-
-                                        </button>
-                                    </div>
-
-                                )}
-
-                            </span></span>
-
-                        <span className='md:hidden flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
-                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
-                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
-
-                            {isThisMonth ? (
-                                <>
-                                    <p className='mr-2'>{thisMonth}</p>
-
-                                    <p>{bonus} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
-                                </>
                             ) : (
-                                <>
-                                    {console.log('This is the last month bonus: ' + bonus)}
-                                    <p className='mr-2'>{lastMonth}</p>
+                                <div className='flex flex-row items-center'>
+                                    <button onClick={generateReferralCode} className="flex w-full whitespace-nowrap rounded-md ml-5 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-4">
 
-                                    <p>{bonus} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
-                                </>
+
+                                        Generate Referral Code
+
+                                    </button>
+                                </div>
 
                             )}
-                        </span> 
-                        <span className='ceBackLeft md:hidden flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
-                        <span className='ceBackLeft md:hidden flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
+
+                        </span></span>
+
+                    <span className='md:hidden flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
+                    <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
+                    <span className='md:hidden flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
+
+                        {isThisMonth ? (
+                            <>
+                                <p className='mr-2'>{thisMonth}</p>
+
+                                <p>{bonus} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
+                            </>
+                        ) : (
+                            <>
+                                {console.log('This is the last month bonus: ' + bonus)}
+                                <p className='mr-2'>{lastMonth}</p>
+
+                                <p>{bonus} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
+                            </>
+
+                        )}
+                    </span> 
+                    <span className='ceBackLeft md:hidden flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
+                    <span className='ceBackLeft md:hidden flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
 
 
-                            
-                        <span className='ceBackRight hidden md:flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
-                        <span className='ceBackLeft hidden md:flex justify-centerx md:justify-startx flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
-                        <span className='ceBackRight hidden md:flex justify-center md:justify-start flex-row w-full justify-start items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
-                        <span className='hidden md:flex justify-centerx md:justify-startx flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
-                        <span className='ceBackRight hidden md:flex justify-center md:justify-start flex-row w-full justify-start items-center text-xs md:text-base'>
-
-                            {isThisMonth ? (
-                                <>
-                                    <p className='mr-2'>{thisMonth}</p>
-
-                                    <p>{bonus} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
-                                </>
-                            ) : (
-                                <>
-                                    {console.log('This is the last month bonus: ' + bonus)}
-                                    <p className='mr-2'>{lastMonth}</p>
-
-                                    <p>{bonus} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
-                                </>
-
-                            )}
-                        </span>
                         
+                    <span className='ceBackRight hidden md:flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
+                    <span className='ceBackLeft hidden md:flex justify-centerx md:justify-startx flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
+                    <span className='ceBackRight hidden md:flex justify-center md:justify-start flex-row w-full justify-start items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
+                    <span className='hidden md:flex justify-centerx md:justify-startx flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
+                    <span className='ceBackRight hidden md:flex justify-center md:justify-start flex-row w-full justify-start items-center text-xs md:text-base'>
+
+                        {isThisMonth ? (
+                            <>
+                                <p className='mr-2'>{thisMonth}</p>
+
+                                <p>{bonus} USDT</p><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { lastMonthDisabled ? null : getMonthTotal("lastMonth") }}><ArrowDropDownOutlined /></div>
+                            </>
+                        ) : (
+                            <>
+                                {console.log('This is the last month bonus: ' + bonus)}
+                                <p className='mr-2'>{lastMonth}</p>
+
+                                <p>{bonus} USDT</p><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropUpOutlined /></div><div onClick={() => { getMonthTotal("thisMonth") }}><ArrowDropDownOutlined /></div>
+                            </>
+
+                        )}
+                    </span>
+                    
 
 
 
-                    </div>
+                </div>
+):(<div></div>)}
 
 
                 </div>
