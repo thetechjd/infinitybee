@@ -259,12 +259,12 @@ export default function BackOffice({
 
 
 
-    /* useEffect(() => {
+   useEffect(() => {
           setRefCode(String(ref))
-          console.log('Ref value set!')
+          console.log('Ref value set!',ref)
       }, [ref])
   
-      useEffect(() => {
+    /*    useEffect(() => {
           const storedAddress = localStorage.getItem("address");
           setAddress(storedAddress)
   
