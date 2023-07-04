@@ -68,13 +68,13 @@ export default function LoginModal(props) {
                                         ) : (
                                             <>
                                              <div>
-                                                <span>Step1</span>
+                                                <span>Step 1</span>
                                                 <button onClick={props.connectWallet} className='ceBtnLogin bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
                                                     Connect Wallet
                                                 </button>
                                             </div>
                                              
-                                               {/*} <p className='text-red-500 text-center'>Connect your wallet to complete registration. <br /> Be Careful &nbsp; ! &nbsp; In the future, you will be able <br /> to log into this account only with this wallet. </p>*/}
+                                               <p className='text-red-500 text-center'>Connect your wallet to complete registration. <br /> Be Careful &nbsp; ! &nbsp; In the future, you will be able <br /> to log into this account only with this wallet. </p>
                                                 </>
                                             
 
@@ -85,7 +85,7 @@ export default function LoginModal(props) {
 
 
                                 <div>
-                                <span>Step2</span>
+                                <span>Step 2</span>
                                 <Input
                                     label="Email"
                                     onChange={(e) => props.setEmail(e.target.value)}
@@ -98,7 +98,7 @@ export default function LoginModal(props) {
                                 <p className='text-red-500'>{props.loginFailed? props.loginFailed: null}</p>
 
                                 <div>
-                                <span>Step2</span>
+                                <span>Step 3</span>
                                 <Input
                                     style={{ border: props.loginMessage ? "#fff" : null }}
                                     label="Password"
@@ -117,7 +117,7 @@ export default function LoginModal(props) {
                                 <p className='text-4xs text-red-500'>{props.loginMessage}</p>
 
                                 <div>
-                                <span>Step3</span>
+                                <span>Step 3</span>
                                 <Input
                                     label="Re-Type Password"
                                     onChange={(e) => props.handlePwCheck(e.target.value)}
@@ -148,7 +148,7 @@ export default function LoginModal(props) {
 
                                         ) : (
                                             <div>
-                                            <span>Step1</span>
+                                            <span>Step 1</span>
                                             <button onClick={props.connectWallet} className='ceBtnLogin bg-royalblue py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'>
                                                 Connect Wallet
                                             </button>
@@ -161,7 +161,7 @@ export default function LoginModal(props) {
 
 
                                 <div>
-                                <span>Step2</span>
+                                <span>Step 2</span>
                                 <Input
                                     label="Email"
                                     onChange={(e) => props.setEmail(e.target.value)}
@@ -177,7 +177,7 @@ export default function LoginModal(props) {
                                 {!props.reset && (
 
                                     <div>
-                                    <span>Step3</span>
+                                    <span>Step 3</span>
                                     <Input
                                         label="Password"
                                         onChange={(e) => props.setPassword(e.target.value)}

@@ -270,11 +270,12 @@ export default function BackOffice({
         if (walletAddress !== undefined) {
             // userAddress = localStorage.getItem("address");
             try {
-                const balance = await beeContract.methods.balanceOf(walletAddress).call();
+                let balance = await beeContract.methods.balanceOf(walletAddress).call();
                 const totalRev = await baseContract.methods.getTotalRefRevenue(walletAddress).call();
+                
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
-                setBalance(balance)
+                setBalance((balance / 10 ** 18).toLocaleString('en', {useGrouping:true}))
             } catch (err) {
                 console.log(err)
             }
@@ -647,7 +648,7 @@ export default function BackOffice({
         bonus[7] = 5;
 
         if (round == '0'){
-            return ifb;
+            return ifb.toLocaleString('en', {useGrouping:true});
         }
         else{
             switch (pack) {
@@ -660,22 +661,22 @@ export default function BackOffice({
                 //     return parseInt(ifb + (ifb * .01)).toFixed(0)
                 //     return parseInt(ifb).toFixed(0)
                 case 3:
-                    return parseInt(ifb + ((ifb * bonus[3]) / 100)).toFixed(0)
+                    return parseInt(ifb + ((ifb * bonus[3]) / 100)).toLocaleString('en', {useGrouping:true})
                     //return parseInt(ifb).toFixed(0)
                 case 4:
-                   return parseInt(ifb + ((ifb * bonus[4]) / 100)).toFixed(0)
+                   return parseInt(ifb + ((ifb * bonus[4]) / 100)).toLocaleString('en', {useGrouping:true})
                     //return parseInt(ifb).toFixed(0)
                 case 5:
-                    return parseInt(ifb + ((ifb * bonus[5]) / 100)).toFixed(0)
+                    return parseInt(ifb + ((ifb * bonus[5]) / 100)).toLocaleString('en', {useGrouping:true})
                     //return parseInt(ifb+ (price * .15)).toFixed(0)
                 case 6:
-                    return parseInt(ifb + ((ifb * bonus[6]) / 100)).toFixed(0)
+                    return parseInt(ifb + ((ifb * bonus[6]) / 100)).toLocaleString('en', {useGrouping:true})
                     //return parseInt(ifb + (price * .1)).toFixed(0)
                 case 7:
-                    return parseInt(ifb + ((ifb * bonus[7]) / 100)).toFixed(0)
+                    return parseInt(ifb + ((ifb * bonus[7]) / 100)).toLocaleString('en', {useGrouping:true})
                     //return parseInt(ifb + (price * .07)).toFixed(0)
                 default:
-                    return ifb
+                    return ifb.toLocaleString('en', {useGrouping:true})
             }
         }
     }
@@ -822,13 +823,13 @@ export default function BackOffice({
                 <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'
                 >
 
-                    <div className='flex w-10/12 mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28'>
+                    <div className='flex w-full mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28x'>
 
-                        <span className='flex items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
-                        <span className='flex items-center'><p>Your sponsor email address: {activeRefCode.referralAddress}</p></span>
-                        <span className='flex items-center'><p>Your wallet address: {walletAddress}</p></span>
+                        <span className='ceBackLeft flex justify-end items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
+                        <span className='ceBackRight flex justify-start items-center'><p>Your sponsor email address: {activeRefCode.referralAddress}</p></span>
+                        <span className='ceBackLeft flex justify-end items-center'><p>Your wallet address: {walletAddress}</p></span>
                         <span></span>
-                        <span className='flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
+                        <span className='ceBackLeft flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
                             <span>
                                 {activeRefCode.data().user.referralCode !== undefined ? (
                                     <div className='flex flex-row items-center '>
@@ -880,16 +881,16 @@ export default function BackOffice({
 
                             )}
                         </span> 
-                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
-                        <span className='md:hidden flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
+                        <span className='ceBackLeft md:hidden flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
+                        <span className='ceBackLeft md:hidden flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
 
 
                             
-                        <span className='hidden md:flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
-                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
-                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
-                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
-                        <span className='hidden md:flex justify-center md:justify-start flex-row w-full items-center text-xs md:text-base'>
+                        <span className='ceBackRight hidden md:flex justify-center md:justify-start items-center'><p className="ceBold">Your Income</p></span>
+                        <span className='ceBackLeft hidden md:flex justify-centerx md:justify-startx flex-row w-full justify-end items-center text-xs md:text-base'><p className='flex justify-end mr-2'>How many people signed up using your referral link: </p><p className='flex justify-end'>{activeRefCode ? (activeRefCode.data().user.signUps ? activeRefCode.data().user.signUps : 0) : 0}</p></span>
+                        <span className='ceBackRight hidden md:flex justify-center md:justify-start flex-row w-full justify-start items-center text-xs md:text-base'><p className='mr-2'>Total:</p><p>{totalRefRevenue / 10 ** 6} USDT</p></span>
+                        <span className='hidden md:flex justify-centerx md:justify-startx flex-row w-full md:whitespace-nowrap justify-end items-center text-xs md:text-base'><p className='mr-2'>How many people have bought a package using your referral link: </p><p >{activeRefCode ? (activeRefCode.data().user.timesBought ? activeRefCode.data().user.timesBought : 0) : 0}</p></span>
+                        <span className='ceBackRight hidden md:flex justify-center md:justify-start flex-row w-full justify-start items-center text-xs md:text-base'>
 
                             {isThisMonth ? (
                                 <>
@@ -947,10 +948,10 @@ export default function BackOffice({
                 )}
 
 
-                <div className='flex flex-col w-full p-2 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48'>
+                <div className='flex flex-col w-full p-2 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48x'>
 
-                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested: </p><p>{balance / 10 ** 18} / {totalAmount} </p></span>
-                    <span className="ceClaim flex">
+                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <div>{balance} / {totalAmount} </div></span>
+                    <span className="ceClaim ceBackRight flex justify-start items-center">
                         <button onClick={() => { copyText(activeRefCode) }} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                         Claim --- IFB tokens
                         </button>
@@ -1031,7 +1032,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.value}</td>
+                                <td className='flex w-full justify-center text-center'>{item.order.value.toLocaleString('en', {useGrouping:true})}</td>
                                 <td className='flex w-full justify-center text-center'><a href={`${pathexplorer+item.order.txid}`} target="_blank">{getTxIDShort(item.order.txid)}</a></td>
                             </tr>
 

@@ -57,8 +57,7 @@ const data2 = [
   ["ICO SEED", 9.1],
   ["ICO Presale 1", 13.6],
   ["ICO Presale 2", 31.8],
-  ["ICO Public Sale", 45.5],
-  ["de completat", 3]
+  ["ICO Public Sale", 45.5]
 ]
 const data1 = [
   ["Task", "Hours per Day"],
@@ -322,14 +321,13 @@ export default function Home() {
             list.push(x);
             
             total += parseFloat(getDiscount(x.order.round, x.order.amount, x.order.package))
-            console.log('ttt',x.order.round,x.order.package,getDiscount(x.order.round, x.order.amount, x.order.package),total)
             
           })
         }
       })
       console.log(list)
       setOrders(list);
-      setTotalAmount(total)
+      setTotalAmount(total.toLocaleString('en', {useGrouping:true}))
     } catch (err) {
       console.log(err)
     }
@@ -1736,9 +1734,9 @@ export default function Home() {
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full h-full'>
 
               <div className='flex w-full grid grid-cols-2  gap-y-1 gap-x-96 isnotmobile isnotmobile-grid'>
-                <h1 className="mx-8 md:mx-4 uppercase tracking-tighter text-4xl md:text-8xl"><span className="text-5xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
+                <h1 className="mx-8 md:mx-4 uppercase tracking-tighter text-4xl md:text-8xl"><span className="ceTopTitle1 text-5xl md:text-9xl tracking-tightest">InfinityBee</span><br></br><span className="ceTopTitle2 text-8xl tracking-wide whitespace-nowrap">Token {translate("presale")}</span></h1>
 
-                <img src='/images/beelogo.png' className='w-[300px] m-auto ' />
+                <img src='/images/beelogo.png' className='ceLogo w-[300px] m-auto ' />
                 <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
                 <p className='m-auto text-3xl'>{translate("sold")}</p>
                 <h3 className='my-auto  whitespace-nowrap mx-4 text-2xl'>{translate("used")}</h3>
@@ -2319,7 +2317,7 @@ export default function Home() {
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>Roadmap</h2>
               <div className="align-items-center" style={{ position: 'relative' }}>
                 <img src="/images/beeactive.png" className="obj" />
-                <img src='/images/roadmap.jpg' className='flex m-auto w-4/5 rounded roadmap' />
+                <img src='/images/roadmap.png' className='flex m-auto w-4/5 rounded roadmap' />
               </div>
             </div>
 
