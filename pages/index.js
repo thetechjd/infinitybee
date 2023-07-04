@@ -1559,11 +1559,11 @@ export default function Home() {
 
   const newBuy = async (id, item) => {
     
-    let temp_ = JSON.stringify(item);
-    temp_ = JSON.parse(temp_.replace(/null/g, '"null"'));
+    // let temp_ = JSON.stringify(item);
+    // temp_ = JSON.parse(temp_.replace(/null/g, '"null"'));
 
-    const users = collection(db, "buy")
-    await setDoc(doc(db, "buy", id), temp_);
+    // const users = collection(db, "buy")
+    // await setDoc(doc(db, "buy", id), temp_);
   }
 
 
