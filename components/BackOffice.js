@@ -201,6 +201,7 @@ export default function BackOffice({
     const [remaining, setRemaining] = useState(0);
     const [refCode, setRefCode] = useState("");
     const [totalRefRevenue, setTotalRefRevenue] = useState(0);
+    const [amountDue, setAmountDue] = useState(0);
 
     const [copyMessage, setCopyMessage] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
@@ -285,6 +286,10 @@ export default function BackOffice({
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
                 setBalance((balance / 10 ** 18).toLocaleString('en', {useGrouping:true}))
+
+                const amountDue = await baseContract.methods.getAmountDue(walletAddress).call();
+                setAmountDue(amountDue);
+
             } catch (err) {
                 console.log(err)
             }
@@ -388,6 +393,11 @@ export default function BackOffice({
         const totalRev = await baseContract.methods.getTotalRefRevenue(address).call();
         console.log(totalRev)
         setTotalRefRevenue(totalRev);
+    }
+
+    const getAmountDue = async (address) => {
+        const amountDue = await baseContract.methods.getAmountDue(address).call();
+        setAmountDue(amountDue);
     }
 
 
@@ -1015,7 +1025,7 @@ export default function BackOffice({
                         {canClaim ? (
                             <div>
                         <button onClick={claim} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
-                            Claim IFB tokens
+                            Claim {amountDue} IFB tokens
                         </button>
                                                 {/* <p><span>{secondsToDhms(claimTime).days}</span> days</p>
                                                 <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
