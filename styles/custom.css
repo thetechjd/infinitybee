@@ -348,12 +348,26 @@ header, .ceTr {
     font-weight: bold;
 }
 
+@media only screen and (min-width: 1200px) {
 .ceBackLeft {
     padding-right: 20px;
 }
 .ceBackRight {
     padding-left: 20px;
 }
+}
+@media only screen and (max-width: 1200px) {
+    .ceBackLeft,  .ceBackLeft p {
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+    }
+    .ceBackRight, .ceBackRight p {
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+    }
+    }
 
 @media only screen and (max-width: 1500px) {
     .ceLogo {
