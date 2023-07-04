@@ -121,6 +121,15 @@ const beeContract = new web3.eth.Contract(
     beeAddress
 );
 
+const icoContract = new web3.eth.Contract(
+    contractABI,
+    contractAddress
+  )
+
+  const fiatContract = new web3.eth.Contract(
+    fiatABI,
+    fiatAddress
+  );
 
 
 const providerOptions = {
@@ -198,9 +207,9 @@ export default function BackOffice({
     const [balance, setBalance] = useState(0)
     const [lastBonus, setLastBonus] = useState(0);
     const [lastMonthDisabled, setLastMonthDisabled] = useState(false)
-    const [claimTime, setClaimTime] = useState(0)
-    
-    
+
+    const [canClaim, setCanClaim] = useState(false)
+    const [claimTime, setClaimTime] = useState(0)   
 
 
 
@@ -284,6 +293,32 @@ export default function BackOffice({
     }, [walletAddress])
 
 
+    useEffect(async () => {
+        try {
+        const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
+        console.log('nnn',nextClaim);
+        if(Date.now() > nextClaim * 1000){
+         setCanClaim(true)
+     
+        }
+     } catch(error){
+         setCanClaim(false)
+     }
+     
+     }, [walletAddress])
+     
+     useEffect(async() => {
+         getTimeLeft();
+     })
+     
+     useEffect(() => {
+        //  const interval = setInterval(() => {
+     
+        //    setClaimTime(claimTime => claimTime - 1);
+        //  }, 1000);
+        //  return () => clearInterval(interval);
+     
+       }, [])
 
 
 
@@ -730,23 +765,22 @@ export default function BackOffice({
     }
 
 
-    const getTimeLeft = async (address) => {
-        let endTime = await baseContract.methods.getClaimPeriod(address).call();
-
+    const getTimeLeft = async () => {
+        let endTime = await icoContract.methods.getClaimPeriod(walletAddress).call();
+       
         let start = (Date.now() / 1000);
-
+    
         let countdown;
         if (endTime < start) {
-            countdown = 0;
+          countdown = 0;
         } else {
-            countdown = endTime - start;
+          countdown = endTime - start;
         }
-        console.log(countdown)
+        // console.log(countdown)
         setClaimTime(countdown);
-
-
-    }
-
+    
+    
+      }
 
 
     function secondsToDhms(seconds) {
@@ -756,22 +790,39 @@ export default function BackOffice({
         var h = Math.floor(seconds % (3600 * 24) / 3600);
         var m = Math.floor(seconds % 3600 / 60);
         var s = Math.floor(seconds % 60);
-
+    
         var dDisplay = d > 0 ? d + ":" : "";
         var hDisplay = h > 0 ? (h < 10 ? "0" + h + ":" : h + ":") : "";
         var mDisplay = m > 0 ? (m < 10 ? "0" + m + ":" : m + ":") : "";
         var sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : "";
-
-
-        if (seconds !== 0) {
-            return `Next Claim Period: ${dDisplay}${hDisplay}${mDisplay}${sDisplay}`;
-        } else {
-            return `Time to claim!`
+    
+        
+          if (seconds !== 0) {
+            return {
+                days: dDisplay,
+                hours: hDisplay,
+                minutes: mDisplay,
+                seconds: sDisplay
+            }
+          } else {
+    
+            setCanClaim(true);
+            return {
+                days: 0,
+                hours: 0,
+                minutes: 0,
+                seconds: 0
+            }
+          } 
+    
         }
-
-
-
-
+    
+    
+    const claim = async () => {
+        if(canClaim){
+            await icoContract.methods.claim().send({from: walletAddress})
+            setCanClaim(false)
+        }
     }
 
 
@@ -952,14 +1003,37 @@ export default function BackOffice({
                 <div className='flex flex-col w-full p-2 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48x'>
 
                     <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <p>{balance} / {totalAmount} </p></span>
-                    <span className="ceClaim ceBackRight flex justify-start items-center">
+                    {/* <span className="ceClaim ceBackRight flex justify-start items-center">
                         <button onClick={() => { copyText(activeRefCode) }} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                         Claim --- IFB tokens
                         </button>
                         <p><span>20</span> days</p>
                         <p><span>19</span> hours</p>
                         <p><span>18</span> minutes</p>
+                    </span> */}
+                    <span className="ceClaim ceBackRight flex justify-start items-center">
+                        {canClaim ? (
+                            <div>
+                        <button onClick={claim} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
+                            Claim IFB tokens
+                        </button>
+                                                {/* <p><span>{secondsToDhms(claimTime).days}</span> days</p>
+                                                <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
+                                                <p><span>{secondsToDhms(claimTime).minutes}</span> minutes</p> */}
+                            </div>
+                        ):(
+                        <>
+                        <button disabled className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
+                            Claim IFB tokens
+                        </button>
+                                                <p><span>{secondsToDhms(claimTime).days}</span> days</p>
+                                                <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
+                                                <p><span>{secondsToDhms(claimTime).minutes}</span> minutes</p>
+                        </>
+                        )}
+
                     </span>
+
                     <span className="ceBold">YOUR PACKAGE(s) PURCHASED</span>
                     {/* Render pagination controls */}
                     <div className='flex w-full justify-end'>
