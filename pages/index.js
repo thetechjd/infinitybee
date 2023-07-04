@@ -28,7 +28,7 @@ const { dateHelper, getLastMonth, getMonth, monthHelper } = require('../utils/ti
 
 import { getFirestore } from "firebase/firestore";
 import { ref, getStorage, uploadBytes } from "firebase/storage";
-import { doc, updateDoc, addDoc, deleteDoc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { doc, updateDoc, addDoc, setDoc, deleteDoc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
 import { initializeApp } from 'firebase/app'
 import {
   getAuth,
@@ -392,14 +392,16 @@ export default function Home() {
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach( async (doc) => {
         if ((doc.data().user.address).toLowerCase() == address.toLowerCase()) {
-          if (refCode.length > 0)
-          doc['referralAddress'] = await baseContract.methods.getAddrByRefCode(refCode).call();
+          if (doc.data().user.sponsorCode){
+            doc['sponsorAddress'] = await baseContract.methods.getAddrByRefCode(doc.data().user.sponsorCode).call();
+            querySnapshot.forEach( async (doc2) => {
+              if ((doc2.data().user.address).toLowerCase() == doc['sponsorAddress'].toLowerCase()) {
+                doc['sponsorEmail'] = doc2.data().user.emailAddress;
+              }
+            })
+          }
           setActiveRefCode(doc)
         }
-
-        
-
-
       })
      
     } catch (err) { 
@@ -521,14 +523,7 @@ export default function Home() {
           showVerificationWall(true)
 
           try {
-            const docRef = await addDoc(collection(db, "users"), {
-              user: {
-                address: walletAddress,
-                createdAt: Date.now(),
-                emailAddress: user.email
-              }
-            });
-
+                       
             //Get ref Code
             let refValue;
 
@@ -537,6 +532,16 @@ export default function Home() {
             } else {
               refValue = 0;
             }
+
+            const docRef = await addDoc(collection(db, "users"), {
+              user: {
+                address: walletAddress,
+                createdAt: Date.now(),
+                emailAddress: user.email,
+                sponsorCode: refCode,
+              }
+            });
+
             console.log("This is the refValue: " + refValue)
             console.log('This is the raw value of the refCode' + refCode)
 
@@ -975,6 +980,12 @@ export default function Home() {
 
 
   const buyTokens = async (pack, usdt) => {
+
+    if (walletAddress && !activeRefCode){
+      fetchReferralCode(walletAddress.toLowerCase());
+      return;
+    }
+
     //let storedAddress = localStorage.getItem("address")
     //if (walletAddress.toLowerCase() === storedAddress.toLowerCase()) {
 
@@ -983,6 +994,20 @@ export default function Home() {
     // } else {
 
 
+    let refValue;
+    // if (refCode.length > 0) {
+    //   refValue = refCode;
+    // } else {
+    //   refValue = 0;
+    // }
+    // console.log("This is the refValue: " + refValue)
+
+    refCode = activeRefCode.data().user.sponsorCode;
+    if (refCode.length > 0) {
+      refValue = refCode;
+    } else {
+      refValue = 0;
+    }
 
     if (!provider) {
 
@@ -995,19 +1020,6 @@ export default function Home() {
         fiatABI,
         fiatAddress
       );
-
-      let refValue;
-
-
-
-      if (refCode.length > 0) {
-        refValue = refCode;
-      } else {
-        refValue = 0;
-      }
-      console.log("This is the refValue: " + refValue)
-
-
 
 
       const total = usdt * 10 ** 6;
@@ -1023,10 +1035,11 @@ export default function Home() {
               setWarningMessage("Almost done! Please wait for confirmation...");
               let data = await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
 
-              if (data && data['transactionHash'])
-              txid = data['transactionHash']
+              if (data && data['transactionHash']){
+                txid = data['transactionHash']
+                await newBuy(walletAddress, data);
+              }
 
-              //console.log('ddddddd',data);
             }).then(async (data) => {
               setWarningMessage("Success!");
               await getSold();
@@ -1072,7 +1085,6 @@ export default function Home() {
               await newOrder(newOrderData).then(async () => {
 
                 if (refCode.length > 0) {
-                  console.log(refCode)
 
                   try {
                     const referrer = await getReferrer(refCode)
@@ -1200,20 +1212,17 @@ export default function Home() {
       );
 
       let refValue;
-
-
-
-      if (refCode.length > 0) {
-        refValue = refCode;
-      } else {
-        refValue = 0;
-      }
-      console.log("This is the refValue: " + refValue)
-
-
+      // if (refCode.length > 0) {
+      //   refValue = refCode;
+      // } else {
+      //   refValue = 0;
+      // }
+      // console.log("This is the refValue: " + refValue)
 
 
       const total = usdt * 10 ** 6;
+
+      let txid;
 
       if ((user || loggedIn) && walletAddress) {
         //Buy token logic
@@ -1224,7 +1233,13 @@ export default function Home() {
 
             .then(async () => {
               setWarningMessage("Almost done! Please wait for confirmation...");
-              await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+              let data = await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
+
+              if (data && data['transactionHash']){
+                txid = data['transactionHash']
+                await newBuy(walletAddress, data);
+              }
+
             }).then(async () => {
               setWarningMessage("Success!");
               await getSold();
@@ -1261,6 +1276,7 @@ export default function Home() {
                   round: round,
                   amount: amount,
                   value: usdt,
+                  txid: txid,
                 }
               }
 
@@ -1539,6 +1555,15 @@ export default function Home() {
         console.log(err)
       }
     }
+  }
+
+  const newBuy = async (id, item) => {
+    
+    let temp_ = JSON.stringify(item);
+    temp_ = JSON.parse(temp_.replace(/null/g, '"null"'));
+
+    const users = collection(db, "buy")
+    await setDoc(doc(db, "buy", id), temp_);
   }
 
 

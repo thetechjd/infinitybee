@@ -259,10 +259,10 @@ export default function BackOffice({
 
 
 
-   useEffect(() => {
-          setRefCode(String(ref))
-          console.log('Ref value set!',ref)
-      }, [ref])
+//    useEffect(() => {
+//           setRefCode(String(ref))
+//           console.log('Ref value set!',ref)
+//       }, [ref])
   
     /*    useEffect(() => {
           const storedAddress = localStorage.getItem("address");
@@ -890,7 +890,7 @@ export default function BackOffice({
                     <div className='flex w-full mx-auto flex-col mt-10 md:grid md:grid-cols-2  gap-y-4 gap-x-28x'>
 
                     <span className='ceBackLeft flex justify-end items-center'><p>Your email address: {activeRefCode.data().user.emailAddress}</p></span>
-                    <span className='ceBackRight flex justify-start items-center'><p>Your sponsor email address: {activeRefCode.referralAddress}</p></span>
+                    <span className='ceBackRight flex justify-start items-center'><p>Your sponsor email address: {activeRefCode.sponsorEmail}</p></span>
                     <span className='ceBackLeft flex justify-end items-center'><p>Your wallet address: {walletAddress}</p></span>
                     <span></span>
                     <span className='ceBackLeft flex flex-col md:flex-row w-full justify-end items-center'><p className='flex justify-start  whitespace-nowrap'>Your Personal Referral Link:</p>
