@@ -300,11 +300,14 @@ export default function BackOffice({
 
     useEffect(async () => {
         try {
+            setCanClaim(false) 
         const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
-        console.log('nnn',nextClaim);
         if(Date.now() > nextClaim * 1000){
-         setCanClaim(true)
-     
+            console.log('nnn',Date.now(), nextClaim * 1000);
+            setCanClaim(true)     
+        }
+        else{
+            setCanClaim(false) 
         }
      } catch(error){
          setCanClaim(false)
