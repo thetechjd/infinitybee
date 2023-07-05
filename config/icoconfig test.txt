@@ -8,7 +8,7 @@
 }
 
 
-//sepolia
+//sepolia test
 {
     "icoAddress": "0x0793d7A0598b2d06cbc8734326D827941802596e",
     "beeAddress": "0xe74344f0d0f10846160d7928cb40ab16e56c4cb8",
