@@ -71,6 +71,19 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_newTime",
+                "type": "uint256"
+            }
+        ],
+        "name": "changeVesting",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "claim",
         "outputs": [],
