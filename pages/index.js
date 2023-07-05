@@ -1003,9 +1003,9 @@ export default function Home() {
     //   refValue = 0;
     // }
     // console.log("This is the refValue: " + refValue)
-
+ 
     refCode = activeRefCode.data().user.sponsorCode;
-    if (refCode.length > 0) {
+    if (refCode && refCode.length > 0) {
       refValue = refCode;
     } else {
       refValue = 0;
@@ -1086,7 +1086,7 @@ export default function Home() {
 
               await newOrder(newOrderData).then(async () => {
 
-                if (refCode.length > 0) {
+                if (refCode && refCode.length > 0) {
 
                   try {
                     const referrer = await getReferrer(refCode)
@@ -1213,7 +1213,7 @@ export default function Home() {
         fiatAddress
       );
 
-      let refValue;
+      //let refValue;
       // if (refCode.length > 0) {
       //   refValue = refCode;
       // } else {
@@ -1287,7 +1287,7 @@ export default function Home() {
 
 
 
-                if (refCode.length > 0) {
+                if (refCode && refCode.length > 0) {
                   console.log(refCode)
 
                   try {
