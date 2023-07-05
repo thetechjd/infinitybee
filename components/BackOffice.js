@@ -109,6 +109,7 @@ const pathexplorer = require("../config/icoconfig.json").pathexplorer;
 
 
 const web3 = createAlchemyWeb3('https://eth-sepolia.g.alchemy.com/v2/tZgBg81RgxE0pkpnQ6pjNpddJBd6nR_b');
+//const web3 = createAlchemyWeb3('https://data-seed-prebsc-2-s2.binance.org:8545/');
 
 
 const baseContract = new web3.eth.Contract(
@@ -137,6 +138,7 @@ const providerOptions = {
         package: WalletConnectProvider, // required
         options: {
             rpc: "https://eth-mainnet.g.alchemy.com/v2/trNMW5_zO5iGvlX4OZ3SjVF-5hLNVsN5" // required
+            //rpc: "https://data-seed-prebsc-2-s2.binance.org:8545/" // required
         }
     }
     /* coinbasewallet: {
@@ -301,6 +303,10 @@ export default function BackOffice({
     useEffect(async () => {
         try {
             setCanClaim(false) 
+
+            const vvvvv = await icoContract.methods.getClaimPeriod("0x49741b1EbaAb7206Dd26CA761f75f475c5389308").call()
+            console.log('vvvvv',vvvvv);
+
         const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
         if(Date.now() > nextClaim * 1000){
             setCanClaim(true)     
@@ -341,8 +347,15 @@ export default function BackOffice({
 
     const lastMonthDisable = (doc) => {
         console.log(doc)
-        const firstMonth = doc.data().user.createdAt;
-        if (monthHelper(firstMonth) === monthHelper(Date.now())) {
+
+        try{
+            const firstMonth = doc.data().user.createdAt;
+            if (monthHelper(firstMonth) === monthHelper(Date.now())) {
+                setLastMonthDisabled(true)
+            }
+        }
+        catch(err){
+            console.log(err)
             setLastMonthDisabled(true)
         }
     }

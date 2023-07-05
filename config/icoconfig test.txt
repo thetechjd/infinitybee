@@ -1,0 +1,22 @@
+
+//testnet
+{
+    "icoAddress": "0xCC07d79f7Da5a75cE4d7245AaF23F681d6aE81c1",
+    "beeAddress": "0x50FcaA129aa1C734Be481995A336BCA2a00FBAD0",
+    "fiatAddress": "0xdEe65abe9a164B8DcD16a02040BE107816D14C47",
+    "pathexplorer": "https://testnet.bscscan.com/tx/"
+}
+
+
+//sepolia
+{
+    "icoAddress": "0x0793d7A0598b2d06cbc8734326D827941802596e",
+    "beeAddress": "0xe74344f0d0f10846160d7928cb40ab16e56c4cb8",
+    "fiatAddress": "0xDF73dF0DA354f2F01661edC2131868BF145713b6",
+    "pathexplorer": "https://sepolia.etherscan.io/tx/"
+
+        "icoAddress": "0x0793d7A0598b2d06cbc8734326D827941802596e",
+    "beeAddress": "0x50FcaA129aa1C734Be481995A336BCA2a00FBAD0",
+    "fiatAddress": "0xDF73dF0DA354f2F01661edC2131868BF145713b6",
+    "pathexplorer": "https://sepolia.etherscan.io/tx/"
+}

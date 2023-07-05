@@ -2,6 +2,7 @@
 
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const web3 = createAlchemyWeb3('https://eth-mainnet.g.alchemy.com/v2/EI8zrRsRs4HkigqcF04vBysFSm5kD_yC');
+//const web3 = createAlchemyWeb3('https://data-seed-prebsc-2-s2.binance.org:8545/');
 
 const contractABI = require("../pages/contract-abi.json");
 const contractAddress = "0x738B31d615bF892039e5F0D3C98B4Ee7B22e0f81";

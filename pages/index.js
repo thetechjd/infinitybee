@@ -143,6 +143,7 @@ const beeAddress = require("../config/icoconfig.json").beeAddress;
 
 
 const web3 = createAlchemyWeb3('https://eth-sepolia.g.alchemy.com/v2/tZgBg81RgxE0pkpnQ6pjNpddJBd6nR_b');
+//const web3 = createAlchemyWeb3('https://data-seed-prebsc-2-s2.binance.org:8545/');
 
 
 const baseContract = new web3.eth.Contract(
@@ -162,6 +163,7 @@ const providerOptions = {
     package: WalletConnectProvider, // required
     options: {
       rpc: "https://eth-mainnet.g.alchemy.com/v2/trNMW5_zO5iGvlX4OZ3SjVF-5hLNVsN5" // required
+      //rpc: "https://data-seed-prebsc-2-s2.binance.org:8545/" // required
     }
   }
   /* coinbasewallet: {
