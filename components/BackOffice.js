@@ -204,6 +204,7 @@ export default function BackOffice({
     const [refCode, setRefCode] = useState("");
     const [totalRefRevenue, setTotalRefRevenue] = useState(0);
     const [amountDue, setAmountDue] = useState(0);
+    const [amountClaimed, setAmountClaimed] = useState(0);
 
     const [copyMessage, setCopyMessage] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
@@ -289,8 +290,10 @@ export default function BackOffice({
                 setTotalRefRevenue(totalRev);
                 setBalance((balance / 10 ** 18).toLocaleString('en', {useGrouping:true}))
 
-                const amountDue = await baseContract.methods.getAmountDue(walletAddress).call();
-                setAmountDue(amountDue);
+                const amountDue_ = await baseContract.methods.getAmountDue(walletAddress).call();
+                const amountClaimed_ = await baseContract.methods.getAmountClaimed(walletAddress).call();
+                setAmountDue(amountDue_);
+                setAmountClaimed(amountClaimed_);
 
             } catch (err) {
                 console.log(err)
@@ -303,10 +306,6 @@ export default function BackOffice({
     useEffect(async () => {
         try {
             setCanClaim(false) 
-
-            const vvvvv = await icoContract.methods.getClaimPeriod("0x49741b1EbaAb7206Dd26CA761f75f475c5389308").call()
-            console.log('vvvvv',vvvvv);
-
         const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
         if(Date.now() > nextClaim * 1000){
             setCanClaim(true)     
@@ -408,11 +407,6 @@ export default function BackOffice({
         const totalRev = await baseContract.methods.getTotalRefRevenue(address).call();
         console.log(totalRev)
         setTotalRefRevenue(totalRev);
-    }
-
-    const getAmountDue = async (address) => {
-        const amountDue = await baseContract.methods.getAmountDue(address).call();
-        setAmountDue(amountDue);
     }
 
 
@@ -1026,7 +1020,7 @@ export default function BackOffice({
 
                 <div className='flex flex-col w-full p-2 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48x'>
 
-                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <p>{balance} / {totalAmount} </p></span>
+                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <p>{amountClaimed} / {totalAmount} </p></span>
                     {/* <span className="ceClaim ceBackRight flex justify-start items-center">
                         <button onClick={() => { copyText(activeRefCode) }} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                         Claim --- IFB tokens
@@ -1039,7 +1033,7 @@ export default function BackOffice({
                         {canClaim ? (
                             <div>
                         <button onClick={claim} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
-                            Claim {amountDue} IFB tokens
+                            Claim {amountDue * 5 / 100} IFB tokens
                         </button>
                                                 {/* <p><span>{secondsToDhms(claimTime).days}</span> days</p>
                                                 <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
