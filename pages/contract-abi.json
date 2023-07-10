@@ -109,11 +109,6 @@
 				"internalType": "uint256",
 				"name": "nextClaim",
 				"type": "uint256"
-			},
-			{
-				"internalType": "uint8",
-				"name": "timesClaimed",
-				"type": "uint8"
 			}
 		],
 		"stateMutability": "view",
