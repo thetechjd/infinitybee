@@ -224,7 +224,7 @@ export default function Home() {
   const [lastMonth, setLastMonth] = useState("")
   const [isThisMonth, setIsThisMonth] = useState(true)
   const [totalAmount, setTotalAmount] = useState(0)
-
+  const [triggerBackOffice, setTriggerBackOffice] = useState(0);
 
 
 
@@ -1565,6 +1565,12 @@ const getFormat = (value) => {
 
   const newBuy = async (id, item) => {
     
+    // await fetchOrders(walletAddress)
+    // await fetchReferralCode(walletAddress)
+    // await fetchReferrals(walletAddress)
+
+    setTriggerBackOffice((triggerBackOffice) => triggerBackOffice + 1);
+
     // let temp_ = JSON.stringify(item);
     // temp_ = JSON.parse(temp_.replace(/null/g, '"null"'));
 
@@ -2931,7 +2937,7 @@ const getFormat = (value) => {
           setBonus={setBonus}
           totalAmount={totalAmount}
           setTotalAmount={setTotalAmount}
-
+          triggerBackOffice={triggerBackOffice}
 
         />
 

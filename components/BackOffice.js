@@ -176,7 +176,8 @@ export default function BackOffice({
     bonus,
     setBonus,
     totalAmount,
-    setTotalAmount
+    setTotalAmount,
+    triggerBackOffice
 }) {
 
 
@@ -232,7 +233,7 @@ export default function BackOffice({
     // Get current orders for the displayed page
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-    const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+    let currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
 
 
@@ -286,7 +287,7 @@ export default function BackOffice({
                 
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
-                setBalance((balance / 10 ** 18).toLocaleString('en', {useGrouping:true}).replace(',', ' '))
+                setBalance((balance / 10 ** 18).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '))
 
             } catch (err) {
                 console.log(err)
@@ -679,7 +680,7 @@ export default function BackOffice({
         bonus[7] = 5;
 
         if (round == '0'){
-            return ifb.toLocaleString('en', {useGrouping:true}).replace(',', ' ');
+            return ifb.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
         }
         else{
             switch (pack) {
@@ -692,22 +693,22 @@ export default function BackOffice({
                 //     return parseInt(ifb + (ifb * .01)).toFixed(0)
                 //     return parseInt(ifb).toFixed(0)
                 case 3:
-                    return parseInt(ifb + ((ifb * bonus[3]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
+                    return parseInt(ifb + ((ifb * bonus[3]) / 100)).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
                     //return parseInt(ifb).toFixed(0)
                 case 4:
-                   return parseInt(ifb + ((ifb * bonus[4]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
+                   return parseInt(ifb + ((ifb * bonus[4]) / 100)).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
                     //return parseInt(ifb).toFixed(0)
                 case 5:
-                    return parseInt(ifb + ((ifb * bonus[5]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
+                    return parseInt(ifb + ((ifb * bonus[5]) / 100)).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
                     //return parseInt(ifb+ (price * .15)).toFixed(0)
                 case 6:
-                    return parseInt(ifb + ((ifb * bonus[6]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
+                    return parseInt(ifb + ((ifb * bonus[6]) / 100)).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
                     //return parseInt(ifb + (price * .1)).toFixed(0)
                 case 7:
-                    return parseInt(ifb + ((ifb * bonus[7]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
+                    return parseInt(ifb + ((ifb * bonus[7]) / 100)).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
                     //return parseInt(ifb + (price * .07)).toFixed(0)
                 default:
-                    return ifb.toLocaleString('en', {useGrouping:true}).replace(',', ' ')
+                    return ifb.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
             }
         }
     }
@@ -769,9 +770,9 @@ export default function BackOffice({
             let amountClaim_ = await baseContract.methods.getAmountClaim(walletAddress).call();
             let amountClaimed_ = await baseContract.methods.getAmountClaimed(walletAddress).call();
 
-            setAmountDue(amountDue_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
-            setAmountClaim(amountClaim_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
-            setAmountClaimed(amountClaimed_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
+            setAmountDue(amountDue_.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '));
+            setAmountClaim(amountClaim_.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '));
+            setAmountClaimed(amountClaimed_.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '));
 
             if(Date.now() > nextClaim * 1000 && parseInt(amountDue_) > parseInt(amountClaimed_)){
                 setCanClaim(true)     
@@ -860,6 +861,12 @@ export default function BackOffice({
 
     }, [])
 
+    useEffect(() => {
+        getAmount(walletAddress);
+        getTimeLeft();
+        currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
+        console.log('from parent');
+      }, [triggerBackOffice]);
 
 
 
@@ -1138,7 +1145,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.value.toLocaleString('en', {useGrouping:true}).replace(',', ' ')}</td>
+                                <td className='flex w-full justify-center text-center'>{item.order.value.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')}</td>
                                 <td className='flex w-full justify-center text-center'><a href={`${pathexplorer+item.order.txid}`} target="_blank">{getTxIDShort(item.order.txid)}</a></td>
                             </tr>
 
