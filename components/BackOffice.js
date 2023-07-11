@@ -1033,7 +1033,7 @@ export default function BackOffice({
 
                 <div className='flex flex-col w-full p-2 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48x'>
 
-                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <p>{getFormat(amountClaimed)} / {getFormat(amountDue)} </p></span>
+                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <p>{getFormat(amountClaimed)} &nbsp; <b>/</b> &nbsp; {getFormat(amountDue)} </p></span>
                     {/* <span className="ceClaim ceBackRight flex justify-start items-center">
                         <button onClick={() => { copyText(activeRefCode) }} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                         Claim --- IFB tokens
@@ -1142,7 +1142,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{key + 1}</td>
                                 <td className='flex w-full justify-center  text-center'>{dateHelper(item.order.date)}</td>
                                 <td className='flex w-full justify-center text-center'>{getPackage(item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.price}</td>
+                                <td className='flex w-full justify-center text-center'>{item.order.price.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'>{item.order.value.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')}</td>
