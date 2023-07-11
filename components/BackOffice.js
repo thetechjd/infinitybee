@@ -204,6 +204,7 @@ export default function BackOffice({
     const [refCode, setRefCode] = useState("");
     const [totalRefRevenue, setTotalRefRevenue] = useState(0);
     const [amountDue, setAmountDue] = useState(0);
+    const [amountClaim, setAmountClaim] = useState(0);
     const [amountClaimed, setAmountClaimed] = useState(0);
 
     const [copyMessage, setCopyMessage] = useState('')
@@ -296,24 +297,7 @@ export default function BackOffice({
 
 
     useEffect(async () => {
-        try {
-
-        const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
-        let amountDue_ = await baseContract.methods.getAmountDue(walletAddress).call();
-        let amountClaimed_ = await baseContract.methods.getAmountClaimed(walletAddress).call();
-
-        setAmountDue(amountDue_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
-        setAmountClaimed(amountClaimed_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
-
-        if(Date.now() > nextClaim * 1000 && parseInt(amountDue_) > parseInt(amountClaimed_)){
-            setCanClaim(true)     
-        }
-        else{
-            setCanClaim(false) 
-        }
-     } catch(error){
-         setCanClaim(false)
-     }
+        getAmount(walletAddress);
      
      }, [walletAddress])
      
@@ -777,6 +761,29 @@ export default function BackOffice({
     }
 
 
+    const getAmount = async (walletAddress) => {
+
+        try {
+            const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
+            let amountDue_ = await baseContract.methods.getAmountDue(walletAddress).call();
+            let amountClaim_ = await baseContract.methods.getAmountClaim(walletAddress).call();
+            let amountClaimed_ = await baseContract.methods.getAmountClaimed(walletAddress).call();
+
+            setAmountDue(amountDue_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
+            setAmountClaim(amountClaim_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
+            setAmountClaimed(amountClaimed_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
+
+            if(Date.now() > nextClaim * 1000 && parseInt(amountDue_) > parseInt(amountClaimed_)){
+                setCanClaim(true)     
+            }
+            else{
+                setCanClaim(false) 
+            }
+        } catch(error){
+            setCanClaim(false)
+        }   
+    }
+
     const getTimeLeft = async () => {
         let endTime = await icoContract.methods.getClaimPeriod(walletAddress).call();
        
@@ -789,17 +796,17 @@ export default function BackOffice({
           countdown = endTime - start;
         }
         // console.log(countdown)
-        setClaimTime(countdown);
-    
-    
-      }
+        setClaimTime(countdown);    
+    }
 
 
     function secondsToDhms(seconds) {
 
         seconds = Number(seconds);
-        if (seconds === 0) 
-        setCanClaim(true);
+
+        if (seconds <= 0) {
+            setCanClaim(true);
+        }
 
         var d = Math.floor(seconds / (3600 * 24));
         var h = Math.floor(seconds % (3600 * 24) / 3600);
@@ -812,7 +819,7 @@ export default function BackOffice({
         var sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : 0;
     
         
-          if (seconds !== 0) {
+          if (seconds > 0) {
             return {
                 days: dDisplay,
                 hours: hDisplay,
@@ -821,6 +828,7 @@ export default function BackOffice({
             }
           } else {
             setCanClaim(true);
+
             return {
                 days: 0,
                 hours: 0,
@@ -836,6 +844,7 @@ export default function BackOffice({
         if(canClaim){
             await icoContract.methods.claim().send({from: walletAddress}).then(() => {
                 setCanClaim(false)
+                getAmount(walletAddress)
                 getTimeLeft()
             })
         }
@@ -1030,7 +1039,7 @@ export default function BackOffice({
                         {canClaim ? (
                             <div>
                         <button onClick={claim} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
-                            Claim {getFormat(amountDue * 5 / 100)} IFB tokens
+                            Claim {getFormat(amountClaim)} IFB tokens
                         </button>
                                                 {/* <p><span>{secondsToDhms(claimTime).days}</span> days</p>
                                                 <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
