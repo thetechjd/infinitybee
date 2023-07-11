@@ -1185,8 +1185,8 @@ export default function Home() {
               })
 
 
-
-
+              await fetchOrders(walletAddress)          
+              setTriggerBackOffice((triggerBackOffice) => triggerBackOffice + 1);
 
             }))
         } catch (error) {
@@ -1332,6 +1332,10 @@ export default function Home() {
 
                 }
               })
+
+              await fetchOrders(walletAddress)          
+              setTriggerBackOffice((triggerBackOffice) => triggerBackOffice + 1);
+              
             })
 
 
@@ -1565,7 +1569,7 @@ const getFormat = (value) => {
 
   const newBuy = async (id, item) => {
     
-    // await fetchOrders(walletAddress)
+    await fetchOrders(walletAddress)
     // await fetchReferralCode(walletAddress)
     // await fetchReferrals(walletAddress)
 
