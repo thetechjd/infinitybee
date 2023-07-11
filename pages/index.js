@@ -329,7 +329,7 @@ export default function Home() {
       })
       console.log(list)
       setOrders(list);
-      setTotalAmount(total.toLocaleString('en', {useGrouping:true}))
+      setTotalAmount(total.toLocaleString('en', {useGrouping:true})).replace(',', ' ')
     } catch (err) {
       console.log(err)
     }
@@ -855,7 +855,7 @@ export default function Home() {
     console.log(amountSold)
     //const amountRemaining = await beeContract.methods.balanceOf(contractAddress).call();
     setSold(amountSold);
-    setRemaining(100_000_000 * 10 ** 18 - (amountSold * 10 ** 18));
+    setRemaining(100000000 * 10 ** 18 - (amountSold * 10 ** 18));
     setTokenPrice(price)
   }
 
@@ -1513,6 +1513,10 @@ export default function Home() {
     }
 }
 
+const getFormat = (value) => {
+  return parseInt(value).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
+}
+
   const getRoundPrice = (round) => {
     switch (round) {
       case '0':
@@ -1768,13 +1772,13 @@ export default function Home() {
                 <h3 className="my-auto whitespace-nowrap mx-4 text-bluee text-2xl">{translate("currency")}</h3>
                 <p className='m-auto text-3xl'>{translate("sold")}</p>
                 <h3 className='my-auto  whitespace-nowrap mx-4 text-2xl'>{translate("used")}</h3>
-                <h3 className='m-auto text-3xl'>{sold ? formatter.format(sold) : 0}</h3>
+                <h3 className='m-auto text-3xl'>{sold ? getFormat(sold) : 0}</h3>
                 <h3 className='my-auto mx-4 whitespace-nowrap text-pinkk text-2xl'>{translate("decentralized")}</h3>
                 <div></div>
                 <h3 className='my-auto uppercase whitespace-nowrap mx-4 text-2xl'>{translate("world")}</h3>
                 <p className='m-auto text-3xl'>{translate("remaining")}</p>
                 <h3 className='my-auto whitespace-nowrap mx-4 text-purplee text-2xl'>{translate("matrix")}</h3>
-                <h3 className='m-auto text-3xl'>{remaining ? formatter.format(remaining / 10 ** 18) : 0}</h3>
+                <h3 className='m-auto text-3xl'>{remaining ? getFormat(remaining / 10 ** 18) : 0}</h3>
 
               </div>
 
@@ -1792,8 +1796,8 @@ export default function Home() {
                 <br /><br />
                 <div className="flex flex-row w-full mx-auto md:flex-row subtitlemobile2">
                   <div className="flex flex-col w-full md:w-1/2">
-                    <p className='m-auto text-3xl'>{translate("sold")} <br /> {sold ? formatter.format(sold) : 0}</p>
-                    <p className='m-auto text-3xl'>{translate("remaining")} <br /> {remaining ? formatter.format(remaining / 10 ** 18) : 0}</p>
+                    <p className='m-auto text-3xl'>{translate("sold")} <br /> {sold ? getFormat(sold) : 0}</p>
+                    <p className='m-auto text-3xl'>{translate("remaining")} <br /> {remaining ? getFormat(remaining / 10 ** 18) : 0}</p>
                   </div>
                   <div className="flex flex-col w-full md:w-1/2">
                     <img src='/images/beelogo.png' className='w-[300px] m-auto ' />

@@ -214,9 +214,6 @@ export default function BackOffice({
 
     const [canClaim, setCanClaim] = useState(false)
     const [claimTime, setClaimTime] = useState(0)   
-
-
-
     
 
     //Pagination
@@ -288,12 +285,7 @@ export default function BackOffice({
                 
                 console.log(totalRev)
                 setTotalRefRevenue(totalRev);
-                setBalance((balance / 10 ** 18).toLocaleString('en', {useGrouping:true}))
-
-                const amountDue_ = await baseContract.methods.getAmountDue(walletAddress).call();
-                const amountClaimed_ = await baseContract.methods.getAmountClaimed(walletAddress).call();
-                setAmountDue(amountDue_);
-                setAmountClaimed(amountClaimed_);
+                setBalance((balance / 10 ** 18).toLocaleString('en', {useGrouping:true}).replace(',', ' '))
 
             } catch (err) {
                 console.log(err)
@@ -305,9 +297,15 @@ export default function BackOffice({
 
     useEffect(async () => {
         try {
-            setCanClaim(false) 
+
         const nextClaim = await icoContract.methods.getClaimPeriod(walletAddress).call()
-        if(Date.now() > nextClaim * 1000){
+        let amountDue_ = await baseContract.methods.getAmountDue(walletAddress).call();
+        let amountClaimed_ = await baseContract.methods.getAmountClaimed(walletAddress).call();
+
+        setAmountDue(amountDue_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
+        setAmountClaimed(amountClaimed_.toLocaleString('en', {useGrouping:true}).replace(',', ' '));
+
+        if(Date.now() > nextClaim * 1000 && parseInt(amountDue_) > parseInt(amountClaimed_)){
             setCanClaim(true)     
         }
         else{
@@ -321,16 +319,7 @@ export default function BackOffice({
      
      useEffect(async() => {
          getTimeLeft();
-     })
-     
-     useEffect(() => {
-         const interval = setInterval(() => {
-     
-           setClaimTime(claimTime => claimTime - 1);
-         }, 1000);
-         return () => clearInterval(interval);
-     
-       }, [])
+    }, [])
 
 
 
@@ -407,6 +396,10 @@ export default function BackOffice({
         const totalRev = await baseContract.methods.getTotalRefRevenue(address).call();
         console.log(totalRev)
         setTotalRefRevenue(totalRev);
+    }
+
+    const getFormat = (value) => {
+        return parseInt(value).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
     }
 
 
@@ -702,7 +695,7 @@ export default function BackOffice({
         bonus[7] = 5;
 
         if (round == '0'){
-            return ifb.toLocaleString('en', {useGrouping:true});
+            return ifb.toLocaleString('en', {useGrouping:true}).replace(',', ' ');
         }
         else{
             switch (pack) {
@@ -715,22 +708,22 @@ export default function BackOffice({
                 //     return parseInt(ifb + (ifb * .01)).toFixed(0)
                 //     return parseInt(ifb).toFixed(0)
                 case 3:
-                    return parseInt(ifb + ((ifb * bonus[3]) / 100)).toLocaleString('en', {useGrouping:true})
+                    return parseInt(ifb + ((ifb * bonus[3]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
                     //return parseInt(ifb).toFixed(0)
                 case 4:
-                   return parseInt(ifb + ((ifb * bonus[4]) / 100)).toLocaleString('en', {useGrouping:true})
+                   return parseInt(ifb + ((ifb * bonus[4]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
                     //return parseInt(ifb).toFixed(0)
                 case 5:
-                    return parseInt(ifb + ((ifb * bonus[5]) / 100)).toLocaleString('en', {useGrouping:true})
+                    return parseInt(ifb + ((ifb * bonus[5]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
                     //return parseInt(ifb+ (price * .15)).toFixed(0)
                 case 6:
-                    return parseInt(ifb + ((ifb * bonus[6]) / 100)).toLocaleString('en', {useGrouping:true})
+                    return parseInt(ifb + ((ifb * bonus[6]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
                     //return parseInt(ifb + (price * .1)).toFixed(0)
                 case 7:
-                    return parseInt(ifb + ((ifb * bonus[7]) / 100)).toLocaleString('en', {useGrouping:true})
+                    return parseInt(ifb + ((ifb * bonus[7]) / 100)).toLocaleString('en', {useGrouping:true}).replace(',', ' ')
                     //return parseInt(ifb + (price * .07)).toFixed(0)
                 default:
-                    return ifb.toLocaleString('en', {useGrouping:true})
+                    return ifb.toLocaleString('en', {useGrouping:true}).replace(',', ' ')
             }
         }
     }
@@ -805,15 +798,18 @@ export default function BackOffice({
     function secondsToDhms(seconds) {
 
         seconds = Number(seconds);
+        if (seconds === 0) 
+        setCanClaim(true);
+
         var d = Math.floor(seconds / (3600 * 24));
         var h = Math.floor(seconds % (3600 * 24) / 3600);
         var m = Math.floor(seconds % 3600 / 60);
         var s = Math.floor(seconds % 60);
     
-        var dDisplay = d > 0 ? d : "";
-        var hDisplay = h > 0 ? (h < 10 ? "0" + h + ":" : h ) : "";
-        var mDisplay = m > 0 ? (m < 10 ? "0" + m + ":" : m ) : "";
-        var sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : "";
+        var dDisplay = d > 0 ? d : 0;
+        var hDisplay = h > 0 ? (h < 10 ? "0" + h + ":" : h ) : 0;
+        var mDisplay = m > 0 ? (m < 10 ? "0" + m + ":" : m ) : 0;
+        var sDisplay = s > 0 ? (s < 10 ? "0" + s : s) : 0;
     
         
           if (seconds !== 0) {
@@ -824,7 +820,6 @@ export default function BackOffice({
                 seconds: sDisplay
             }
           } else {
-    
             setCanClaim(true);
             return {
                 days: 0,
@@ -839,8 +834,10 @@ export default function BackOffice({
     
     const claim = async () => {
         if(canClaim){
-            await icoContract.methods.claim().send({from: walletAddress})
-            setCanClaim(false)
+            await icoContract.methods.claim().send({from: walletAddress}).then(() => {
+                setCanClaim(false)
+                getTimeLeft()
+            })
         }
     }
 
@@ -1020,7 +1017,7 @@ export default function BackOffice({
 
                 <div className='flex flex-col w-full p-2 mx-auto  mt-10 md:grid md:grid-cols-2  gap-y-10 gap-x-48x'>
 
-                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <p>{amountClaimed} / {totalAmount} </p></span>
+                    <span className='flex flex-col md:flex-row w-full whitespace-nowrap justify-start items-center'><p className='mr-2 ceBold'>TOTAL AMOUNT of InfinityBee TOKENS Vested:</p>  <p>{getFormat(amountClaimed)} / {getFormat(amountDue)} </p></span>
                     {/* <span className="ceClaim ceBackRight flex justify-start items-center">
                         <button onClick={() => { copyText(activeRefCode) }} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
                         Claim --- IFB tokens
@@ -1033,7 +1030,7 @@ export default function BackOffice({
                         {canClaim ? (
                             <div>
                         <button onClick={claim} className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 hover:bg-green-300 py-2 px-1">
-                            Claim {amountDue * 5 / 100} IFB tokens
+                            Claim {getFormat(amountDue * 5 / 100)} IFB tokens
                         </button>
                                                 {/* <p><span>{secondsToDhms(claimTime).days}</span> days</p>
                                                 <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
@@ -1044,9 +1041,16 @@ export default function BackOffice({
                         <button disabled className="ceBold flex whitespace-nowrap rounded-md ml-1 mr-1 my-3 justify-center items-center bg-blue-400 py-2 px-1">
                             Claim IFB tokens
                         </button>
-                                                <p><span>{secondsToDhms(claimTime).days}</span> days</p>
-                                                <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
-                                                <p><span>{secondsToDhms(claimTime).minutes}</span> minutes</p>
+                        { (amountDue - amountClaimed > 0) && (
+                            <>
+                               <p><span>{secondsToDhms(claimTime).days}</span> days</p>
+                               <p><span>{secondsToDhms(claimTime).hours}</span> hours</p>
+                               <p><span>{secondsToDhms(claimTime).minutes}</span> minutes</p>
+                               <p><span>{secondsToDhms(claimTime).seconds}</span> seconds</p>
+                            </>
+                        )
+
+                        }
                         </>
                         )}
 
@@ -1125,7 +1129,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{item.order.price}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.value.toLocaleString('en', {useGrouping:true})}</td>
+                                <td className='flex w-full justify-center text-center'>{item.order.value.toLocaleString('en', {useGrouping:true}).replace(',', ' ')}</td>
                                 <td className='flex w-full justify-center text-center'><a href={`${pathexplorer+item.order.txid}`} target="_blank">{getTxIDShort(item.order.txid)}</a></td>
                             </tr>
 
