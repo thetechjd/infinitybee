@@ -142,8 +142,8 @@ const beeAddress = require("../config/icoconfig.json").beeAddress;
 
 
 
-const web3 = createAlchemyWeb3('https://eth-sepolia.g.alchemy.com/v2/tZgBg81RgxE0pkpnQ6pjNpddJBd6nR_b');
-//const web3 = createAlchemyWeb3('https://data-seed-prebsc-2-s2.binance.org:8545/');
+//const web3 = createAlchemyWeb3('https://eth-sepolia.g.alchemy.com/v2/tZgBg81RgxE0pkpnQ6pjNpddJBd6nR_b');
+const web3 = createAlchemyWeb3('https://data-seed-prebsc-2-s2.binance.org:8545/');
 
 
 const baseContract = new web3.eth.Contract(
@@ -162,8 +162,8 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      rpc: "https://eth-mainnet.g.alchemy.com/v2/trNMW5_zO5iGvlX4OZ3SjVF-5hLNVsN5" // required
-      //rpc: "https://data-seed-prebsc-2-s2.binance.org:8545/" // required
+      //rpc: "https://eth-mainnet.g.alchemy.com/v2/trNMW5_zO5iGvlX4OZ3SjVF-5hLNVsN5" // required
+      rpc: "https://data-seed-prebsc-2-s2.binance.org:8545/" // required
     }
   }
   /* coinbasewallet: {
@@ -806,7 +806,8 @@ export default function Home() {
         setAddress(address);
 
         let chainIdNum = getNetwork();
-        if (chainIdNum !== '0xaa36a7') {
+        //if (chainIdNum !== '0xaa36a7') {
+        if (chainIdNum !== '0x61') {
           switchNetwork(web3ModalInstance);
         }
         fetchReferralCode(address.toLowerCase());
@@ -831,7 +832,8 @@ export default function Home() {
   }
 
   const switchNetwork = async (web3modal) => {
-    var chainId = 11155111
+    //var chainId = 11155111
+    var chainId = 97
 
     const provider = new Web3(web3modal)
     await window.ethereum.request({
