@@ -680,7 +680,7 @@ export default function BackOffice({
         bonus[7] = 5;
 
         if (round == '0'){
-            return ifb.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
+            return parseInt(ifb.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '));
         }
         else{
             switch (pack) {
@@ -708,7 +708,7 @@ export default function BackOffice({
                     return parseInt(ifb + ((ifb * bonus[7]) / 100)).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
                     //return parseInt(ifb + (price * .07)).toFixed(0)
                 default:
-                    return ifb.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')
+                    return parseInt(ifb.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '))
             }
         }
     }
