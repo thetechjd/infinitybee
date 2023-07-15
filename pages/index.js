@@ -156,6 +156,15 @@ const beeContract = new web3.eth.Contract(
   beeAddress
 );
 
+const icoContract = new web3.eth.Contract(
+  contractABI,
+  contractAddress
+)
+
+const fiatContract = new web3.eth.Contract(
+  fiatABI,
+  fiatAddress
+);
 
 
 const providerOptions = {
@@ -271,7 +280,14 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
+  useEffect(async() => {
+
+    const www = "0x1961577c97E04758F9aADD3D1Be86CcFab0E6E54";
+const nextClaim1 = await icoContract.methods.getClaimPeriod(www).call()
+let amountDue1 = await baseContract.methods.getAmountDue(www).call();
+let amountClaimed1 = await baseContract.methods.getAmountClaimed(www).call();
+console.log('xxxxxxxx',nextClaim1, amountDue1, amountClaimed1)
+
     const logStatus = localStorage.getItem("loggedIn")
     const userAddress = localStorage.getItem("address")
     if (logStatus && userAddress)
@@ -1015,17 +1031,6 @@ export default function Home() {
 
     if (!provider) {
 
-      const icoContract = new web3.eth.Contract(
-        contractABI,
-        contractAddress
-      )
-
-      const fiatContract = new web3.eth.Contract(
-        fiatABI,
-        fiatAddress
-      );
-
-
       const total = usdt * 10 ** 6;
 
       let txid;
@@ -1203,17 +1208,6 @@ export default function Home() {
 
 
     } else {
-
-
-      const icoContract = new provider.eth.Contract(
-        contractABI,
-        contractAddress
-      )
-
-      const fiatContract = new provider.eth.Contract(
-        fiatABI,
-        fiatAddress
-      );
 
       //let refValue;
       // if (refCode.length > 0) {

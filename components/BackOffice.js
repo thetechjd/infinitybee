@@ -774,7 +774,9 @@ export default function BackOffice({
             setAmountClaim(amountClaim_.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '));
             setAmountClaimed(amountClaimed_.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' '));
 
-            if(Date.now() > nextClaim * 1000 && parseInt(amountDue_) > parseInt(amountClaimed_)){
+            if(Date.now() > nextClaim * 1000 && 
+            parseInt(amountDue_) > parseInt(amountClaimed_) && 
+            parseInt(amountClaim) > 0){
                 setCanClaim(true)     
             }
             else{
