@@ -208,6 +208,8 @@ export default function BackOffice({
     const [amountClaim, setAmountClaim] = useState(0);
     const [amountClaimed, setAmountClaimed] = useState(0);
 
+    const [tokenPrice, setTokenPrice] = useState(0)
+
     const [copyMessage, setCopyMessage] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
     const [balance, setBalance] = useState(0)
@@ -252,9 +254,12 @@ export default function BackOffice({
 
 
 
-    useEffect(() => {
+    useEffect(async () => {
         setThisMonth(convertMonth(monthHelper(Date.now())))
         setLastMonth(convertMonth(monthHelper(Date.now()) - 1))
+
+        const tokenPrice = await baseContract.methods.tokenPrice().call();
+        setTokenPrice(tokenPrice / 10 ** 18)
     }, [])
 
    
@@ -663,7 +668,15 @@ export default function BackOffice({
         }
     }
 
+    const getTotalValue = (price, round) => {
 
+        let roundPrice = getRoundPrice(round);
+        
+        let amount = price / roundPrice ;
+
+        return parseInt(amount * tokenPrice).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
+
+    }
 
     const getDiscount = (round, price, pack) => {
         const roundPrice = getRoundPrice(round);
@@ -1148,7 +1161,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{item.order.price.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{item.order.value.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')}</td>
+                                <td className='flex w-full justify-center text-center'>{getTotalValue(item.order.amount, item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'><a href={`${pathexplorer+item.order.txid}`} target="_blank">{getTxIDShort(item.order.txid)}</a></td>
                             </tr>
 
