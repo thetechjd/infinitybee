@@ -282,11 +282,9 @@ export default function Home() {
 
   useEffect(async() => {
 
-    const www = "0x1961577c97E04758F9aADD3D1Be86CcFab0E6E54";
-const nextClaim1 = await icoContract.methods.getClaimPeriod(www).call()
-let amountDue1 = await baseContract.methods.getAmountDue(www).call();
-let amountClaimed1 = await baseContract.methods.getAmountClaimed(www).call();
-console.log('xxxxxxxx',nextClaim1, amountDue1, amountClaimed1)
+    const www = "0x04ba31acca96ca16a90fbe04e383929d3b6050fd";
+const cont = await icoContract.methods.getContributionsPackages(www).call()
+console.log('ccc', cont)
 
     const logStatus = localStorage.getItem("loggedIn")
     const userAddress = localStorage.getItem("address")
