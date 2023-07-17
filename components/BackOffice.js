@@ -683,14 +683,11 @@ export default function BackOffice({
             return 5;
     }
 
-    const getTotalValue = (price, round, pck) => {
+    const getTotalValue = (round, price, pck) => {
 
-        let roundPrice = getRoundPrice(round);
+        //let roundPrice = getRoundPrice(round);
         
-        let amount = price / roundPrice ;
-
-        if (round > 0 && getBonus(pck) > 0)
-        amount = amount + ((amount * getBonus(pck)) / 100);
+        let amount = getDiscount(round, price, pck);
 
         return parseInt(amount * tokenPrice).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
 
@@ -1181,7 +1178,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{item.order.price.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{getTotalValue(item.order.amount, item.order.round, item.order.package)}</td>
+                                <td className='flex w-full justify-center text-center'>{getTotalValue(item.order.round, item.order.amount, item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'><a href={`${pathexplorer+item.order.txid}`} target="_blank">{getTxIDShort(item.order.txid)}</a></td>
                             </tr>
 
