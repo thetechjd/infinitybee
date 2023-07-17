@@ -687,11 +687,55 @@ export default function BackOffice({
 
         //let roundPrice = getRoundPrice(round);
         
-        let amount = getDiscount(round, price, pck);
-        amount = amount.replaceAll(" ","");
+        const roundPrice = getRoundPrice(round);
+        const ifb = price / roundPrice;
 
-        console.log('fffffff',amount, tokenPrice);
-        return parseInt(parseInt(amount) * tokenPrice).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
+        let bonus = [];
+        bonus[0] = 0;
+        bonus[1] = 0;
+        bonus[2] = 0;
+        bonus[3] = 3;
+        bonus[4] = 12;
+        bonus[5] = 9;
+        bonus[6] = 7;
+        bonus[7] = 5;
+
+        let amount = 0;
+        
+        if (round == '0'){
+            amount = ifb;
+        }
+        else{
+            switch (pck) {
+                // case 0:
+                //     amount = ifb
+                // case 1:
+                //     amount = parseInt(ifb + (ifb * .02)).toFixed(0)
+                //     amount = parseInt(ifb).toFixed(0)
+                // case 2:
+                //     amount = parseInt(ifb + (ifb * .01)).toFixed(0)
+                //     amount = parseInt(ifb).toFixed(0)
+                case 3:
+                    amount = ifb + ((ifb * bonus[3]) / 100)
+                    //amount = parseInt(ifb).toFixed(0)
+                case 4:
+                   amount = ifb + ((ifb * bonus[4]) / 100)
+                    //amount = parseInt(ifb).toFixed(0)
+                case 5:
+                    amount = ifb + ((ifb * bonus[5]) / 100)
+                    //amount = parseInt(ifb+ (price * .15)).toFixed(0)
+                case 6:
+                    amount = ifb + ((ifb * bonus[6]) / 100)
+                    //amount = parseInt(ifb + (price * .1)).toFixed(0)
+                case 7:
+                    amount = ifb + ((ifb * bonus[7]) / 100)
+                    //amount = parseInt(ifb + (price * .07)).toFixed(0)
+                default:
+                    amount = ifb
+            }
+        }
+
+        return parseInt(amount * tokenPrice).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
 
     }
 
