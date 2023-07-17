@@ -668,11 +668,29 @@ export default function BackOffice({
         }
     }
 
-    const getTotalValue = (price, round) => {
+    const getBonus = (pck) => {
+        if(pck <= 2)
+            return 0;
+        else if(pck = 3)
+            return 3;
+        if(pck = 4)
+            return 12;
+        else if(pck = 5)
+            return 9;
+        else if(pck = 6)
+            return 7;
+        else if(pck = 7)
+            return 5;
+    }
+
+    const getTotalValue = (price, round, pck) => {
 
         let roundPrice = getRoundPrice(round);
         
         let amount = price / roundPrice ;
+
+        if (round > 0 && getBonus(pck) > 0)
+        amount = amount + ((amount * getBonus(pck)) / 100);
 
         return parseInt(amount * tokenPrice).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
 
@@ -858,10 +876,12 @@ export default function BackOffice({
     
     const claim = async () => {
         if(canClaim){
-            await icoContract.methods.claim().send({from: walletAddress}).then(() => {
+            await icoContract.methods.claim().send({from: walletAddress}).then((data) => {
                 setCanClaim(false)
                 getAmount(walletAddress)
                 getTimeLeft()
+
+                console.log('ddddd', data);
             })
         }
     }
@@ -1161,7 +1181,7 @@ export default function BackOffice({
                                 <td className='flex w-full justify-center text-center'>{item.order.price.toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ')}</td>
                                 <td className='flex w-full justify-center text-center'>{getRound(item.order.round)}</td>
                                 <td className='flex w-full justify-center text-center'>{getDiscount(item.order.round, item.order.amount, item.order.package)}</td>
-                                <td className='flex w-full justify-center text-center'>{getTotalValue(item.order.amount, item.order.round)}</td>
+                                <td className='flex w-full justify-center text-center'>{getTotalValue(item.order.amount, item.order.round, item.order.package)}</td>
                                 <td className='flex w-full justify-center text-center'><a href={`${pathexplorer+item.order.txid}`} target="_blank">{getTxIDShort(item.order.txid)}</a></td>
                             </tr>
 
