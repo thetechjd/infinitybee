@@ -688,8 +688,10 @@ export default function BackOffice({
         //let roundPrice = getRoundPrice(round);
         
         let amount = getDiscount(round, price, pck);
+        amount = amount.replaceAll(" ","");
 
-        return parseInt(amount * tokenPrice).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
+        console.log('fffffff',amount, tokenPrice);
+        return parseInt(parseInt(amount) * tokenPrice).toLocaleString('en', {useGrouping:true}).replaceAll(',', ' ');
 
     }
 
