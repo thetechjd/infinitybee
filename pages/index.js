@@ -88,13 +88,20 @@ const options2 = {
   is3D: true
 };
 
+const apiKey = require("../config/icoconfig.json").apiKey;
+const authDomain = require("../config/icoconfig.json").authDomain;
+const projectId = require("../config/icoconfig.json").projectId;
+const storageBucket = require("../config/icoconfig.json").storageBucket;
+const messagingSenderId = require("../config/icoconfig.json").messagingSenderId;
+const appId = require("../config/icoconfig.json").appId;
+
 const firebaseConfig = {
-  apiKey: "AIzaSyACfUR1tmMLp0YRkVDBiRmMGJ5rdMuK_VY",
-  authDomain: "beandbee-38cba.firebaseapp.com",
-  projectId: "beandbee-38cba",
-  storageBucket: "beandbee-38cba.appspot.com",
-  messagingSenderId: "296445192075",
-  appId: "1:296445192075:web:4da5127fe15743c82ab18e"
+  apiKey: apiKey,
+  authDomain: authDomain,
+  projectId: projectId,
+  storageBucket: storageBucket,
+  messagingSenderId: messagingSenderId,
+  appId: appId
 };
 
 const actionCodeSettings = {
@@ -139,11 +146,14 @@ const beeABI = require("../pages/bee-abi.json");
 const contractAddress = require("../config/icoconfig.json").icoAddress;
 const fiatAddress = require("../config/icoconfig.json").fiatAddress;
 const beeAddress = require("../config/icoconfig.json").beeAddress;
-
+const pathrpc = require("../config/icoconfig.json").pathrpc;
+const chainidhex = require("../config/icoconfig.json").chainidhex;
+const chainiddec = require("../config/icoconfig.json").chainiddec;
+const tokendecimals = require("../config/icoconfig.json").tokendecimals;
 
 
 //const web3 = createAlchemyWeb3('https://eth-sepolia.g.alchemy.com/v2/tZgBg81RgxE0pkpnQ6pjNpddJBd6nR_b');
-const web3 = createAlchemyWeb3('https://data-seed-prebsc-2-s2.binance.org:8545/');
+const web3 = createAlchemyWeb3(pathrpc);
 
 
 const baseContract = new web3.eth.Contract(
@@ -172,7 +182,7 @@ const providerOptions = {
     package: WalletConnectProvider, // required
     options: {
       //rpc: "https://eth-mainnet.g.alchemy.com/v2/trNMW5_zO5iGvlX4OZ3SjVF-5hLNVsN5" // required
-      rpc: "https://data-seed-prebsc-2-s2.binance.org:8545/" // required
+      rpc: pathrpc // required
     }
   }
   /* coinbasewallet: {
@@ -820,8 +830,7 @@ console.log('ccc', cont)
         setAddress(address);
 
         let chainIdNum = getNetwork();
-        //if (chainIdNum !== '0xaa36a7') {
-        if (chainIdNum !== '0x61') {
+        if (chainIdNum !== chainidhex) {
           switchNetwork(web3ModalInstance);
         }
         fetchReferralCode(address.toLowerCase());
@@ -846,8 +855,7 @@ console.log('ccc', cont)
   }
 
   const switchNetwork = async (web3modal) => {
-    //var chainId = 11155111
-    var chainId = 97
+    var chainId = chainiddec
 
     const provider = new Web3(web3modal)
     await window.ethereum.request({
@@ -869,9 +877,9 @@ console.log('ccc', cont)
     const amountSold = await baseContract.methods.sold().call();
     const price = await baseContract.methods.tokenPrice().call();
     console.log(amountSold)
-    //const amountRemaining = await beeContract.methods.balanceOf(contractAddress).call();
+    const amountRemaining = await beeContract.methods.balanceOf(contractAddress).call();
     setSold(amountSold);
-    setRemaining(100000000 * 10 ** 18 - (amountSold * 10 ** 18));
+    setRemaining(36000000 * 10 ** 18 - (amountSold * 10 ** 18));
     setTokenPrice(price)
   }
 
@@ -999,6 +1007,10 @@ console.log('ccc', cont)
 
   const buyTokens = async (pack, usdt) => {
 
+    if (!walletAddress){
+      showLoginModal(true)
+    }
+
     if (walletAddress && !activeRefCode){
       fetchReferralCode(walletAddress.toLowerCase());
       return;
@@ -1029,7 +1041,7 @@ console.log('ccc', cont)
 
     if (!provider) {
 
-      const total = usdt * 10 ** 6;
+      const total = usdt * 10 ** tokendecimals;
 
       let txid;
 
@@ -1037,7 +1049,7 @@ console.log('ccc', cont)
         //Buy token logic
         setWarningMessage("Please approve default amount...");
         try {
-          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress })
+          await fiatContract.methods.approve(contractAddress, BigInt(total)).send({ from: walletAddress })
             .then(async () => {
               setWarningMessage("Almost done! Please wait for confirmation...");
               let data = await icoContract.methods.buyTokens(pack, refValue).send({ from: walletAddress, gas: 500000 })
@@ -1216,7 +1228,7 @@ console.log('ccc', cont)
       // console.log("This is the refValue: " + refValue)
 
 
-      const total = usdt * 10 ** 6;
+      const total = usdt * 10 ** tokendecimals;
 
       let txid;
 
@@ -1225,7 +1237,7 @@ console.log('ccc', cont)
         setWarningMessage("Please approve default amount...");
 
         try {
-          await fiatContract.methods.approve(contractAddress, total).send({ from: walletAddress })
+          await fiatContract.methods.approve(contractAddress, BigInt(total)).send({ from: walletAddress })
 
             .then(async () => {
               setWarningMessage("Almost done! Please wait for confirmation...");
@@ -1642,7 +1654,7 @@ const getFormat = (value) => {
 
     console.log('Copied!')
     navigator.clipboard.writeText
-      (`https://infinitybee.vercel.app?ref=${item.data().user.referralCode}`);
+      (`https://infinitybee.io?ref=${item.data().user.referralCode}`);
 
     setCopyMessage('Copied!');
     setTimeout(() => setCopyMessage(""), 1500);
@@ -1702,7 +1714,7 @@ const getFormat = (value) => {
         <div className='flex flex-col absolute -my-10 items-center justify-center bg-transparent w-full h-full z-50'>
           <div className='flex flex-col border-2 rounded-sm items-center justify-center border-black p-5'>
             <h3 className="text-center text-black">Please check your email. A verification email has been sent to the address provided.</h3>
-            <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={() => { showVerificationWall(false); showLoginModal(true); toggleVariant(); }}>Sign In</button>
+            <button className='flex mt-8 bg-red-500 text-center justify-center rounded-md w-1/2 md:w-1/4 px-4' onClick={() => { showVerificationWall(false); showLoginModal(true); toggleVariant(); }}>Log in</button>
           </div>
         </div>
       )}
@@ -1837,7 +1849,7 @@ const getFormat = (value) => {
             )}
 
             {warningMessage && (
-              <div className='fixed flex w-full h-full m-auto justify-center items-center z-40'>
+              <div className='ceWarning fixed flex w-full h-full m-auto justify-center items-center z-40'>
 
 
                 <div className='relative flex flex-col bg-slate950 p-4 rounded border border-gray-500 text-center items-center justify-between mx-auto z-40 w-1/2'>
@@ -1853,7 +1865,7 @@ const getFormat = (value) => {
             )}
 
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='adventurer' className='w-full my-10'>
-              <h2 className='text-center uppercase text-6xl my-5 h2mobile'>Adventurer {translate("levels")}</h2>
+              <h2 className='text-center uppercase text-6xl my-5 h2mobile'>Adventurer Levels</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
                   <div className='flex flex-col w-full md:w-1/3 z-30 flip-card'>
@@ -1864,14 +1876,14 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>25,000 IFB Tokens  <br /> Bonus 0%</p>
+                            <p className='my-1'>25,000 IFB Tokens  </p> 
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>200 USDT</button>
+                    <button onClick={() => { buyTokens(0, 200) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 200 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
                     <div className="cecardfilp">
@@ -1881,14 +1893,14 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>62,500 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>62,500 IFB Tokens </p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>500 USDT</button>
+                    <button onClick={() => { buyTokens(2, 500) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 500 USDT</button>
                   </div>
 
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
@@ -1899,14 +1911,14 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>137,500 IFB Tokens <br /> Bonus 0%</p>
+                            <p className='my-1'>137,500 IFB Tokens </p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>1.100 USDT</button>
+                    <button onClick={() => { buyTokens(1, 1100) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 1.100 USDT</button>
                   </div>
                   {/*}
                    <div className={`flex flex-col mx-auto w-full card ${isFlipped ? 'flipped' : ''}`} onMouseEnter={handleCardFlip} onMouseLeave={handleCardFlip}>
@@ -1940,7 +1952,7 @@ const getFormat = (value) => {
               </div>
             </div>
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='master' className='w-full my-10'>
-              <h2 className='text-center uppercase text-6xl my-5'>Master {translate("levels")}</h2>
+              <h2 className='text-center uppercase text-6xl my-5'>Master Levels</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
 
@@ -1965,14 +1977,14 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>287,500 IFB Tokens <br /> Bonus 3%</p>
+                            <p className='my-1'>287,500 IFB Tokens </p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>2.300 USDT</button>
+                    <button onClick={() => { buyTokens(3, 2300) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 2.300 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
                     <div className="cecardfilp">
@@ -1982,14 +1994,14 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>625,000 IFB Tokens <br /> Bonus 5%</p>
+                            <p className='my-1'>625,000 IFB Tokens </p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>5.000 USDT</button>
+                    <button onClick={() => { buyTokens(7, 5000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 5.000 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
                     <div className="cecardfilp">
@@ -1999,21 +2011,21 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>1,375,000 IFB Tokens <br /> Bonus 7%</p>
+                            <p className='my-1'>1,375,000 IFB Tokens </p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>11.000 USDT</button>
+                    <button onClick={() => { buyTokens(6, 11000) }} className='ceBtnPrice flex w-1/2 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 11.000 USDT</button>
                   </div>
 
                 </div>
               </div>
             </div>
             <div style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} id='legend' className='w-full my-10'>
-              <h2 className='text-center uppercase text-6xl my-5'>Legend {translate("levels")}</h2>
+              <h2 className='text-center uppercase text-6xl my-5'>Legend Levels</h2>
               <div className="w-full flex flex-col">
                 <div className='flex flex-col w-full mx-auto md:flex-row justify-around'>
 
@@ -2034,14 +2046,14 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>2,875,000 IFB Tokens <br /> Bonus 9%</p>
+                            <p className='my-1'>2,875,000 IFB Tokens </p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>23.000 USDT</button>
+                    <button onClick={() => { buyTokens(5, 23000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 23.000 USDT</button>
                   </div>
                   <div className='flex flex-col w-full md:w-1/3 flip-card'>
                     <div className="cecardfilp">
@@ -2051,14 +2063,14 @@ const getFormat = (value) => {
                         </div>
                         <div className="flip-card-back">
                           <div className='ceInfo flex flex-col min-h-[200px] font-extrabold my-3 justify-center text-center items-center'>
-                            <p className='my-1'>6,000,000 IFB Tokens <br /> Bonus 12%</p>
+                            <p className='my-1'>6,000,000 IFB Tokens </p>
                             <p className='my-1'>Release 10% <br /> Vesting 18 Months</p>
                             <p className='my-1 cePriceCard'>InfinityBee price 0.008 USD</p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-8 py-1'>48.000 USDT</button>
+                    <button onClick={() => { buyTokens(4, 48000) }} className='ceBtnPrice flex w-1/2 md:w-1/3 mx-auto button-gradient text-center hover:bg-blue-300 duration-200 justify-center rounded-full px-4 py-1'>Buy package &nbsp; 48.000 USDT</button>
                   </div>
 
 
@@ -2132,15 +2144,15 @@ const getFormat = (value) => {
                     <p className="ceTitle2 ceLeft ceq">La ce se poate folosi Tokenul InfinityBee ( IFB) ?</p>
                     <p className="ceDescription2 ceLeft ">
                       Tokenul InfinityBee (IFB) are multiple utilități : <br />
-                      – este un activ financiar (IFB) care se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
-                      – este un instrument deflaționar datorită strategiilor Be&Bee : Buyback și Burn <br />
-                      – constituie o valoare materială care poate fi utilizată pentru acțiuni umanitare (donații și finanțări pentru diverse proiecte caritabile), pe platforma BeeNICE și în platforma de crowdfunding BeeGENEROUS <sup>369</sup> <br />
-                      – este necesar pentru activarea nivelurilor 3 , 6 , 9 în BeeGENEROUS <sup>369</sup> <br />
-                      – utilizat în BeeSAFE (planul economy), investiții periodice în IFB <br />
-                      – este unitate de schimb folosită în BeeSHOP pentru cumpărarea / vânzarea de produse / servicii <br />
-                      – cu ajutorul token-ului IFB se vor cumpăra NFT-uri din colecțiile ByBee <br />
-                      – este un instrument financiar care se folosește în interiorul NFT Lab, <br /> pentru vânzarea / cumpărarea de bunuri<br />
-                      – se folosește pentru anumite și acțiuni din BeeLand (Metaverse) și BeeGame (platformă de jocuri)<br />
+                      ◈ este un activ financiar (IFB) care se va tranzacționa pe diferite platforme de exchange (DEX / CEX) <br />
+                      ◈ este un instrument deflaționar datorită strategiilor Be&Bee : Buyback și Burn <br />
+                      ◈ constituie o valoare materială care poate fi utilizată pentru acțiuni umanitare (donații și finanțări pentru diverse proiecte caritabile), pe platforma BeeNICE și în platforma de crowdfunding BeeGENEROUS <sup>369</sup> <br />
+                      ◈ este necesar pentru activarea nivelurilor 3 , 6 , 9 în BeeGENEROUS <sup>369</sup> <br />
+                      ◈ utilizat în BeeSAFE (planul economy), investiții periodice în IFB <br />
+                      ◈ este unitate de schimb folosită în BeeSHOP pentru cumpărarea / vânzarea de produse / servicii <br />
+                      ◈ cu ajutorul token-ului IFB se vor cumpăra NFT-uri din colecțiile ByBee <br />
+                      ◈ este un instrument financiar care se folosește în interiorul NFT Lab, <br /> pentru vânzarea / cumpărarea de bunuri<br />
+                      ◈ se folosește pentru anumite și acțiuni din BeeLand (Metaverse) și BeeGame (platformă de jocuri)<br />
                     </p>
                   </div>
 
@@ -2148,10 +2160,10 @@ const getFormat = (value) => {
                     <p className="ceTitle2 ceLeft ceq">Cum și de unde se poate obține Tokenul InfinityBee ( IFB) ?</p>
                     <p className="ceDescription2 ceLeft">
                       Tokenul InfinityBee (IFB) înainte de Listare, se poate obține prin : <br />
-                      – participarea la una sau la toate cele 3 etape de PreSale pe această platformă :  <br />
+                      ◈ participarea la una sau la toate cele 3 etape de PreSale pe această platformă :  <br />
                       Private Sale 1, Private Sale 2, Public Sale <br />
-                      – sistemul de crowdfunding BeeGENEROUS <sup>369</sup>,  în programele :  Matrix Bee3 & Matrix Bee4 și <br />
-                      – programe de bounty și airdrop <br />
+                      ◈ sistemul de crowdfunding BeeGENEROUS <sup>369</sup>,  în programele :  Matrix Bee3 & Matrix Bee4 și <br />
+                      ◈ programe de bounty și airdrop <br />
                       După listare se va tranzacționa pe diferite platforme de exchange (DEX / CEX)
                     </p>
 
@@ -2357,7 +2369,9 @@ const getFormat = (value) => {
               </div>
             </div>
 
-            <div id='faq' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center isnotmobile'>
+            {lang === 'EN' ? (
+              <>
+              <div id='faq' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center isnotmobile'>
               <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
 
               <div className="flex flex-col w-full mx-auto md:flex-row small_space">
@@ -2379,7 +2393,7 @@ const getFormat = (value) => {
                       <a className={`tab-link ${faqLeft == "4" ? "active" : ""} `} data-toggle="tab" href="#tab5x">Bonuses & Revenues</a>
                     </li>
                     <li onClick={() => { setFaqLeft("5"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
-                      <a className={`tab-link ${faqLeft == "5" ? "active" : ""} `} data-toggle="tab" href="#tab6x">Legalitate & Securitate</a>
+                      <a className={`tab-link ${faqLeft == "5" ? "active" : ""} `} data-toggle="tab" href="#tab6x">Legality & Security</a>
                     </li>
                   </ul>
                 </div>
@@ -2391,47 +2405,48 @@ const getFormat = (value) => {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingThree">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
-                              aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span>
+                              aria-expanded="false" aria-controls="collapseThree"><span>Who is our project addressed to ?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
                               </a> </h6>
                           </div>
                           <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
-                            <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
+                            <div className="card-body"> The Be&Bee project was born from the need to help people who feel the desire to belong to a group (a community), who want to learn new things and evolve beautifully, so that in the end they are prepared to integrate into the New Paradigm. </div>
                           </div>
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
-                              aria-controls="collapseOne"><span>Ce este Be&Bee ?</span>
+                              aria-controls="collapseOne"><span>What is Be&Bee ?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
                               </a></h6>
                           </div>
                           <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
-                            <div className="card-body"> Be&Bee este un ecosistem prietenos în care noi idei și proiecte prind viață, astfel crescând valoarea comunității, ceea ce va duce la revolutionarea sistemelor de Crowdfunding, a Rețelelor de socializare și e-Commerce. <br />
-                              Acest ecosistem este format din mai multe instrumente și este construit pe 3 piloni principali :  Material, Spiritual și Educațional (informațional).</div>
+                            <div className="card-body"> Be&Bee is a friendly ecosystem where new ideas and projects come to life, thus increasing the value of the community, which will revolutionize Crowdfunding, Social Networks and e-Commerce systems. <br />
+This ecosystem consists of several tools and is built on 3 main pillars: Material, Spiritual and Educational (informational)
+</div>
                           </div>
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTwo">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
-                              aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
-                                proiectului “Be&Bee Community” ?</span>
+                              aria-expanded="false" aria-controls="collapseTwo"><span>What are the main objectives of the "Be&Bee Community" project ?</span>
                                 <ins></ins>
                                 <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
                                 <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
                                 </a> </h6>
                           </div>
                           <div id="collapseTwo" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="headingTwo" data-parent="#accordion1">
-                            <div className="card-body"> Această Comunitate este un mediu unde oamenii folosesc tehnologia pentru: <br />
-                              – a-și îndeplini visele și pentru a-și atinge obiectivele propuse, <br />
-                              – a-și diversifica sursele de venit, <br />
-                              – a-și promova afacerile, serviciile/bunurile, aducând un plus de valoare în comunitate, <br />
-                              – a socializa, a colabora și pentru a forma legături între ei, <br />
-                              – a-și îmbogăți cunoștințele în diferite domenii precum: Tehnologie, Crypto, NLP, LeaderShip, e-Commerce, Astrologie, Numerologie, Spiritualitate, Parenting, LifeStyle … etc
+                            <div className="card-body"> This Community is an environment where people use technology for: <br />
+– fulfilling their dreams and to achieve their goals <br />
+– diversifying their income sources <br />
+– promoting their businesses, services/goods and bringing value to the community <br />
+– socialize, collaborate and connect with each other <br />
+– expanding their knowledge in different fields such as: Technology, Cryptocurrency, NLP, LeaderShip, e-Commerce, Astrology, Numerology, Spirituality, Parenting, LifeStyle and many more.
+
 
                             </div>
                           </div>
@@ -2443,7 +2458,7 @@ const getFormat = (value) => {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingNine">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
-                              aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span>
+                              aria-controls="collapseNine"><span>The ecosystem of the Be&Bee Community has a state-of-the-art technology and includes several tools:</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
@@ -2485,20 +2500,22 @@ const getFormat = (value) => {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
-                              aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span>
+                              aria-expanded="true" aria-controls="collapseTen"><span>When are the Be&Bee ecosystem tools released ?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
                               </a> </h6>
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
-                            <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
-                              Runda 1 :  InfinityBee, BeeGENEROUS<sup>369</sup>, BeeSAFE, BeeCHANGE <br />
-                              Runda 2 :  BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
-                              Runda 3 :  BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
-                              Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
+                            <div className="card-body">The tools of the Be&Bee ecosystem will be released gradually, in several stages, around the PreSale (ICO) rounds. <br /> <br />
 
-                              Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
+Private Sale 1 : InfinityBee , BeeGENEROUS369, BeeSAFE , BeeCHANGE <br />
+Private Sale 2 : BeeNiCE, NFT Lab, BeeCREATiVE, ByBee, RoBee <br />
+Public Sale : BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
+Next rounds: BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
+
+For more information you can check the ROADMAP section.
+
                             </div>
                           </div>
                         </div>
@@ -2509,29 +2526,27 @@ const getFormat = (value) => {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
                           <div className="card-header" id="headingTen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
-                              aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span>
+                              aria-expanded="true" aria-controls="collapseTen"><span>What is BeeGENEROUS <sup>369</sup> ?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
                               </a> </h6>
                           </div>
                           <div id="collapseTen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
-                            <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
+                            <div className="card-body">It is the first crowdfunding platform in the world that combines blockchain and smart contract technologies with network marketing on a matrix system.  This tool is based on 2 matrix systems: Matrix Bee3 & Matrix Bee4. </div>
                           </div>
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
                           <div className="card-header" id="headingEleven">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
-                              aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
-                                platformă ?</span>
+                              aria-expanded="false" aria-controls="collapseEleven"><span>What currencies are used in this platform ?</span>
                                 <ins></ins>
                                 <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
                                 </a> </h6>
                           </div>
                           <div id="collapseEleven" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingEleven" data-parent="#accordion4">
-                            <div className="card-body"> Taxa de înscriere se poate plăti cu una din cele 5 cripto-monede : USDT, USDC, BUSD, BNB și EGLD <br />
-                              Activarea nivelurilor de multifinanțare se poate face cu aceleași 5 crypto monede (de mai sus), excepție făcând nivelurile 3, 6 și 9 care se activează doar cu tokenul comunității noastre InfinityBee (IFB).
+                            <div className="card-body"> Multifunding levels can be activated with 5 cryptocurrencies: USDT, USDC, BUSD, BNB and EGLD, except for levels 3, 6 and 9 which are only activated with our community token InfinityBee (IFB).
 
                             </div>
                           </div>
@@ -2539,18 +2554,18 @@ const getFormat = (value) => {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
                           <div className="card-header" id="heading48">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
-                              aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
-                                ?</span>
+                              aria-expanded="false" aria-controls="collapse48"><span> What categories of projects are accepted ?</span>
                                 <ins></ins>
                                 <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
                                 </a> </h6>
                           </div>
                           <div id="collapse48" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading48" data-parent="#accordion4">
-                            <div className="card-body"> a. nevoi personale <br />
-                              b. probleme de sănătate <br />
-                              c. proiecte de tip business <br />
-                              d. proiecte umanitare / caritabile
+                            <div className="card-body"> a. personal needs <br />
+b. medical issues <br />
+c. business projects <br />
+d. humanitarian / charitable projects
+
                             </div>
                           </div>
                         </div>
@@ -2561,7 +2576,7 @@ const getFormat = (value) => {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="headingSeventeen">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
-                              aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span>
+                              aria-controls="collapseSeventeen"><span>How can I diversify my sources of income with the help of this platform?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
@@ -2569,10 +2584,11 @@ const getFormat = (value) => {
                           </div>
                           <div id="collapseSeventeen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingSeventeen"
                             data-parent="#accordion5">
-                            <div className="card-body"> Prin distribuirea link-ului tău de invitație vei atrage mai mulți investitori (participanți la ICO). <br />
-                              Dacă o persoană folosește link-ul tău și cumpără unul sau mai multe pachete cu tokeni InfinityBee, tu vei fi recompensat cu 5% din totalul sumei investite de acea persoană. Acești bani vor intra direct (instant) în portofelul tău cripto. <br />
-                              Deasemenea, prin folosirea link-ului tău, acea persoană va beneficia și ea de un discount de 5%. <br />
-                              Prin cumpărarea și deținerea de tokeni InfinityBee poți avea un real profit în timp.
+                            <div className="card-body"> By sharing your invitation link you will attract more investors (ICO participants). <br />
+If a person uses your referral link and buys one or more packages of InfinityBee tokens, you will be rewarded with 5% of the package value bought by that person. This money will go directly (instantly) into your crypto wallet. <br />
+Also, by using your referral link, that person will benefit a 5% discount from the package value. <br />
+By buying and holding InfinityBee tokens you can have a real profit over time.
+
                             </div>
                           </div>
                         </div>
@@ -2583,44 +2599,45 @@ const getFormat = (value) => {
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading61">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
-                              aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span>
+                              aria-controls="collapse61"><span>Where can I read more details about the legal aspect of the platform ?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
                               </a> </h6>
                           </div>
                           <div id="collapse61" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
-                            <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
+                            <div className="card-body">For more details regarding the legal aspect and to see the list of supported countries please read the Terms and Conditions page.</div>
                           </div>
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading62">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
-                              aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span>
+                              aria-controls="collapse62"><span>Who has access to my tokens ?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
                               </a> </h6>
                           </div>
                           <div id="collapse62" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
-                            <div className="card-body"> Înainte de a cumpăra un pachet cu tokeni InfinityBee, este necesar să îți creezi un cont pe această platformă de ICO. <br />
-                              Contul tău personal va fi asociat tot timpul cu portofelul de cripto-monede cu care te-ai autentificat în momentul creării acestuia. Prin urmare, toți tokenii alocați pachetului achiziționat, sunt trimiși numai în acest portofel. <br />
-                              Fiecare pachet de tokeni are caracteristici proprii și specifice. <br />
-                              Așadar, în funcție de pachetul achiziționat, fiecare dintre noi va primi cuantumul specificat în componența pachetului în una sau mai multe tranșe. Acest mecanism se execută în mod automat de către smart contractul ICO-ului. <br />
+                            <div className="card-body"> Before buying a package of InfinityBee tokens, it is necessary to create an account on this ICO platform. <br />
+Your personal account will always be associated with the email and cryptocurrency wallet you signed in with when it was created. Therefore, all tokens allocated to the purchased package are sent to this wallet only. <br />
+Each token package has its own specific characteristics. <br />
+So, depending on the purchased package, each of us will receive the amount specified in the package info in one or more installments. This mechanism is automatically executed by the ICO's smart contract.
+
                             </div>
                           </div>
                         </div>
                         <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
                           <div className="card-header" id="heading63">
                             <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
-                              aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span>
+                              aria-controls="collapse63"><span> What verification methods does BeeGENEROUS <sup>369</sup> &nbsp; crowdfunding platform use ?</span>
                               <ins></ins>
                               <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
                               <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
                               </a> </h6>
                           </div>
                           <div id="collapse63" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
-                            <div className="card-body"> Platforma folosește KYC (Know Your Customer) & AML (Anti Money Laundering)  – 2 elemente de identificare și verificare a membrilor, necesare unui proiect crypto să fie legal și credibil.</div>
+                            <div className="card-body">The platform uses KYC (Know Your Customer) & AML (Anti Money Laundering) – 2 elements of member identification and verification, necessary for a crypto project to be legal and trustworthy.</div>
                           </div>
                         </div>
                       </div>
@@ -2909,6 +2926,563 @@ const getFormat = (value) => {
                 </div>
               </div>
             </div>
+              </>
+              ):(
+                <>
+                <div id='faq' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center isnotmobile'>
+                <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
+  
+                <div className="flex flex-col w-full mx-auto md:flex-row small_space">
+                  <div className="ceFaqLeft ceFaqLeft2 ceFaqCustom flex flex-col w-full md:w-1/3">
+                    <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
+                      <li onClick={() => { setFaqLeft("1"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
+                        <a className={`tab-link ${faqLeft == "1" ? "active" : ""} `} data-toggle="tab" href="#tab1x">General</a>
+                      </li>
+                      {/* <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                <a className="tab-link" data-toggle="tab" href="#tab2">Termeni & Definitii </a>
+              </li> */}
+                      <li onClick={() => { setFaqLeft("2"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                        <a className={`tab-link ${faqLeft == "2" ? "active" : ""} `} data-toggle="tab" href="#tab3x">Ecosistem</a>
+                      </li>
+                      <li onClick={() => { setFaqLeft("3"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                        <a className={`tab-link ${faqLeft == "3" ? "active" : ""} `} data-toggle="tab" href="#tab4x">BeeGENEROUS <sup>369</sup></a>
+                      </li>
+                      <li onClick={() => { setFaqLeft("4"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <a className={`tab-link ${faqLeft == "4" ? "active" : ""} `} data-toggle="tab" href="#tab5x">Bonusuri și Venituri</a>
+                      </li>
+                      <li onClick={() => { setFaqLeft("5"); setFaqRightGeneral(""); }} className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <a className={`tab-link ${faqLeft == "5" ? "active" : ""} `} data-toggle="tab" href="#tab6x">Legalitate & Securitate</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="ceFaqRight ceFaqRight2 flex flex-col w-full md:w-2/3">
+                    <div className="tab-content res_md_mt_30 res_sm_mt_20">
+  
+                      <div className={`tab-pane fade  ${faqLeft == "1" ? "show active" : ""} `} id="tab1" role="tabpanel">
+                        <div id="accordion1" className="faq_content5">
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                            <div className="card-header" id="headingThree">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
+                                aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                                </a> </h6>
+                            </div>
+                            <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
+                              <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
+                            </div>
+                          </div>
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                            <div className="card-header">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
+                                aria-controls="collapseOne"><span>Ce este Be&Bee ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                                </a></h6>
+                            </div>
+                            <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
+                              <div className="card-body"> Be&Bee este un ecosistem prietenos în care noi idei și proiecte prind viață, astfel crescând valoarea comunității, ceea ce va duce la revolutionarea sistemelor de Crowdfunding, a Rețelelor de socializare și e-Commerce. <br />
+                                Acest ecosistem este format din mai multe instrumente și este construit pe 3 piloni principali :  Material, Spiritual și Educațional (informațional).</div>
+                            </div>
+                          </div>
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                            <div className="card-header" id="headingTwo">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
+                                aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
+                                  proiectului “Be&Bee Community” ?</span>
+                                  <ins></ins>
+                                  <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                                  <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                                  </a> </h6>
+                            </div>
+                            <div id="collapseTwo" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="headingTwo" data-parent="#accordion1">
+                              <div className="card-body"> Această Comunitate este un mediu unde oamenii folosesc tehnologia pentru: <br />
+                                – a-și îndeplini visele și pentru a-și atinge obiectivele propuse, <br />
+                                – a-și diversifica sursele de venit, <br />
+                                – a-și promova afacerile, serviciile/bunurile, aducând un plus de valoare în comunitate, <br />
+                                – a socializa, a colabora și pentru a forma legături între ei, <br />
+                                – a-și îmbogăți cunoștințele în diferite domenii precum: Tehnologie, Crypto, NLP, LeaderShip, e-Commerce, Astrologie, Numerologie, Spiritualitate, Parenting, LifeStyle … etc
+  
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={`tab-pane fade  ${faqLeft == "2" ? "show active" : ""} `} id="tab3" role="tabpanel">
+                        <div id="accordion3" className="faq_content5">
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                            <div className="card-header" id="headingNine">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
+                                aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                                </a>
+                              </h6>
+                            </div>
+                            <div id="collapseNine" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingNine" data-parent="#accordion3">
+                              <div className="card-body">
+                                <div className="listtxt">
+                                  <div>
+                                    <span>1 &nbsp; BeeGENEROUS <sup>369</sup></span>
+                                    <span>5 &nbsp; BeeNiCE</span>
+                                    <span>9 &nbsp; MyGift</span>
+                                    <span>13 &nbsp; BeeEDU</span>
+                                  </div>
+                                  <div>
+                                    <span>2 &nbsp; InfinityBee (IFB)</span>
+                                    <span>6 &nbsp; NFT Lab </span>
+                                    <span>10 &nbsp; BeeSHOP</span>
+                                    <span>14 &nbsp; BeeLiFE</span>
+                                  </div>
+                                  <div>
+                                    <span>3 &nbsp; BeeSAFE</span>
+                                    <span>7 &nbsp; ByBee</span>
+                                    <span>11 &nbsp; BeeZumZOOM</span>
+                                    <span>15 &nbsp; BeeGAME</span>
+                                  </div>
+                                  <div>
+                                    <span>4 &nbsp; BeeCHANGE</span>
+                                    <span>8 &nbsp; BeeCREATIVE</span>
+                                    <span>12 &nbsp; NFTCom</span>
+                                    <span>16 &nbsp; BeeLAND</span>
+                                  </div>
+  
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                            <div className="card-header" id="headingTen">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                                aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                                </a> </h6>
+                            </div>
+                            <div id="collapseTen" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
+                              <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
+                                Runda 1 :  InfinityBee, BeeGENEROUS<sup>369</sup>, BeeSAFE, BeeCHANGE <br />
+                                Runda 2 :  BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
+                                Runda 3 :  BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
+                                Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
+  
+                                Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={`tab-pane fade  ${faqLeft == "3" ? "show active" : ""} `} id="tab4" role="tabpanel">
+                        <div id="accordion4" className="faq_content5">
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                            <div className="card-header" id="headingTen">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                                aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                                </a> </h6>
+                            </div>
+                            <div id="collapseTen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
+                              <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
+                            </div>
+                          </div>
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                            <div className="card-header" id="headingEleven">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
+                                aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
+                                  platformă ?</span>
+                                  <ins></ins>
+                                  <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                                  </a> </h6>
+                            </div>
+                            <div id="collapseEleven" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingEleven" data-parent="#accordion4">
+                              <div className="card-body"> Taxa de înscriere se poate plăti cu una din cele 5 cripto-monede : USDT, USDC, BUSD, BNB și EGLD <br />
+                                Activarea nivelurilor de multifinanțare se poate face cu aceleași 5 crypto monede (de mai sus), excepție făcând nivelurile 3, 6 și 9 care se activează doar cu tokenul comunității noastre InfinityBee (IFB).
+  
+                              </div>
+                            </div>
+                          </div>
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
+                            <div className="card-header" id="heading48">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
+                                aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate
+                                  ?</span>
+                                  <ins></ins>
+                                  <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                                  </a> </h6>
+                            </div>
+                            <div id="collapse48" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading48" data-parent="#accordion4">
+                              <div className="card-body"> a. nevoi personale <br />
+                                b. probleme de sănătate <br />
+                                c. proiecte de tip business <br />
+                                d. proiecte umanitare / caritabile
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={`tab-pane fade  ${faqLeft == "4" ? "show active" : ""} `} id="tab5" role="tabpanel">
+                        <div id="accordion5" className="faq_content5">
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                            <div className="card-header" id="headingSeventeen">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
+                                aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                                </a> </h6>
+                            </div>
+                            <div id="collapseSeventeen" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingSeventeen"
+                              data-parent="#accordion5">
+                              <div className="card-body"> Prin distribuirea link-ului tău de invitație vei atrage mai mulți investitori (participanți la ICO). <br />
+                                Dacă o persoană folosește link-ul tău și cumpără unul sau mai multe pachete cu tokeni InfinityBee, tu vei fi recompensat cu 5% din totalul sumei investite de acea persoană. Acești bani vor intra direct (instant) în portofelul tău cripto. <br />
+                                Deasemenea, prin folosirea link-ului tău, acea persoană va beneficia și ea de un discount de 5%. <br />
+                                Prin cumpărarea și deținerea de tokeni InfinityBee poți avea un real profit în timp.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={`tab-pane fade  ${faqLeft == "5" ? "show active" : ""} `} id="tab6" role="tabpanel">
+                        <div id="accordion6" className="faq_content5">
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                            <div className="card-header" id="heading61">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
+                                aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                                </a> </h6>
+                            </div>
+                            <div id="collapse61" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
+                              <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
+                            </div>
+                          </div>
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                            <div className="card-header" id="heading62">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
+                                aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                                </a> </h6>
+                            </div>
+                            <div id="collapse62" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
+                              <div className="card-body"> Înainte de a cumpăra un pachet cu tokeni InfinityBee, este necesar să îți creezi un cont pe această platformă de ICO. <br />
+                                Contul tău personal va fi asociat tot timpul cu portofelul de cripto-monede cu care te-ai autentificat în momentul creării acestuia. Prin urmare, toți tokenii alocați pachetului achiziționat, sunt trimiși numai în acest portofel. <br />
+                                Fiecare pachet de tokeni are caracteristici proprii și specifice. <br />
+                                Așadar, în funcție de pachetul achiziționat, fiecare dintre noi va primi cuantumul specificat în componența pachetului în una sau mai multe tranșe. Acest mecanism se execută în mod automat de către smart contractul ICO-ului. <br />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                            <div className="card-header" id="heading63">
+                              <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
+                                aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                                </a> </h6>
+                            </div>
+                            <div id="collapse63" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
+                              <div className="card-body"> Platforma folosește KYC (Know Your Customer) & AML (Anti Money Laundering)  – 2 elemente de identificare și verificare a membrilor, necesare unui proiect crypto să fie legal și credibil.</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+  
+  
+  
+              </div>
+  
+              <div id='faqmobile' style={{ opacity: errorModal || loginModal ? "10%" : "100%" }} className='w-full my-10 justify-center faqmobile ismobile'>
+                <h2 className='ceHeader text-center uppercase text-6xl my-5'>FAQ</h2>
+  
+                <div className="flex flex-col w-full mx-auto md:flex-row small_space">
+                  <div className="tab-content res_md_mt_30 res_sm_mt_20">
+                    <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
+                      <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.5s">
+                        <a className={`tab-link active`} data-toggle="tab" href="#tab1x">General</a>
+                      </li>
+                    </ul>
+                    <div className={`tab-pane fade show active`} id="tab1" role="tabpanel">
+                      <div id="accordion1" className="faq_content5">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                          <div className="card-header" id="headingThree">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("1") }} className="collapsed" data-toggle="collapse" href="#collapseThreex"
+                              aria-expanded="false" aria-controls="collapseThree"><span>Cui i se adresează proiectul nostru ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "1" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "1" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapseThree" className={`collapse ${faqRight == "1" ? "show" : ""} `} aria-labelledby="headingThree" data-parent="#accordion1">
+                            <div className="card-body"> Acest proiect a luat naștere din nevoia de a ajuta persoanele care simt dorința de apartenență la un grup (o comunitate), care doresc să învețe lucruri noi și să evolueze frumos, ca într-un final să fie pregătite să se integreze în Noua Paradigmă. (Paradigmele sunt o multitudine de obiceiuri. În cele mai multe cazuri, aceste obiceiuri nici măcar nu sunt create de tine și totuși, îți ghidează fiecare mișcare pe care o faci.  O schimbare de paradigmă, este o trecere la un joc nou sau un nou set de reguli. Și când regulile se schimbă, întreaga ta lume se poate schimba.). </div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                          <div className="card-header">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("2") }} data-toggle="collapse" href="#collapseOnex" aria-expanded="true"
+                              aria-controls="collapseOne"><span>Ce este Be&Bee ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "2" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "2" ? "show" : "hide"} `} />
+                              </a></h6>
+                          </div>
+                          <div id="collapseOne" className={`collapse ${faqRight == "2" ? "show" : ""} `} aria-labelledby="headingOne" data-parent="#accordion1">
+                            <div className="card-body"> Be&Bee este un ecosistem prietenos în care noi idei și proiecte prind viață, astfel crescând valoarea comunității, ceea ce va duce la revolutionarea sistemelor de Crowdfunding, a Rețelelor de socializare și e-Commerce. <br />
+                              Acest ecosistem este format din mai multe instrumente și este construit pe 3 piloni principali :  Material, Spiritual și Educațional (informațional).</div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                          <div className="card-header" id="headingTwo">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("3") }} className="collapsed" data-toggle="collapse" href="#collapseTwox"
+                              aria-expanded="false" aria-controls="collapseTwo"><span>Care sunt principalele obiective ale
+                                proiectului “Be&Bee Community” ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "3" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "3" ? "show" : "hide"} `} />
+                                </a> </h6>
+                          </div>
+                          <div id="collapseTwo" className={`collapse ${faqRight == "3" ? "show" : ""} `} aria-labelledby="headingTwo" data-parent="#accordion1">
+                            <div className="card-body"> Această Comunitate este un mediu unde oamenii folosesc tehnologia pentru: <br />
+                              – a-și îndeplini visele și pentru a-și atinge obiectivele propuse, <br />
+                              – a-și diversifica sursele de venit, <br />
+                              – a-și promova afacerile, serviciile/bunurile, aducând un plus de valoare în comunitate, <br />
+                              – a socializa, a colabora și pentru a forma legături între ei, <br />
+                              – a-și îmbogăți cunoștințele în diferite domenii precum: Tehnologie, Crypto, NLP, LeaderShip, e-Commerce, Astrologie, Numerologie, Spiritualitate, Parenting, LifeStyle … etc
+  
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
+                      <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                        <a className={`tab-link active`} data-toggle="tab" href="#tab3x">Ecosystem</a>
+                      </li>
+                    </ul>
+                    <div className={`tab-pane fade  show active`} id="tab3" role="tabpanel">
+                      <div id="accordion3" className="faq_content5">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                          <div className="card-header" id="headingNine">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("4") }} data-toggle="collapse" href="#collapseNinex" aria-expanded="true"
+                              aria-controls="collapseNine"><span>Din ce este format Ecosistemul Be&Bee ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "4" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "4" ? "show" : "hide"} `} />
+                              </a>
+                            </h6>
+                          </div>
+                          <div id="collapseNine" className={`collapse ${faqRight == "4" ? "show" : ""} `} aria-labelledby="headingNine" data-parent="#accordion3">
+                            <div className="card-body">
+                              <div className="listtxt">
+                                <div>
+                                  <span>1 &nbsp; BeeGENEROUS <sup>369</sup></span>
+                                  <span>5 &nbsp; BeeNiCE</span>
+                                  <span>9 &nbsp; MyGift</span>
+                                  <span>13 &nbsp; BeeEDU</span>
+                                </div>
+                                <div>
+                                  <span>2 &nbsp; InfinityBee (IFB)</span>
+                                  <span>6 &nbsp; NFT Lab </span>
+                                  <span>10 &nbsp; BeeSHOP</span>
+                                  <span>14 &nbsp; BeeLiFE</span>
+                                </div>
+                                <div>
+                                  <span>3 &nbsp; BeeSAFE</span>
+                                  <span>7 &nbsp; ByBee</span>
+                                  <span>11 &nbsp; BeeZumZOOM</span>
+                                  <span>15 &nbsp; BeeGAME</span>
+                                </div>
+                                <div>
+                                  <span>4 &nbsp; BeeCHANGE</span>
+                                  <span>8 &nbsp; BeeCREATIVE</span>
+                                  <span>12 &nbsp; NFTCom</span>
+                                  <span>16 &nbsp; BeeLAND</span>
+                                </div>
+  
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                          <div className="card-header" id="headingTen">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("5") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                              aria-expanded="true" aria-controls="collapseTen"><span>Când se lansează instrumentele ecosistemului Be&Bee ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "5" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "5" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapseTen" className={`collapse ${faqRight == "5" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
+                            <div className="card-body">Instrumentele ecosistemului Be&Bee vor fi lansate treptat, în mai multe etape, din preajma rundelor de PreSale (ICO). <br /><br />
+                              Runda 1: BeeGENEROUS<sup>369</sup>, InfinityBee, BeeSAFE, BeeCHANGE <br />
+                              Runda 2 : BeeNiCE, NFT Lab, BeeCREATiVE, ByBee <br />
+                              Runda 3 : BeeSHOP, NFT Com, MyGiFT, BeeZumZOOM <br />
+                              Următoarele runde : BeeEDU, BeeLiFE, BeeLAND, BeeGAME <br /><br />
+  
+                              Pentru mai multe informații puteți consulta secțiunea ROAD MAP (link---).
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
+                      <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.7s">
+                        <a className={`tab-link active`} data-toggle="tab" href="#tab4x">BeeGENEROUS <sup>369</sup></a>
+                      </li>
+                    </ul>
+                    <div className={`tab-pane fade  show active`} id="tab4" role="tabpanel">
+                      <div id="accordion4" className="faq_content5">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.6s">
+                          <div className="card-header" id="headingTen">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("6") }} className="collapsed" data-toggle="collapse" href="#collapseTenx"
+                              aria-expanded="true" aria-controls="collapseTen"><span>Ce este BeeGENEROUS <sup>369</sup> ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "6" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "6" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapseTen" className={`collapse ${faqRight == "6" ? "show" : ""} `} aria-labelledby="headingTen" data-parent="#accordion4">
+                            <div className="card-body">Este prima platformă de crowdfunding din lume care îmbină tehnologiile blockchain și smartcontract cu network marketing-ul pe model matricial.  Acest instrument este format din 2 sisteme, de tip matrice :  Matrix Bee3 & Matrix Bee4. </div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                          <div className="card-header" id="headingEleven">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("7") }} className="collapsed" data-toggle="collapse" href="#collapseElevenx"
+                              aria-expanded="false" aria-controls="collapseEleven"><span>Ce monede se folosesc în această
+                                platformă ?</span>
+                                <ins></ins>
+                                <ArrowDropDownIcon className={`ceArrow ${faqRight != "7" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "7" ? "show" : "hide"} `} />
+                                </a> </h6>
+                          </div>
+                          <div id="collapseEleven" className={`collapse ${faqRight == "7" ? "show" : ""} `} aria-labelledby="headingEleven" data-parent="#accordion4">
+                            <div className="card-body"> Taxa de înscriere se poate plăti cu una din cele 5 cripto-monede : USDT, USDC, BUSD, BNB și EGLD <br />
+                              Activarea nivelurilor de multifinanțare se poate face cu aceleași 5 crypto monede (de mai sus), excepție făcând nivelurile 3, 6 și 9 care se activează doar cu tokenul comunității noastre InfinityBee (IFB).
+  
+                            </div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="1s">
+                          <div className="card-header" id="heading48">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("8") }} className="collapsed" data-toggle="collapse" href="#collapse48x"
+                              aria-expanded="false" aria-controls="collapse48"><span> Ce categorii de proiecte sunt acceptate ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "8" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "8" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapse48" className={`collapse ${faqRight == "8" ? "show" : ""} `} aria-labelledby="heading48" data-parent="#accordion4">
+                            <div className="card-body"> a. nevoi personale <br />
+                              b. probleme de sănătate <br />
+                              c. proiecte de tip business <br />
+                              d. proiecte umanitare / caritabile
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
+                      <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <a className={`tab-link active`} data-toggle="tab" href="#tab5x">Bonuses & Revenues</a>
+                      </li>
+                    </ul>
+                    <div className={`tab-pane fade  show active`} id="tab5" role="tabpanel">
+                      <div id="accordion5" className="faq_content5">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                          <div className="card-header" id="headingSeventeen">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("9") }} data-toggle="collapse" href="#collapseSeventeenx" aria-expanded="true"
+                              aria-controls="collapseSeventeen"><span>Cum îmi pot diversifica sursele de venit cu ajutorul acestei platforme ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "9" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "9" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapseSeventeen" className={`collapse ${faqRight == "9" ? "show" : ""} `} aria-labelledby="headingSeventeen"
+                            data-parent="#accordion5">
+                            <div className="card-body"> Prin distribuirea link-ului tău de invitație vei atrage mai mulți investitori (participanți la ICO). <br />
+                              Dacă o persoană folosește link-ul tău și cumpără unul sau mai multe pachete cu tokeni InfinityBee, tu vei fi recompensat cu 5% din totalul sumei investite de acea persoană. Acești bani vor intra direct (instant) în portofelul tău cripto. <br />
+                              Deasemenea, prin folosirea link-ului tău, acea persoană va beneficia și ea de un discount de 5%. <br />
+                              Prin cumpărarea și deținerea de tokeni InfinityBee poți avea un real profit în timp.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <ul className="nav nav-pills d-block tab_s2" id="pills-tab" role="tablist">
+                      <li className="nav-item animation" data-animation="fadeInUp" data-animation-delay="0.8s">
+                        <a className={`tab-link active`} data-toggle="tab" href="#tab6x">Legalitate & Securitate</a>
+                      </li>
+                    </ul>
+                    <div className={`tab-pane fade  show active`} id="tab6" role="tabpanel">
+                      <div id="accordion6" className="faq_content5">
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                          <div className="card-header" id="heading61">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("10") }} data-toggle="collapse" href="#collapse61x" aria-expanded="true"
+                              aria-controls="collapse61"><span>Unde pot citi mai multe detalii referitoare la aspectul legal al platformei ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "10" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "10" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapse61" className={`collapse ${faqRight == "10" ? "show" : ""} `} aria-labelledby="heading61" data-parent="#accordion6">
+                            <div className="card-body"> Pentru mai multe detalii referitoare la aspectul legal și pentru a vedea lista țărilor acceptate vă rugăm să consultați pagina de Termeni și condiții.</div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                          <div className="card-header" id="heading62">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("11") }} data-toggle="collapse" href="#collapse62x" aria-expanded="true"
+                              aria-controls="collapse62"><span>Cine are acces la tokenii mei ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "11" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "11" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapse62" className={`collapse ${faqRight == "11" ? "show" : ""} `} aria-labelledby="heading62" data-parent="#accordion6">
+                            <div className="card-body"> Înainte de a cumpăra un pachet cu tokeni InfinityBee, este necesar să îți creezi un cont pe această platformă de ICO. <br />
+                              Contul tău personal va fi asociat tot timpul cu portofelul de cripto-monede cu care te-ai autentificat în momentul creării acestuia. Prin urmare, toți tokenii alocați pachetului achiziționat, sunt trimiși numai în acest portofel. <br />
+                              Fiecare pachet de tokeni are caracteristici proprii și specifice. <br />
+                              Așadar, în funcție de pachetul achiziționat, fiecare dintre noi va primi cuantumul specificat în componența pachetului în una sau mai multe tranșe. Acest mecanism se execută în mod automat de către smart contractul ICO-ului. <br />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="cecard animation" data-animation="fadeInUp" data-animation-delay="0.4s">
+                          <div className="card-header" id="heading63">
+                            <h6 className="mb-0"> <a onClick={() => { setFaqRightGeneral("12") }} data-toggle="collapse" href="#collapse63x" aria-expanded="true"
+                              aria-controls="collapse63"><span> Ce metode de verificare folosește platforma de crowdfunding BeeGENEROUS <sup>369</sup> ?</span>
+                              <ins></ins>
+                              <ArrowDropDownIcon className={`ceArrow ${faqRight != "12" ? "show" : "hide"} `} />
+                                <ArrowDropUpIcon className={`ceArrow ${faqRight == "12" ? "show" : "hide"} `} />
+                              </a> </h6>
+                          </div>
+                          <div id="collapse63" className={`collapse ${faqRight == "12" ? "show" : ""} `} aria-labelledby="heading63" data-parent="#accordion6">
+                            <div className="card-body"> Platforma folosește KYC (Know Your Customer) & AML (Anti Money Laundering)  – 2 elemente de identificare și verificare a membrilor, necesare unui proiect crypto să fie legal și credibil.</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                </>
+              )}
 
 
           </section>

@@ -1,6 +1,10 @@
 {
-    "icoAddress": "0xf9b5e88778E0c0d1891599ab9aa0d5F3207ACbDC",
-    "beeAddress": "0x50FcaA129aa1C734Be481995A336BCA2a00FBAD0",
-    "fiatAddress": "0xdEe65abe9a164B8DcD16a02040BE107816D14C47",
-    "pathexplorer": "https://testnet.bscscan.com/tx/"
+    "icoAddress": "0x1Df66705C258061D6B3EBdc715Fa9335969AfAe4",    
+    "beeAddress": "0x00489e6Db1902fBF268F36ac0E1F21262d8C817F", 
+    "fiatAddress": "0x76B6aD63383bdD6086398885B8DB1A35335ab952",
+    "pathexplorer": "https://testnet.bscscan.com/tx/",
+    "pathrpc": "https://data-seed-prebsc-2-s2.binance.org:8545/",
+    "chainiddec": "97",
+    "chainidhex": "0x61",
+    "tokendecimals": 18
 }

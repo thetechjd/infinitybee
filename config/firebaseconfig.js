@@ -3,12 +3,12 @@ import {getAuth} from 'firebase/auth';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyACfUR1tmMLp0YRkVDBiRmMGJ5rdMuK_VY",
-  authDomain: "beandbee-38cba.firebaseapp.com",
-  projectId: "beandbee-38cba",
-  storageBucket: "beandbee-38cba.appspot.com",
-  messagingSenderId: "296445192075",
-  appId: "1:296445192075:web:4da5127fe15743c82ab18e"
+  apiKey: "AIzaSyDY3vrDhjTZ9S62YsuOTJp0MuhxdhmB-fM",
+  authDomain: "beandbee-39cba.firebaseapp.com",
+  projectId: "beandbee-39cba",
+  storageBucket: "beandbee-39cba.appspot.com",
+  messagingSenderId: "800319144140",
+  appId: "1:800319144140:web:80703e900cc88b59e78269"
 };
 
 
