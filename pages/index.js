@@ -88,20 +88,13 @@ const options2 = {
   is3D: true
 };
 
-const apiKey = require("../config/icoconfig.json").apiKey;
-const authDomain = require("../config/icoconfig.json").authDomain;
-const projectId = require("../config/icoconfig.json").projectId;
-const storageBucket = require("../config/icoconfig.json").storageBucket;
-const messagingSenderId = require("../config/icoconfig.json").messagingSenderId;
-const appId = require("../config/icoconfig.json").appId;
-
 const firebaseConfig = {
-  apiKey: apiKey,
-  authDomain: authDomain,
-  projectId: projectId,
-  storageBucket: storageBucket,
-  messagingSenderId: messagingSenderId,
-  appId: appId
+  apiKey: "AIzaSyDY3vrDhjTZ9S62YsuOTJp0MuhxdhmB-fM",
+  authDomain: "beandbee-39cba.firebaseapp.com",
+  projectId: "beandbee-39cba",
+  storageBucket: "beandbee-39cba.appspot.com",
+  messagingSenderId: "800319144140",
+  appId: "1:800319144140:web:80703e900cc88b59e78269"
 };
 
 const actionCodeSettings = {
